@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
+//import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
@@ -23,7 +23,7 @@ public class Rink extends JPanel {
         rink.setStroke(new BasicStroke(5));
 
         rink.setColor(Color.RED);
-        rink.draw(new Line2D.Double(190, 100, 190, 450));// 5 vertical lines on rink
+        rink.draw(new Line2D.Double(190, 100, 190, 450)); // first vertical lines on rink
         rink.setColor(Color.BLUE);
         rink.draw(new Line2D.Double(340, 100, 340, 450));
         rink.setColor(Color.RED);
@@ -31,7 +31,11 @@ public class Rink extends JPanel {
         rink.setColor(Color.BLUE);
         rink.draw(new Line2D.Double(660, 100, 660, 450));
         rink.setColor(Color.RED);
-        rink.draw(new Line2D.Double(810, 100, 810, 450));
+        rink.draw(new Line2D.Double(810, 100, 810, 450)); // last line
+
+        rink.draw(new Rectangle2D.Double(166, 251, 24, 48));
+        rink.draw(new Rectangle2D.Double(810, 251, 24, 48));
+
         rink.drawOval(445, 220, 110, 110);
         rink.setColor(Color.BLACK);
         rink.draw(new RoundRectangle2D.Double(100, 100, 800, 350, 200, 200));
