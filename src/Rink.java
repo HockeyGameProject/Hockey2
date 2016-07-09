@@ -33,8 +33,8 @@ public class Rink extends JPanel {
         rink.setColor(Color.RED);
         rink.draw(new Line2D.Double(810, 100, 810, 450)); // last line
 
-        rink.draw(new Rectangle2D.Double(166, 251, 24, 48));
-        rink.draw(new Rectangle2D.Double(810, 251, 24, 48));
+        rink.draw(new Rectangle2D.Double(150, 235, 40, 80));
+        rink.draw(new Rectangle2D.Double(810, 235, 40, 80));
 
         rink.drawOval(445, 220, 110, 110);
         rink.setColor(Color.BLACK);
