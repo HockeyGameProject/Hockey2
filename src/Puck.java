@@ -1,7 +1,9 @@
 import java.awt.*;
 
 /**
- * Created by Mesa on 7/1/2016.
+ * creates and drwas a puck object on the rink
+ * @author Evan Mesa
+ * @version 1
  */
 public class Puck extends MovingObject {
 

@@ -1,5 +1,8 @@
+import java.awt.*;
+
 /**
- * Created by alien on 7/8/16.
+ * Main Controller class for the game. It calls update() and step()
+ * @author Aditi Datta
  */
 public class Controller {
     UI ui;
@@ -12,6 +15,16 @@ public class Controller {
     public Controller(){
         ui      = new UI("Hockey");
         rink    = new Rink();
+        p1      = new Player(new Point(100,200), 5, 0.3, 40, Color.MAGENTA);
+        p2      = new Player(new Point(500,200), 5, 0.3, 40, Color.GREEN);
+        p3      = new Player(new Point(300,100), 5, 0.3, 40, Color.MAGENTA);
+        p4      = new Player(new Point(500,300), 5, 0.3, 40, Color.GREEN);
+
+        rink.add(p1);
+        rink.add(p2);
+        rink.add(p3);
+        rink.add(p4);
+        ui.add(rink);
 
         ui.pack();
         ui.setVisible(true);

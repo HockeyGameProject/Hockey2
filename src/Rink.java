@@ -6,7 +6,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
 /**
- * Created by Mesa on 7/1/2016.
+ * creates a Rink on the main panel.
+ * @author Evan Mesa
+ * @version 1
  */
 public class Rink extends JPanel {
 

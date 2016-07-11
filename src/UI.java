@@ -2,7 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by alien on 7/5/16.
+ * creates a game UI, the main frame containing menu bar and game board
+ * @author Aditi Datta
+ * @version 1
  */
 public class UI extends JFrame implements Runnable{
     public UI(String title){

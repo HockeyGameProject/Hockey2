@@ -1,30 +1,33 @@
 /**
- * Created by Mesa on 7/1/2016.
+ * creates and drwas a puck object on the rink
+ * @author Evan Mesa
+ * @author Aditi Datta
+ * @version 2
  */
 
 import java.awt.*;
 
-public class MovingObject {
+public class MovingObject extends Component {
 
-    Point point;
-    int speed;
-    double angle;
-    int radius;
+    Point   location;
+    int     speed;
+    double  angle;
+    int     radius;
 
 
     public MovingObject(Point point, int speed, double angle, int radius) {
-        this.point = point;
+        this.location = point;
         this.speed = speed;
         this.angle = angle;
         this.radius = radius;
     }
 
     public Point getPoint() {
-        return point;
+        return location;
     }
 
     public void setLocation(Point point) {
-        this.point = point;
+        this.location = point;
     }
 
     public int getSpeed() {
@@ -47,7 +50,11 @@ public class MovingObject {
         this.radius = radius;
     }
 
-
+    public void paint(Graphics g){
+        Graphics2D object = (Graphics2D) g;
+        object.setColor(Color.BLACK);
+        object.fillOval(location.x, location.y, this.radius/2, this.radius/2);
+    }
 
 
 

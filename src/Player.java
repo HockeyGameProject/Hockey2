@@ -1,19 +1,19 @@
 import java.awt.*;
 
 /**
- * Created by Mesa on 7/1/2016.
+ * creates a player object
+ * @author Evan Mesa
+ * @version 1
  */
-
-
-
 
 public class Player extends MovingObject {
 
-
+    Color teamColor;
     //Graphics2D stick = (Graphics2D) g;
 
-    public Player(Point point, int speed, double angle, int radius) {
+    public Player(Point point, int speed, double angle, int radius, Color color) {
         super(point, speed, angle, radius);
+        this.teamColor = color;
     }
 
     @Override
@@ -42,6 +42,12 @@ public class Player extends MovingObject {
 
     public void steal(){
 
+    }
+
+    public void paint(Graphics g){
+        Graphics2D object = (Graphics2D) g;
+        object.setColor(teamColor);
+        object.fillOval(location.x, location.y, this.radius/2, this.radius/2);
     }
 
 

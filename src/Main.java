@@ -1,5 +1,7 @@
 /**
- * Created by Mesa on 7/5/2016.
+ * Main class that creates UI and starts the simulator
+ * @author Aditi Datta
+ * @version 1
  */
 public class Main {
 
