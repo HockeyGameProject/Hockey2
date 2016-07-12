@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class Rink extends JPanel implements Runnable {
 
+    Thread t;
     ArrayList<MovingObject> objects = new ArrayList<>();
 
     Rink() {
@@ -26,7 +27,17 @@ public class Rink extends JPanel implements Runnable {
     }
 
     @Override
+    public void addNotify() {
+        super.addNotify();
+
+        t = new Thread(this);
+        t.start();
+    }
+
+
+    @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D rink = (Graphics2D) g;
 
         rink.setStroke(new BasicStroke(5));
@@ -64,10 +75,33 @@ public class Rink extends JPanel implements Runnable {
         }
     }
 
+    public void startGame(){
+        if(t == null) {
+            t = new Thread(this, "Rink");
+            t.start();
+        }
+    }
+
     @Override
     public void run() {
         System.out.println("RUNNING");
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        updateAll();
+        repaint();
+    }
+
+    public void updateAll(){
+
+        for(MovingObject mo : objects){
+            System.out.println("Current Location: "+mo.location);
+            mo.updateLocation();
+            System.out.println("Updated Location: "+mo.location);
+        }
     }
 
 }
