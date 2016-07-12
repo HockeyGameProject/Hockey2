@@ -52,8 +52,8 @@ public class Player extends MovingObject {
 
     @Override
     public void updateLocation() {
-        location.x = location.x + 0;
-        location.y = location.y + 0;
+        location.x = (int) (location.x + getSpeed()/30 * Math.sin(getAngle()));
+        location.y = (int) (location.y + getSpeed()/30 * Math.cos(getAngle()));
     }
 
 

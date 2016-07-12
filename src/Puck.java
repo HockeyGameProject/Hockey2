@@ -18,6 +18,7 @@ public class Puck extends MovingObject {
 
     @Override
     public void updateLocation() {
-
+        location.x = (int) (location.x + getSpeed()/30 * Math.sin(getAngle()));
+        location.y = (int) (location.y + getSpeed()/30 * Math.cos(getAngle()));
     }
 }
