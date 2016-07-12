@@ -4,6 +4,7 @@ import java.awt.geom.Line2D;
 //import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
 
 /**
  * creates a Rink on the main panel.
@@ -12,10 +13,15 @@ import java.awt.geom.RoundRectangle2D;
  */
 public class Rink extends JPanel {
 
+    ArrayList<MovingObject> objects = new ArrayList<>();
     Rink() {
         // set a preferred size for the custom panel.
         setPreferredSize(new Dimension(1000,550));
         setLayout(new BorderLayout());
+    }
+
+    public void add(MovingObject mo){
+        objects.add(mo);
     }
 
     @Override
@@ -41,11 +47,11 @@ public class Rink extends JPanel {
         rink.drawOval(445, 220, 110, 110);
         rink.setColor(Color.BLACK);
         rink.draw(new RoundRectangle2D.Double(100, 100, 800, 350, 200, 200));
-        //rink.fillOval(-25, 25, 20, 20);//5 circles on hockey rink
-        //rink.fillOval(-25, -25, 20, 20);
-        //rink.fillOval(0, 0, 20, 20);
-        //rink.fillOval(25, 25, 20, 20);
-        //rink.fillOval(25, -25, 20, 20);
+
+        for(MovingObject mo : objects){
+            rink.setColor(mo.color);
+            rink.fillOval(mo.location.x, mo.location.y, mo.radius/2, mo.radius/2);
+        }
     }
 
 }

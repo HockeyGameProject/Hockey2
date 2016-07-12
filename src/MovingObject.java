@@ -13,13 +13,14 @@ public class MovingObject extends Component {
     int     speed;
     double  angle;
     int     radius;
+    Color   color;
 
-
-    public MovingObject(Point point, int speed, double angle, int radius) {
+    public MovingObject(Point point, int speed, double angle, int radius, Color color) {
         this.location = point;
-        this.speed = speed;
-        this.angle = angle;
-        this.radius = radius;
+        this.speed =    speed;
+        this.angle =    angle;
+        this.radius =   radius;
+        this.color =    color;
     }
 
     public Point getPoint() {
