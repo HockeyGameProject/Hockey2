@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author Evan Mesa
  * @version 1
  */
-public class Rink extends JPanel {
+public class Rink extends JPanel implements Runnable {
 
     ArrayList<MovingObject> objects = new ArrayList<>();
 
@@ -51,9 +51,15 @@ public class Rink extends JPanel {
 
         for(MovingObject mo : objects){
             rink.setColor(mo.color);
-            rink.fillOval(mo.location.x, mo.location.y, mo.radius/2, mo.radius/2);
+            rink.fillOval(mo.location.x-mo.radius, mo.location.y-mo.radius, mo.radius*2, mo.radius*2);
 
         }
+    }
+
+    @Override
+    public void run() {
+        System.out.println("RUNNING");
+
     }
 
 }

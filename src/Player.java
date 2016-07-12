@@ -44,11 +44,12 @@ public class Player extends MovingObject {
 
     }
 
-    public void paint(Graphics g){
+    /*public void paintComponent(Graphics g){
+        super.paintComponent(g);
         Graphics2D object = (Graphics2D) g;
         object.setColor(teamColor);
         object.fillOval(location.x, location.y, this.radius/2, this.radius/2);
-    }
+    }*/
 
     @Override
     public void updateLocation() {

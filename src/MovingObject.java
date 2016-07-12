@@ -51,11 +51,11 @@ public abstract class MovingObject extends Component {
         this.radius = radius;
     }
 
-    public void paint(Graphics g){
+    /*public void paint(Graphics g){
         Graphics2D object = (Graphics2D) g;
         object.setColor(Color.BLACK);
         object.fillOval(location.x, location.y, this.radius*2, this.radius*2);
-    }
+    }*/
 
     public abstract void updateLocation();
 
