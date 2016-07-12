@@ -18,7 +18,7 @@ public class Player extends MovingObject {
 
     @Override
     public void setRadius(int radius) {
-        super.setRadius(45);
+        super.setRadius(80);
     }
 
 
@@ -52,8 +52,8 @@ public class Player extends MovingObject {
 
     @Override
     public void updateLocation() {
-        location.x = location.x + 270;
-        location.y = location.y + 280;
+        location.x = location.x + 0;
+        location.y = location.y + 0;
     }
 
 
