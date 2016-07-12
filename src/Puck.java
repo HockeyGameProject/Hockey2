@@ -15,4 +15,9 @@ public class Puck extends MovingObject {
     public void setRadius(int radius) {
         super.setRadius(15);
     }
+
+    @Override
+    public void updateLocation() {
+
+    }
 }

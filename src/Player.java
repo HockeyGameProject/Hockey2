@@ -50,5 +50,11 @@ public class Player extends MovingObject {
         object.fillOval(location.x, location.y, this.radius/2, this.radius/2);
     }
 
+    @Override
+    public void updateLocation() {
+        location.x = location.x + 270;
+        location.y = location.y + 280;
+    }
+
 
 }

@@ -7,7 +7,7 @@
 
 import java.awt.*;
 
-public class MovingObject extends Component {
+public abstract class MovingObject extends Component {
 
     Point   location;
     int     speed;
@@ -56,6 +56,8 @@ public class MovingObject extends Component {
         object.setColor(Color.BLACK);
         object.fillOval(location.x, location.y, this.radius/2, this.radius/2);
     }
+
+    public abstract void updateLocation();
 
 
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Rink extends JPanel {
 
     ArrayList<MovingObject> objects = new ArrayList<>();
+
     Rink() {
         // set a preferred size for the custom panel.
         setPreferredSize(new Dimension(1000,550));
@@ -51,6 +52,7 @@ public class Rink extends JPanel {
         for(MovingObject mo : objects){
             rink.setColor(mo.color);
             rink.fillOval(mo.location.x, mo.location.y, mo.radius/2, mo.radius/2);
+
         }
     }
 

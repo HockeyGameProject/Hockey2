@@ -15,4 +15,9 @@ public class Goalie extends Player {
     public void setRadius(int radius) {
         super.setRadius(45);
     }
+
+    @Override
+    public void updateLocation() {
+
+    }
 }
