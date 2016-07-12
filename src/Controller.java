@@ -21,12 +21,12 @@ public class Controller {
         ui      = new UI("Hockey");
         rink    = new Rink();
 
-        p1      = new Player(new Point(480,280), 5, 0.3, 25, Color.RED);
-        p2      = new Player(new Point(690,370), 5, 0.3, 25, Color.GREEN);
-        p3      = new Player(new Point(320,170), 5, 0.3, 25, Color.MAGENTA);
-        p4      = new Player(new Point(530,280), 5, 0.3, 25, Color.BLUE);
-        g1      = new Goalie(new Point(210, 280), 5, 0.3, 25, Color.LIGHT_GRAY);
-        g2      = new Goalie(new Point(800, 280), 5, 0.3, 25, Color.DARK_GRAY);
+        p1      = new Player(new Point(480,275), 5, 0.3, 20, Color.RED);
+        p2      = new Player(new Point(690,370), 5, 0.3, 20, Color.GREEN);
+        p3      = new Player(new Point(320,170), 5, 0.3, 20, Color.MAGENTA);
+        p4      = new Player(new Point(530,275), 5, 0.3, 20, Color.BLUE);
+        g1      = new Goalie(new Point(190+20, 275), 5, 0.3, 20, Color.LIGHT_GRAY);
+        g2      = new Goalie(new Point(810-20, 275), 5, 0.3, 20, Color.DARK_GRAY);
 
         rink.add(p1);
         rink.add(p2);

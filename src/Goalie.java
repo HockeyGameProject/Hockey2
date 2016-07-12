@@ -18,6 +18,6 @@ public class Goalie extends Player {
 
     @Override
     public void updateLocation() {
-
+        //getPoint()
     }
 }

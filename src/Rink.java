@@ -42,12 +42,20 @@ public class Rink extends JPanel implements Runnable {
         rink.setColor(Color.RED);
         rink.draw(new Line2D.Double(810, 100, 810, 450)); // last line
 
+        rink.setColor(Color.GREEN);// center X line
+        rink.draw(new Line2D.Double(190, 275, 810, 275));
+
+        rink.setColor(Color.RED); //goals
         rink.draw(new Rectangle2D.Double(150, 235, 40, 80));
         rink.draw(new Rectangle2D.Double(810, 235, 40, 80));
 
         rink.drawOval(445, 220, 110, 110);
         rink.setColor(Color.BLACK);
         rink.draw(new RoundRectangle2D.Double(100, 100, 800, 350, 200, 200));
+
+        rink.setColor(Color.BLUE);//crease
+        rink.fillArc(190-40, 232, 86, 86, 90, -180);
+        rink.fillArc(810-40-5, 232, 86, 86, 90, 180);
 
         for(MovingObject mo : objects){
             rink.setColor(mo.color);
