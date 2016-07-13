@@ -5,10 +5,15 @@ import java.awt.*;
  * @author Evan Mesa
  * @version 1
  */
-public class Goalie extends Player {
+public class Goalie2 extends Player {
 
-    public Goalie(Point point, int speed, double angle, int radius, Color color) {
+    private Puck puck;
+    public Goalie2(Point point, int speed, double angle, int radius, Color color) {
         super(point, speed, angle, radius, color);
+    }
+
+    public void setPuck(Puck pk){
+        Puck puck = pk;
     }
 
     @Override
@@ -17,13 +22,9 @@ public class Goalie extends Player {
     }
 
     @Override
-    public void updateLocation1G1(Puck puck) {
-        double slope = (275 - puck.location.y) / (190 - puck.location.x);
-        double goalieX = (190 + (210-190)/slope);
-        setLocation((int)goalieX, 210);
-    }
 
-    public void updateLocation1G2(Puck puck) {
+
+    public void updateLocation() {
         double slope = (275 - puck.location.y) / (810 - puck.location.x);
         double goalieX = (190 + (790-810)/slope);
         setLocation((int)goalieX, 790);
