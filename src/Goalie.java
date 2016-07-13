@@ -17,7 +17,15 @@ public class Goalie extends Player {
     }
 
     @Override
-    public void updateLocation() {
-        //getPoint()
+    public void updateLocation1G1(Puck puck) {
+        double slope = (275 - puck.location.y) / (190 - puck.location.x);
+        double goalieX = (190 + (210-190)/slope);
+        setLocation((int)goalieX, 210);
+    }
+
+    public void updateLocation1G2(Puck puck) {
+        double slope = (275 - puck.location.y) / (810 - puck.location.x);
+        double goalieX = (190 + (790-810)/slope);
+        setLocation((int)goalieX, 790);
     }
 }
