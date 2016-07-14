@@ -13,7 +13,7 @@ public class Goalie2 extends Player {
     }
 
     public void setPuck(Puck pk){
-        Puck puck = pk;
+        puck = pk;
     }
 
     @Override
@@ -25,8 +25,15 @@ public class Goalie2 extends Player {
 
 
     public void updateLocation() {
+        location.y = 790;
         double slope = (275 - puck.location.y) / (810 - puck.location.x);
-        double goalieX = (190 + (790-810)/slope);
-        setLocation((int)goalieX, 790);
+        double saveSpot = (190 + (790-810)/slope);
+        if(location.x < saveSpot){
+            location.x = (int) (location.x + 1 * Math.sin(-1.570795));// moves up one pixel per frame at at 90 degree angle up
+        }
+        else if (location.x > saveSpot){
+            location.x = (int) (location.x + 1 * Math.sin(1.570795)); // moves down one pizel per frame
+        }
+
     }
 }
