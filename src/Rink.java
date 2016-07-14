@@ -26,14 +26,6 @@ public class Rink extends JPanel implements Runnable {
         objects.add(mo);
     }
 
-    @Override
-    public void addNotify() {
-        super.addNotify();
-
-        t = new Thread(this);
-        t.start();
-    }
-
 
     @Override
     public void paintComponent(Graphics g) {
@@ -69,10 +61,16 @@ public class Rink extends JPanel implements Runnable {
         rink.fillArc(810-40-5, 232, 86, 86, 90, 180);
 
         for(MovingObject mo : objects){
-            rink.setColor(mo.color);
-            rink.fillOval(mo.location.x-mo.radius, mo.location.y-mo.radius, mo.radius*2, mo.radius*2);
-
+            mo.draw(rink);
         }
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+
+        t = new Thread(this);
+        t.start();
     }
 
     public void startGame(){
@@ -85,22 +83,24 @@ public class Rink extends JPanel implements Runnable {
     @Override
     public void run() {
         System.out.println("RUNNING");
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        int i = 0;
+        while(i++ < 50) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            updateAll();
+            repaint();
         }
-        updateAll();
-        repaint();
     }
 
     public void updateAll(){
 
         for(MovingObject mo : objects){
-            System.out.println("Current Location: "+mo.location);
+            //System.out.println("Current Location: "+mo.location);
             mo.updateLocation();
-            System.out.println("Updated Location: "+mo.location);
+            //System.out.println("Updated Location: "+mo.location);
         }
     }
 

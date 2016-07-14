@@ -7,8 +7,8 @@ import java.awt.*;
  */
 public class Puck extends MovingObject {
 
-    public Puck(Point point, int speed, double angle, int radius) {
-        super(point, speed, angle, radius, Color.BLACK);
+    public Puck(Point point, int speed, double angle, int radius, Color color) {
+        super(point, speed, angle, radius, color);
     }
 
     @Override

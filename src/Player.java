@@ -51,10 +51,18 @@ public class Player extends MovingObject {
         object.fillOval(location.x, location.y, this.radius/2, this.radius/2);
     }*/
 
+    /*public void draw(Graphics2D g2d){
+        g2d.setColor(color);
+        g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
+    }*/
+
     @Override
     public void updateLocation() {
-        location.x = (int) (location.x + getSpeed() * Math.sin(getAngle()));
-        location.y = (int) (location.y + getSpeed() * Math.cos(getAngle()));
+        //location.x = (int) (location.x + getSpeed() * Math.sin(getAngle()));
+        //location.y = (int) (location.y + getSpeed() * Math.cos(getAngle()));
+
+        location.x = (int) (location.x + getSpeed() * Math.sin(angle));
+        location.y = (int) (location.y + getSpeed() * Math.cos(angle));
     }
 
 

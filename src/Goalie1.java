@@ -22,6 +22,11 @@ public class Goalie1 extends Player {
         super.setRadius(45);
     }
 
+    /*public void draw(Graphics2D g2d){
+        g2d.setColor(color);
+        g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
+    }*/
+
     @Override
     public void updateLocation() {
         location.y = 210;

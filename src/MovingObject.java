@@ -59,6 +59,9 @@ public abstract class MovingObject extends Component {
 
     public abstract void updateLocation();
 
-
+    public void draw(Graphics2D g2d){
+        g2d.setColor(color);
+        g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
+    }
 
 }
