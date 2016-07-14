@@ -1,5 +1,7 @@
 /**
- * Created by Mesa on 7/13/2016.
+ * creates a Stick and adds it to a player.
+ * @author Evan Mesa
+ * @version 1
  */
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -13,11 +15,14 @@ public class Stick extends MovingObject{
     Player player;
     int a;
     int b;
-    int x;
-    int y;
+    //int x;
+    //int y;
 
-    public Stick(Point point, int speed, double angle, int length, Color color) {
-        super(point, speed, angle, length, color);
+    public Stick(Player p, int speed, double angle, int length, Color color) {
+        super(p.location, speed, angle, length, color);
+        player = p;
+        a = (int)( location.x + length * Math.cos(getAngle()));
+        b = (int)( location.y + length * Math.sin(getAngle()));
     }
 
     /*public void setStroke(Graphics g){
@@ -33,16 +38,18 @@ public class Stick extends MovingObject{
 
     @Override
     public void updateLocation() {
-        a = player.getLocation().x;
-        b = player.getLocation().y;
-        x = (int)( a + 30 * Math.cos(getAngle()));
-        y = (int)( b + 30 * Math.sin(getAngle()));
+        //a = player.getLocation().x;
+        //b = player.getLocation().y;
+        location = player.location;
+        a = (int)( location.x + radius * Math.cos(getAngle()));
+        b = (int)( location.y + radius * Math.sin(getAngle()));
     }
 
     @Override
     public void draw(Graphics2D g2d) {
 
         g2d.setStroke(new BasicStroke(5));
-        g2d.drawLine(a, b, (int)( a + radius * Math.sin(getAngle())), (int)( b + radius * Math.cos(getAngle())));
+        g2d.setColor(color);
+        g2d.drawLine(location.x, location.y, a, b);
     }
 }
