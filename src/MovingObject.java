@@ -54,7 +54,7 @@ public abstract class MovingObject extends Component {
 
 
 
-
+    //test
     public abstract void updateLocation();
 
     public void draw(Graphics2D g2d){
