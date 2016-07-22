@@ -60,6 +60,7 @@ public class Rink extends JPanel implements Runnable {
         rink.fillArc(190-40, 232, 86, 86, 90, -180);
         rink.fillArc(810-40-5, 232, 86, 86, 90, 180);
 
+
         for(MovingObject mo : objects){
             mo.draw(rink);
         }
