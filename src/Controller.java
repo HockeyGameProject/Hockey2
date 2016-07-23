@@ -5,6 +5,8 @@ import java.util.Random;
  * Main Controller class for the game. It calls update() and step()
  * @author Aditi Datta
  */
+
+//test
 public class Controller {
     UI       ui;
     Rink     rink;
