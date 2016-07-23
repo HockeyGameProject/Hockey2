@@ -6,7 +6,7 @@ import java.util.Random;
  * @author Aditi Datta
  */
 
-//test
+//test1
 public class Controller {
     UI       ui;
     Rink     rink;
