@@ -15,6 +15,11 @@ public abstract class MovingObject extends Component {
     int     radius;
     Color   color;
 
+    static int topBoundary = 100;
+    static int bottomBoundary = 450;
+    static int leftBoundary = 100;
+    static int rightBoundary = 900;
+
     public MovingObject(Point point, int speed, double angle, int radius, Color color) {
         this.location = point;
         this.speed =    speed;

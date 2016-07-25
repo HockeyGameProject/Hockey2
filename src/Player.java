@@ -56,11 +56,18 @@ public class Player extends MovingObject {
         g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
     }*/
 
+
+    public void hitWall(){
+        if(location.x == topBoundary + 20 || location.x == bottomBoundary -20 || location.y == leftBoundary +20 || location.y == rightBoundary -20 ){
+
+            setSpeed(0);
+        }
+    }
     @Override
     public void updateLocation() {
         //location.x = (int) (location.x + getSpeed() * Math.sin(getAngle()));
         //location.y = (int) (location.y + getSpeed() * Math.cos(getAngle()));
-
+        hitWall();
         location.x = (int) (location.x + getSpeed() * Math.sin(angle));
         location.y = (int) (location.y + getSpeed() * Math.cos(angle));
     }

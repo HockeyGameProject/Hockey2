@@ -7,10 +7,7 @@ import java.awt.*;
  */
 public class Puck extends MovingObject {
 
-    int topBoundary = 100;
-    int bottomBoundary = 450;
-    int leftBoundary = 100;
-    int rightBoundary = 900;
+
     double reflectAngle;
 
     public Puck(Point point, int speed, double angle, int radius, Color color) {
@@ -23,7 +20,7 @@ public class Puck extends MovingObject {
     }
 
     public void reflection(){
-        if(location.x == topBoundary || location.x == bottomBoundary || location.y == leftBoundary || location.y == rightBoundary ){
+        if(location.x == topBoundary + 10 || location.x == bottomBoundary -10 || location.y == leftBoundary +10 || location.y == rightBoundary -10 ){
             reflectAngle = (-1)*getAngle();
             setAngle(reflectAngle);
         }
