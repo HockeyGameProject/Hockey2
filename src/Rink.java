@@ -85,7 +85,7 @@ public class Rink extends JPanel implements Runnable {
     public void run() {
         System.out.println("RUNNING");
         int i = 0;
-        while(i++ < 400) {
+        while(i++ < 1000) {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {

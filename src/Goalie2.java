@@ -21,19 +21,15 @@ public class Goalie2 extends Player {
 
     @Override
     public void updateLocation() {
-        location.y = 790;
-        int goalLine = 810;
-        int topGoalPost = 235;
-        int bottomGoalPost = 315;
-        int horizontalMiddle = 275;
+        location.x = 790;
 
-        double slope = (double) (horizontalMiddle - puck.location.y) / (goalLine - puck.location.x);
+        double slope = (double) (horizontalMiddle - puck.location.y) / (rightGoalLine - puck.location.x);
 
-        double saveSpot = (horizontalMiddle + (210-goalLine)*slope);//wrong
+        double saveSpot = (horizontalMiddle + (790-rightGoalLine)*slope);
 
 
         //test
-        if (puck.location.x <= goalLine){
+        if (puck.location.x >= rightGoalLine){
             if ( puck.location.y < topGoalPost){
                 location.y = topGoalPost;
             }
@@ -45,16 +41,18 @@ public class Goalie2 extends Player {
                     location.y = location.y + 1;// moves up one pixel per frame at at 90 degree angle up
                 }
                 else if (location.y < puck.location.y){
-                    location.y = location.y + 1; // moves down one pizel per frame
+                    location.y = location.y + 1; // moves down one pixel per frame
                 }
             }
         }
+
         if(saveSpot >= bottomGoalPost){
             saveSpot = bottomGoalPost;
         }
         else if ( saveSpot <= topGoalPost){
             saveSpot = topGoalPost;
         }
+
         if(location.y < saveSpot){
             location.y = (location.y + 1);// moves up one pixel per frame at at 90 degree angle up
         }

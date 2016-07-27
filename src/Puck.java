@@ -28,6 +28,9 @@ public class Puck extends MovingObject {
             reflectAngle = (-1)*getAngle();
             setAngle(reflectAngle);
         }
+
+
+
     }
 
     @Override
