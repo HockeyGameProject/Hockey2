@@ -12,10 +12,12 @@ public class Goalie2 extends Player {
         puck = pk;
     }
 
+
     @Override
     public void setRadius(int radius) {
         super.setRadius(45);
     }
+
 
     @Override
     public void updateLocation() {
@@ -23,31 +25,42 @@ public class Goalie2 extends Player {
         int goalLine = 810;
         int topGoalPost = 235;
         int bottomGoalPost = 315;
-        double slope = (275 - puck.location.y) / (810 - puck.location.x);
-        int saveSpot = (int)(190 + (790-810)/slope);
+        int horizontalMiddle = 275;
 
-        if (puck.location.y >= goalLine){
-            if ( puck.location.x < topGoalPost){
-                location.x = topGoalPost;
+        double slope = (double) (horizontalMiddle - puck.location.y) / (goalLine - puck.location.x);
+
+        double saveSpot = (horizontalMiddle + (210-goalLine)*slope);//wrong
+
+
+
+        if (puck.location.x <= goalLine){
+            if ( puck.location.y < topGoalPost){
+                location.y = topGoalPost;
             }
-            else if ( puck.location.x > bottomGoalPost){
-                location.x = bottomGoalPost;
+            else if ( puck.location.y > bottomGoalPost){
+                location.y = bottomGoalPost;
             }
             else{
-                if(location.x > puck.location.x){
-                    location.x = (int) (location.x + 1 * Math.sin(-1.570795));// moves up one pixel per frame at at 90 degree angle up
+                if(location.y > puck.location.y){
+                    location.y = location.y + 1;// moves up one pixel per frame at at 90 degree angle up
                 }
-                else if (location.x < puck.location.x){
-                    location.x = (int) (location.x + 1 * Math.sin(1.570795)); // moves down one pizel per frame
+                else if (location.y < puck.location.y){
+                    location.y = location.y + 1; // moves down one pizel per frame
                 }
             }
         }
-        else if(location.x > saveSpot){
-            location.x = (int) (location.x + 1 * Math.sin(-1.570795));// moves up one pixel per frame at at 90 degree angle up
+        if(saveSpot >= bottomGoalPost){
+            saveSpot = bottomGoalPost;
         }
-        else if (location.x < saveSpot){
-            location.x = (int) (location.x + 1 * Math.sin(1.570795)); // moves down one pizel per frame
+        else if ( saveSpot <= topGoalPost){
+            saveSpot = topGoalPost;
         }
-
+        if(location.y < saveSpot){
+            location.y = (location.y + 1);// moves up one pixel per frame at at 90 degree angle up
+        }
+        else if (location.y > saveSpot){
+            location.y = (location.y -1 ); // moves down one pizel per frame
+        }
     }
+
 }

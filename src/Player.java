@@ -68,6 +68,7 @@ public class Player extends MovingObject {
         //location.x = (int) (location.x + getSpeed() * Math.sin(getAngle()));
         //location.y = (int) (location.y + getSpeed() * Math.cos(getAngle()));
         hitWall();
+
         location.x = (int) (location.x + getSpeed() * Math.sin(angle));
         location.y = (int) (location.y + getSpeed() * Math.cos(angle));
     }

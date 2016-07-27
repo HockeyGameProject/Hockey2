@@ -26,6 +26,7 @@ public class Goalie1 extends Player {
         int topGoalPost = 235;
         int bottomGoalPost = 315;
         int horizontalMiddle = 275;
+
         double slope = (double) (horizontalMiddle - puck.location.y) / (goalLine - puck.location.x);
 
         double saveSpot = (horizontalMiddle + (210-goalLine)*slope);//wrong

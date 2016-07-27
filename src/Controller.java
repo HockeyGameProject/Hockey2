@@ -34,7 +34,7 @@ public class Controller {
         p3   = new Player(new Point(320, 170), 5, 4*Math.PI - 0.523599, 20, Color.MAGENTA);
         p4   = new Player(new Point(530, 275), 5, 4*Math.PI - 0.523599, 20, Color.BLUE);
         g1   = new Goalie1(new Point(190+20, 275), 5, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY);
-        g2   = new Goalie2(new Point(810-20, 275), 5, 4*Math.PI - 0.523599, 20, Color.DARK_GRAY);
+        g2   = new Goalie2(new Point(810-20, 275), 5, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY);
         puck = new Puck(new Point(800, 200), 5, 0.523599 * (-4), 10, Color.BLACK);
         s1   = new Stick(p1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s2   = new Stick(p2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
@@ -58,6 +58,7 @@ public class Controller {
         rink.add(s4);
         rink.add(p4);
         rink.add(s5);
+
         rink.add(g1);
         rink.add(s6);
         rink.add(g2);

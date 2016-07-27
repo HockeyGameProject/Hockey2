@@ -85,7 +85,7 @@ public class Rink extends JPanel implements Runnable {
     public void run() {
         System.out.println("RUNNING");
         int i = 0;
-        while(i++ < 50) {
+        while(i++ < 400) {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
@@ -93,6 +93,7 @@ public class Rink extends JPanel implements Runnable {
             }
             updateAll();
             repaint();
+
         }
     }
 
@@ -101,6 +102,16 @@ public class Rink extends JPanel implements Runnable {
         for(MovingObject mo : objects){
             //System.out.println("Current Location: "+mo.location);
             mo.updateLocation();
+            for(MovingObject ob : objects){
+                if(mo != ob) {
+
+
+                    if ( Collision.objectsCollide(mo, ob) ){
+
+                    }
+                }
+            }
+
             //System.out.println("Updated Location: "+mo.location);
         }
     }
