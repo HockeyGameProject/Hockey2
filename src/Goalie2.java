@@ -20,7 +20,7 @@ public class Goalie2 extends Player {
     @Override
     public void updateLocation() {
         location.y = 790;
-        int goalLine = 790;
+        int goalLine = 810;
         int topGoalPost = 235;
         int bottomGoalPost = 315;
         double slope = (275 - puck.location.y) / (810 - puck.location.x);

@@ -20,7 +20,11 @@ public class Puck extends MovingObject {
     }
 
     public void reflection(){
-        if(location.x == topBoundary + 10 || location.x == bottomBoundary -10 || location.y == leftBoundary +10 || location.y == rightBoundary -10 ){
+        if(location.y <= topBoundary + 10 || location.y >= bottomBoundary -10){
+            reflectAngle = (-1)*getAngle()+Math.PI;
+            setAngle(reflectAngle);
+        }
+        else if(location.x <= leftBoundary +10 || location.x >= rightBoundary -10 ){
             reflectAngle = (-1)*getAngle();
             setAngle(reflectAngle);
         }

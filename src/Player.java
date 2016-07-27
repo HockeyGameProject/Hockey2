@@ -58,7 +58,7 @@ public class Player extends MovingObject {
 
 
     public void hitWall(){
-        if(location.x == topBoundary + 20 || location.x == bottomBoundary -20 || location.y == leftBoundary +20 || location.y == rightBoundary -20 ){
+        if(location.y <= topBoundary + 20 || location.y >= bottomBoundary -20 || location.x <= leftBoundary +20 || location.x >= rightBoundary -20 ){
 
             setSpeed(0);
         }
