@@ -114,6 +114,6 @@ public class Rink extends JPanel implements Runnable {
 
             //System.out.println("Updated Location: "+mo.location);
         }
-    }
+    }//test
 
 }

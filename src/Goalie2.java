@@ -32,7 +32,7 @@ public class Goalie2 extends Player {
         double saveSpot = (horizontalMiddle + (210-goalLine)*slope);//wrong
 
 
-
+        //test
         if (puck.location.x <= goalLine){
             if ( puck.location.y < topGoalPost){
                 location.y = topGoalPost;
