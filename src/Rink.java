@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Line2D;
 //import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -60,6 +61,18 @@ public class Rink extends JPanel implements Runnable {
         rink.fillArc(190-40, 232, 86, 86, 90, -180);
         rink.fillArc(810-40-5, 232, 86, 86, 90, 180);
 
+        rink.setColor(Color.BLACK);
+        Arc2D arc1 = new Arc2D.Double(100, 100, 200, 200, 90, 90, Arc2D.OPEN);
+        rink.draw(arc1);
+
+        Arc2D arc2 = new Arc2D.Double(100, 250, 200, 200, 180, 90, Arc2D.OPEN);
+        rink.draw(arc2);
+
+        Arc2D arc3 = new Arc2D.Double(700, 100, 200, 200, 0, 90, Arc2D.OPEN);
+        rink.draw(arc3);
+
+        Arc2D arc4 = new Arc2D.Double(700, 250, 200, 200, 270, 90, Arc2D.OPEN);
+        rink.draw(arc4);
 
         for(MovingObject mo : objects){
             mo.draw(rink);
@@ -85,7 +98,7 @@ public class Rink extends JPanel implements Runnable {
     public void run() {
         System.out.println("RUNNING");
         int i = 0;
-        while(i++ < 1000) {
+        while(i++ < 500) {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
@@ -93,7 +106,6 @@ public class Rink extends JPanel implements Runnable {
             }
             updateAll();
             repaint();
-
         }
     }
 
@@ -102,18 +114,8 @@ public class Rink extends JPanel implements Runnable {
         for(MovingObject mo : objects){
             //System.out.println("Current Location: "+mo.location);
             mo.updateLocation();
-            for(MovingObject ob : objects){
-                if(mo != ob) {
-
-
-                    if ( Collision.objectsCollide(mo, ob) ){
-
-                    }
-                }
-            }
-
             //System.out.println("Updated Location: "+mo.location);
         }
-    }//test
+    }
 
 }

@@ -83,27 +83,92 @@ center green line 275
 
 
     public void hitWalls(){
-        if(        location.y <= topBoundary + radius
+        /*if(location.y <= topBoundary + radius
                 || location.y >= bottomBoundary - radius
                 || location.x <= leftBoundary + radius
                 || location.x >= rightBoundary - radius ){
 
             setSpeed(0);
         }
-
-        if(       (location.y <= bottomGoalPost + radius && location.x >= leftGoalBack - radius && location.x <= leftGoalLine + radius)//bottom of left goal
-                || (location.y >= topGoalPost    - radius && location.x >= leftGoalBack - radius && location.x <= leftGoalLine + radius)//top of left goal post
-                || (location.y >= topGoalPost - radius &&  location.y <= bottomGoalPost + radius && location.x >= leftGoalBack -radius)// back of left goal
-
-                || (location.y <= bottomGoalPost + radius && location.x <= rightGoalBack + radius && location.x >= rightGoalLine - radius)//bottom of right goal
-                || (location.y >= topGoalPost    - radius && location.x <= rightGoalBack + radius && location.x >= rightGoalLine - radius)//top of right goal
-                || (location.y >= topGoalPost - radius &&  location.y <= bottomGoalPost + radius && location.x <= rightGoalBack + radius)//bottom of right goal
+        */
+        reflection();
+        /*
+        if((location.y <= bottomGoalPost + radius
+                    && location.x >= leftGoalBack - radius
+                    && location.x <= leftGoalLine + radius)//bottom of left goal
+                || (location.y >= topGoalPost    - radius
+                    && location.x >= leftGoalBack - radius
+                    && location.x <= leftGoalLine + radius)//top of left goal post
+                || (location.y >= topGoalPost - radius
+                    &&  location.y <= bottomGoalPost + radius
+                    && location.x >= leftGoalBack -radius)// back of left goal
+                ){
+            setSpeed(0);
+        }
+        else if ((location.y <= bottomGoalPost + radius
+                    && location.x <= rightGoalBack + radius
+                    && location.x >= rightGoalLine - radius)//bottom of right goal
+                || (location.y >= topGoalPost    - radius
+                    && location.x <= rightGoalBack + radius
+                    && location.x >= rightGoalLine - radius)//top of right goal
+                || (location.y >= topGoalPost - radius
+                    &&  location.y <= bottomGoalPost + radius
+                    && location.x <= rightGoalBack + radius)//bottom of right goal
         ){
 
             setSpeed(0);
         }
+        */
+        if(location.x >= rightGoalLine - radius && location.y <= bottomGoalPost + radius
+                && location.y >= topGoalPost - radius){
+            setSpeed(0);
+        }
+
+        else if(location.x <= leftGoalLine - radius && location.y <= bottomGoalPost + radius
+                && location.y >= topGoalPost - radius){
+            setSpeed(0);
+        }
+
+        if(location.x >= rightGoalLine && ((location.y <= bottomGoalPost + radius
+                                                && location.y > horizontalMiddle
+                                                && location.x < rightGoalBack)
+                                            || (location.y >= topGoalPost - radius
+                                                && location.y < horizontalMiddle
+                                                && location.x < rightGoalBack)
+                                            || (location.x <= rightGoalBack + radius
+                                                && location.x > rightGoalBack
+                                                && location.y < bottomGoalPost
+                                                && location.y > topGoalPost))){
+            setSpeed(0);
+        }
+        else if( location.x <= leftGoalLine && ((location.y <= bottomGoalPost + radius
+                                                    && location.y > horizontalMiddle
+                                                    && location.x > leftGoalBack)
+                                                || (location.y >= topGoalPost - radius
+                                                    && location.y < horizontalMiddle
+                                                    && location.x > leftGoalBack)
+                                                || (location.x >= leftGoalBack - radius
+                                                    && location.x < leftGoalBack
+                                                    && location.y < bottomGoalPost
+                                                    && location.y > topGoalPost))){
+            setSpeed(0);
+        }
 
     }
+
+    public void reflection(){
+        double reflectAngle;
+        if(location.y <= topBoundary + 10 || location.y >= bottomBoundary -10){
+            reflectAngle = (-1)*getAngle()+Math.PI;
+            setAngle(reflectAngle);
+        }
+        else if(location.x <= leftBoundary +10 || location.x >= rightBoundary -10 ){
+            reflectAngle = (-1)*getAngle();
+            setAngle(reflectAngle);
+        }
+
+    }
+
     @Override
     public void updateLocation() {
         //location.x = (int) (location.x + getSpeed() * Math.sin(getAngle()));
