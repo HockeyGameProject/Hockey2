@@ -1,11 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.List;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Line2D;
 //import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+
 import java.util.ArrayList;
+
 
 /**
  * creates a Rink on the main panel.
@@ -64,7 +67,6 @@ public class Rink extends JPanel implements Runnable {
         rink.setColor(Color.BLACK);
         Arc2D arc1 = new Arc2D.Double(100, 100, 200, 200, 90, 90, Arc2D.OPEN);
         rink.draw(arc1);
-
         Arc2D arc2 = new Arc2D.Double(100, 250, 200, 200, 180, 90, Arc2D.OPEN);
         rink.draw(arc2);
 
@@ -73,6 +75,7 @@ public class Rink extends JPanel implements Runnable {
 
         Arc2D arc4 = new Arc2D.Double(700, 250, 200, 200, 270, 90, Arc2D.OPEN);
         rink.draw(arc4);
+
 
         for(MovingObject mo : objects){
             mo.draw(rink);
@@ -98,7 +101,7 @@ public class Rink extends JPanel implements Runnable {
     public void run() {
         System.out.println("RUNNING");
         int i = 0;
-        while(i++ < 500) {
+        while(i++ < 1000) {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
@@ -106,16 +109,38 @@ public class Rink extends JPanel implements Runnable {
             }
             updateAll();
             repaint();
+
         }
     }
 
+
+
+    ArrayList<ArrayList<MovingObject>> collisionList = new ArrayList<>();
+    ArrayList<MovingObject> twoObjectsCollide = new ArrayList<>();
     public void updateAll(){
+        // Collision detection
+
 
         for(MovingObject mo : objects){
             //System.out.println("Current Location: "+mo.location);
             mo.updateLocation();
+            for(MovingObject ob : objects){
+                if(mo != ob) {
+                    twoObjectsCollide = Collision.objectsCollide(mo, ob);
+                }
+                collisionList.add(twoObjectsCollide);
+            }
+
             //System.out.println("Updated Location: "+mo.location);
         }
-    }
+
+        for(ArrayList<MovingObject> col : collisionList){// for each list in the list of list
+            //handle collisions set angle and speed with
+            col.get(0);
+            col.get(1);
+        }
+        // update objects
+        //
+    }//test
 
 }
