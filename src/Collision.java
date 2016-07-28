@@ -8,6 +8,9 @@ public class Collision {
         if(Math.sqrt(Math.pow((object2.location.x - object1.location.x), 2)
                 + Math.pow((object2.location.y - object1.location.y), 2))
                 == distance){
+
+
+            //out object in collision array
             return true;
         }
         return false;

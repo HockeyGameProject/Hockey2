@@ -64,7 +64,6 @@ public class Rink extends JPanel implements Runnable {
         rink.setColor(Color.BLACK);
         Arc2D arc1 = new Arc2D.Double(100, 100, 200, 200, 90, 90, Arc2D.OPEN);
         rink.draw(arc1);
-
         Arc2D arc2 = new Arc2D.Double(100, 250, 200, 200, 180, 90, Arc2D.OPEN);
         rink.draw(arc2);
 
@@ -73,6 +72,7 @@ public class Rink extends JPanel implements Runnable {
 
         Arc2D arc4 = new Arc2D.Double(700, 250, 200, 200, 270, 90, Arc2D.OPEN);
         rink.draw(arc4);
+
 
         for(MovingObject mo : objects){
             mo.draw(rink);
@@ -98,7 +98,7 @@ public class Rink extends JPanel implements Runnable {
     public void run() {
         System.out.println("RUNNING");
         int i = 0;
-        while(i++ < 500) {
+        while(i++ < 1000) {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
@@ -106,16 +106,27 @@ public class Rink extends JPanel implements Runnable {
             }
             updateAll();
             repaint();
+
         }
     }
 
     public void updateAll(){
-
+        // Collision detection
         for(MovingObject mo : objects){
             //System.out.println("Current Location: "+mo.location);
             mo.updateLocation();
+            for(MovingObject ob : objects){
+                if(mo != ob) {
+                    Collision.objectsCollide(mo, ob);
+                }
+            }
+
             //System.out.println("Updated Location: "+mo.location);
         }
-    }
+        //handle collisions set angle and speed with
+
+        // update objects
+        //
+    }//test
 
 }
