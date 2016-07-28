@@ -10,8 +10,8 @@ public class Puck extends MovingObject {
 
     double reflectAngle;
 
-    public Puck(Point point, int speed, double angle, int radius, Color color) {
-        super(point, speed, angle, radius, color);
+    public Puck(int id, Point point, int speed, double angle, int radius, Color color) {
+        super(id, point, speed, angle, radius, color);
     }
 
     @Override

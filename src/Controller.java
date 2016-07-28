@@ -28,20 +28,21 @@ public class Controller {
         ui      = new UI("Hockey");
         rink    = new Rink();
 
+        // Moving objects
         // CREATING PLAYERS AND GOALIES
-        p1   = new Player(new Point(480, 275), 5, 3*Math.PI - 0.523599, 20, Color.RED);
-        p2   = new Player(new Point(690, 370), 5, 3*Math.PI - 0.523599, 20, Color.GREEN);
-        p3   = new Player(new Point(320, 170), 5, 4*Math.PI - 0.523599, 20, Color.MAGENTA);
-        p4   = new Player(new Point(530, 275), 5, 4*Math.PI - 0.523599, 20, Color.BLUE);
-        g1   = new Goalie1(new Point(190+20, 275), 5, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY);
-        g2   = new Goalie2(new Point(810-20, 275), 5, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY);
-        puck = new Puck(new Point(800, 200), 5, 0.523599 * (-5.5), 10, Color.BLACK);
-        s1   = new Stick(p1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
-        s2   = new Stick(p2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
-        s3   = new Stick(p3, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
-        s4   = new Stick(p4, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
-        s5   = new Stick(g1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
-        s6   = new Stick(g2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
+        p1   = new Player(0,new Point(480, 275), 5, 3*Math.PI - 0.523599, 20, Color.RED);
+        p2   = new Player(1,new Point(690, 370), 5, 3*Math.PI - 0.523599, 20, Color.GREEN);
+        p3   = new Player(2,new Point(320, 170), 5, 4*Math.PI - 0.523599, 20, Color.MAGENTA);
+        p4   = new Player(3,new Point(530, 275), 5, 4*Math.PI - 0.523599, 20, Color.BLUE);
+        g1   = new Goalie1(4,new Point(190+20, 275), 5, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY);
+        g2   = new Goalie2(5,new Point(810-20, 275), 5, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY);
+        puck = new Puck(6,new Point(800, 200), 5, 0.523599 * (-5.5), 10, Color.BLACK);
+        s1   = new Stick(7,p1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
+        s2   = new Stick(8,p2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
+        s3   = new Stick(9,p3, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
+        s4   = new Stick(10,p4, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
+        s5   = new Stick(11,g1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
+        s6   = new Stick(12,g2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
 
         //s1.setPlayer(p1);
         // GIVING PUCK REFERENCE TO GOALIES
@@ -63,7 +64,7 @@ public class Controller {
         rink.add(s6);
         rink.add(g2);
         rink.add(puck);
-
+        // added moving objects
 
         ui.add(rink);
         ui.pack();

@@ -18,8 +18,8 @@ public class Stick extends MovingObject{
     //int x;
     //int y;
 
-    public Stick(Player p, int speed, double angle, int length, Color color) {
-        super(p.location, speed, angle, length, color);
+    public Stick(int id, Player p, int speed, double angle, int length, Color color) {
+        super(id, p.location, speed, angle, length, color);
         player = p;
         a = (int)( location.x + length * Math.cos(getAngle()));
         b = (int)( location.y + length * Math.sin(getAngle()));

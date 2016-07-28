@@ -11,8 +11,8 @@ public class Player extends MovingObject {
     Color teamColor;
     //Graphics2D stick = (Graphics2D) g;
 
-    public Player(Point point, int speed, double angle, int radius, Color color) {
-        super(point, speed, angle, radius, color);
+    public Player(int id, Point point, int speed, double angle, int radius, Color color) {
+        super(id, point, speed, angle, radius, color);
         this.teamColor = color;
     }
 
