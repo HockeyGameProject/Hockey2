@@ -1,11 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.List;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Line2D;
 //import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+
 import java.util.ArrayList;
+
 
 /**
  * creates a Rink on the main panel.
@@ -110,21 +113,32 @@ public class Rink extends JPanel implements Runnable {
         }
     }
 
+
+
+    ArrayList<ArrayList<MovingObject>> collisionList = new ArrayList<>();
+    ArrayList<MovingObject> twoObjectsCollide = new ArrayList<>();
     public void updateAll(){
         // Collision detection
+
+
         for(MovingObject mo : objects){
             //System.out.println("Current Location: "+mo.location);
             mo.updateLocation();
             for(MovingObject ob : objects){
                 if(mo != ob) {
-                    Collision.objectsCollide(mo, ob);
+                    twoObjectsCollide = Collision.objectsCollide(mo, ob);
                 }
+                collisionList.add(twoObjectsCollide);
             }
 
             //System.out.println("Updated Location: "+mo.location);
         }
-        //handle collisions set angle and speed with
 
+        for(ArrayList<MovingObject> col : collisionList){// for each list in the list of list
+            //handle collisions set angle and speed with
+            col.get(0);
+            col.get(1);
+        }
         // update objects
         //
     }//test
