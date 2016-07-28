@@ -1,32 +1,32 @@
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Mesa on 7/15/2016.
- */
 public class Collision {
 
-    public static ArrayList<MovingObject> objectsCollide(MovingObject object1, MovingObject object2){
-        int distance = object1.radius + object2.radius;
+    //ArrayList<ArrayList<MovingObject>> adjList = new ArrayList<>(7);
 
-        ArrayList<MovingObject> twoObjectsCollide = new ArrayList<>();
-        //ArrayList<ArrayList<MovingObject>> collisionList = new ArrayList<>();
-        if(Math.sqrt(Math.pow((object2.location.x - object1.location.x), 2)
-                + Math.pow((object2.location.y - object1.location.y), 2))
-                == distance){
-
-
-            //out object in collision array
-            twoObjectsCollide.add(object1);
-            twoObjectsCollide.add(object2);
-            //collisionList.add(twoObjectsCollide);
-
-
+    ArrayList<MovingObject>[] adjList = new ArrayList[7];
+    public Collision(){
+        for (int i = 0; i < 7; i++){
+            adjList[i] = new ArrayList<MovingObject>();
         }
-        return twoObjectsCollide;
     }
 
-    //public boolean edgeOfRinkCollision(MovingObject object1){// need a different one for players and puck
+    public boolean objectsCollide(MovingObject object1, MovingObject object2){
+        int distance = object1.radius + object2.radius;
 
-    //}
+
+
+        if(Math.sqrt(Math.pow((object2.location.x - object1.location.x), 2)
+                + Math.pow((object2.location.y - object1.location.y), 2))
+                == distance) {
+
+            adjList[object1.id].add(object2);
+            adjList[object2.id].add(object1);
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
