@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 /**
  * creates a player object
@@ -6,16 +8,35 @@ import java.awt.*;
  * @version 1
  */
 
-public class Player extends MovingObject {
+public class Player extends MovingObject implements MouseMotionListener{
 
     Color teamColor;
-    //Graphics2D stick = (Graphics2D) g;
 
     public Player(int id, Point point, int speed, double angle, int radius, Color color) {
         super(id, point, speed, angle, radius, color);
         this.teamColor = color;
     }
 
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        eventOutput("Mouse dragged", e);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+       e.getX();
+    }
+
+    public Player(int id, Point point, int speed, double angle, int radius, Color color, Color teamColor) {
+        super(id, point, speed, angle, radius, color);
+        this.teamColor = teamColor;
+        this.addMouseMotionListener(this);
+    }
+
+    //Graphics2D stick = (Graphics2D) g;
+
+
+   // public void followMouse(e)
 
 
     public void pass(Puck puck){
@@ -80,7 +101,6 @@ center green line 275
 
 
     */
-
 
     public void hitWalls(){
         /*if(location.y <= topBoundary + radius
