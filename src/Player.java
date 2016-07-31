@@ -19,12 +19,14 @@ public class Player extends MovingObject implements MouseMotionListener{
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        eventOutput("Mouse dragged", e);
+    //    eventOutput("Mouse dragged", e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-       e.getX();
+        double slope = (double) (e.getY() - location.y) / (e.getX() - location.x);
+        double angle = Math.tan(slope);
+        setAngle(angle);
     }
 
     public Player(int id, Point point, int speed, double angle, int radius, Color color, Color teamColor) {
@@ -110,9 +112,9 @@ center green line 275
 
             setSpeed(0);
         }
-        */
+
         reflection();
-        /*
+
         if((location.y <= bottomGoalPost + radius
                     && location.x >= leftGoalBack - radius
                     && location.x <= leftGoalLine + radius)//bottom of left goal
@@ -139,14 +141,15 @@ center green line 275
             setSpeed(0);
         }
         */
+        reflection();
         if(location.x >= rightGoalLine - radius && location.y <= bottomGoalPost + radius
                 && location.y >= topGoalPost - radius){
-            setSpeed(0);
+            setSpeed(1);
         }
 
         else if(location.x <= leftGoalLine - radius && location.y <= bottomGoalPost + radius
                 && location.y >= topGoalPost - radius){
-            setSpeed(0);
+            setSpeed(1);
         }
 
         if(location.x >= rightGoalLine && ((location.y <= bottomGoalPost + radius
@@ -159,7 +162,7 @@ center green line 275
                                                 && location.x > rightGoalBack
                                                 && location.y < bottomGoalPost
                                                 && location.y > topGoalPost))){
-            setSpeed(0);
+            setSpeed(1);
         }
         else if( location.x <= leftGoalLine && ((location.y <= bottomGoalPost + radius
                                                     && location.y > horizontalMiddle
@@ -171,7 +174,7 @@ center green line 275
                                                     && location.x < leftGoalBack
                                                     && location.y < bottomGoalPost
                                                     && location.y > topGoalPost))){
-            setSpeed(0);
+            setSpeed(1);
         }
 
     }
