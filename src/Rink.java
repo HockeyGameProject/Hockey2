@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Line2D;
 //import java.awt.geom.Point2D;
@@ -15,15 +19,38 @@ import java.util.ArrayList;
  * @author Evan Mesa
  * @version 1
  */
-public class Rink extends JPanel implements Runnable {
+public class Rink extends JPanel implements Runnable, MouseMotionListener {
 
     Thread t;
     ArrayList<MovingObject> objects = new ArrayList<>();
+    Player p1;
 
-    Rink() {
+    Rink(Player p) {
         // set a preferred size for the custom panel.
         setPreferredSize(new Dimension(1000,550));
         setLayout(new BorderLayout());
+        p1 = p;
+
+        addMouseMotionListener(new MouseAdapter() {
+
+            public void mousePressed(MouseEvent e){
+
+                double slope = (double) (e.getY() - p1.location.y) / (e.getX() - p1.location.x);
+                double angle = Math.tan( slope);
+                p1.setAngle(angle);
+
+            }
+
+
+            public void mouseMoved(MouseEvent e) {
+                double slope = (double) (e.getY() - p1.location.y) / (e.getX() - p1.location.x);
+                double angle = Math.tan(slope);
+                p1.setAngle((-1) *angle);
+                System.out.println(p1.getPoint());
+
+            }
+        });
+
     }
 
     public void add(MovingObject mo){
@@ -126,9 +153,9 @@ public class Rink extends JPanel implements Runnable {
             mo.updateLocation();
             for(MovingObject ob : objects){
                 if(mo != ob) {
-                    twoObjectsCollide = Collision.objectsCollide(mo, ob);
+                    //Collision.objectsCollide(mo, ob);
                 }
-                collisionList.add(twoObjectsCollide);
+                //collisionList.add(twoObjectsCollide);
             }
 
             //System.out.println("Updated Location: "+mo.location);
@@ -143,4 +170,21 @@ public class Rink extends JPanel implements Runnable {
         //
     }//test
 
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        movePlayer(e, p1);
+    }
+
+    public void movePlayer(MouseEvent e, Player p){
+        double slope = (double) (e.getY() - p.location.y) / (e.getX() - p.location.x);
+        double angle = Math.tan(slope);
+        p.setAngle(angle);
+        System.out.println("test");
+    }
 }

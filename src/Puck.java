@@ -35,8 +35,48 @@ public class Puck extends MovingObject {
 
     @Override
     public void updateLocation() {
-        reflection();
+        hitWalls();
         location.x = (int) (location.x + getSpeed() * Math.sin(getAngle()));
         location.y = (int) (location.y + getSpeed() * Math.cos(getAngle()));
+    }
+
+    public void hitWalls(){
+
+        reflection();
+        if(location.x >= rightGoalLine - radius && location.y <= bottomGoalPost + radius
+                && location.y >= topGoalPost - radius){
+            reflection();
+        }
+
+        else if(location.x <= leftGoalLine - radius && location.y <= bottomGoalPost + radius
+                && location.y >= topGoalPost - radius){
+            reflection();
+        }
+
+        if(location.x >= rightGoalLine && ((location.y <= bottomGoalPost + radius
+                && location.y > horizontalMiddle
+                && location.x < rightGoalBack)
+                || (location.y >= topGoalPost - radius
+                && location.y < horizontalMiddle
+                && location.x < rightGoalBack)
+                || (location.x <= rightGoalBack + radius
+                && location.x > rightGoalBack
+                && location.y < bottomGoalPost
+                && location.y > topGoalPost))){
+            reflection();
+        }
+        else if( location.x <= leftGoalLine && ((location.y <= bottomGoalPost + radius
+                && location.y > horizontalMiddle
+                && location.x > leftGoalBack)
+                || (location.y >= topGoalPost - radius
+                && location.y < horizontalMiddle
+                && location.x > leftGoalBack)
+                || (location.x >= leftGoalBack - radius
+                && location.x < leftGoalBack
+                && location.y < bottomGoalPost
+                && location.y > topGoalPost))){
+            reflection();
+        }
+
     }
 }

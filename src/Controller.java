@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 
 /**
@@ -23,14 +25,17 @@ public class Controller {
     Stick    s4;
     Stick    s5;
     Stick    s6;
+    MouseEvent e;
 
     public Controller(){
         ui      = new UI("Hockey");
-        rink    = new Rink();
+
 
         // Moving objects
         // CREATING PLAYERS AND GOALIES
         p1   = new Player(0,new Point(480, 275), 5, 3*Math.PI - 0.523599, 20, Color.RED);
+
+
         p2   = new Player(1,new Point(690, 370), 5, 3*Math.PI - 0.523599, 20, Color.GREEN);
         p3   = new Player(2,new Point(320, 170), 5, 4*Math.PI - 0.523599, 20, Color.MAGENTA);
         p4   = new Player(3,new Point(530, 275), 5, 4*Math.PI - 0.523599, 20, Color.BLUE);
@@ -43,7 +48,7 @@ public class Controller {
         s4   = new Stick(10,p4, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s5   = new Stick(11,g1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s6   = new Stick(12,g2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
-
+        rink    = new Rink(p1);
         //s1.setPlayer(p1);
         // GIVING PUCK REFERENCE TO GOALIES
         g1.setPuck(puck);
