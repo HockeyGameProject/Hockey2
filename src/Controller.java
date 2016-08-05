@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
@@ -33,7 +35,7 @@ public class Controller {
 
         // Moving objects
         // CREATING PLAYERS AND GOALIES
-        p1   = new Player(0,new Point(480, 275), 5, 3*Math.PI - 0.523599, 20, Color.RED);
+        p1   = new Player(0,new Point(480, 275), 3, 3*Math.PI - 0.523599, 20, Color.RED);
 
 
         p2   = new Player(1,new Point(690, 370), 5, 3*Math.PI - 0.523599, 20, Color.GREEN);
@@ -48,7 +50,7 @@ public class Controller {
         s4   = new Stick(10,p4, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s5   = new Stick(11,g1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s6   = new Stick(12,g2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
-        rink    = new Rink(p1);
+        rink    = new Rink();
         //s1.setPlayer(p1);
         // GIVING PUCK REFERENCE TO GOALIES
         g1.setPuck(puck);
@@ -75,6 +77,66 @@ public class Controller {
         ui.pack();
         ui.setVisible(true);
 
+        Rink.selectedPlayer = p1;
+        rink.addMouseMotionListener(rink);
+        rink.addKeyListener(rink);
+    }
+
+    private class KBListener implements KeyListener {
+
+        /**
+         * Invoked when a key has been typed.
+         * See the class description for {@link KeyEvent} for a definition of
+         * a key typed event.
+         *
+         * @param e
+         */
+        @Override
+        public void keyTyped(KeyEvent e) {
+            char c = e.getKeyChar();
+            if(c == 's' ){
+                if( Rink.selectedPlayer == p1)
+                    Rink.selectedPlayer = p2;
+                else
+                    Rink.selectedPlayer = p1;
+            }
+        }
+
+        /**
+         * Invoked when a key has been pressed.
+         * See the class description for {@link KeyEvent} for a definition of
+         * a key pressed event.
+         *
+         * @param e
+         */
+        @Override
+        public void keyPressed(KeyEvent e) {
+            char c = e.getKeyChar();
+            if(c == 's' ){
+                if( Rink.selectedPlayer == p1)
+                    Rink.selectedPlayer = p2;
+                else
+                    Rink.selectedPlayer = p1;
+            }
+        }
+
+        /**
+         * Invoked when a key has been released.
+         * See the class description for {@link KeyEvent} for a definition of
+         * a key released event.
+         *
+         * @param e
+         */
+        @Override
+        public void keyReleased(KeyEvent e) {
+            char c = e.getKeyChar();
+            if(c == 's' ){
+                if( Rink.selectedPlayer == p1)
+                    Rink.selectedPlayer = p2;
+                else
+                    Rink.selectedPlayer = p1;
+            }
+        }
     }
 
 

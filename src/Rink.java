@@ -1,10 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.List;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Line2D;
 //import java.awt.geom.Point2D;
@@ -19,43 +16,86 @@ import java.util.ArrayList;
  * @author Evan Mesa
  * @version 1
  */
-public class Rink extends JPanel implements Runnable, MouseMotionListener {
+public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyListener {
+
+    /**
+     * Invoked when a key has been typed.
+     * See the class description for {@link KeyEvent} for a definition of
+     * a key typed event.
+     *
+     * @param e
+     */
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+        if(c == 's' ){
+            System.out.println("pressed");
+            /*if( Rink.selectedPlayer == p1)
+                Rink.selectedPlayer = p2;
+            else
+                Rink.selectedPlayer = p1;
+                */
+        }
+    }
+
+    /**
+     * Invoked when a key has been pressed.
+     * See the class description for {@link KeyEvent} for a definition of
+     * a key pressed event.
+     *
+     * @param e
+     */
+    @Override
+    public void keyPressed(KeyEvent e) {
+        char c = e.getKeyChar();
+        if(c == 's' ){
+            System.out.println("pressed");
+            /*if( Rink.selectedPlayer == p1)
+                Rink.selectedPlayer = p2;
+            else
+                Rink.selectedPlayer = p1;
+            */
+        }
+    }
+
+    /**
+     * Invoked when a key has been released.
+     * See the class description for {@link KeyEvent} for a definition of
+     * a key released event.
+     *
+     * @param e
+     */
+    @Override
+    public void keyReleased(KeyEvent e) {
+        char c = e.getKeyChar();
+        if(c == 's' ){
+            System.out.println("pressed");
+            /*if( Rink.selectedPlayer == p1)
+                Rink.selectedPlayer = p2;
+            else
+                Rink.selectedPlayer = p1;
+            */
+        }
+    }
+
 
     Thread t;
     ArrayList<MovingObject> objects = new ArrayList<>();
-    Player p1;
+    static Player selectedPlayer;
+    boolean dragged = false;
+    boolean moved = false;
+    MouseEvent e = null;
 
-    Rink(Player p) {
+    Rink() {
         // set a preferred size for the custom panel.
         setPreferredSize(new Dimension(1000,550));
         setLayout(new BorderLayout());
-        p1 = p;
-
-        addMouseMotionListener(new MouseAdapter() {
-
-            public void mousePressed(MouseEvent e){
-
-                double slope = (double) (e.getY() - p1.location.y) / (e.getX() - p1.location.x);
-                double angle = Math.tan( slope);
-                p1.setAngle(angle);
-
-            }
-
-
-            public void mouseMoved(MouseEvent e) {
-                double slope = (double) (e.getY() - p1.location.y) / (e.getX() - p1.location.x);
-                double angle = Math.tan(slope);
-                p1.setAngle((-1) *angle);
-                System.out.println(p1.getPoint());
-
-            }
-        });
-
     }
 
     public void add(MovingObject mo){
         objects.add(mo);
     }
+
 
 
     @Override
@@ -87,8 +127,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener {
         rink.setColor(Color.BLACK);
         rink.draw(new RoundRectangle2D.Double(100, 100, 800, 350, 200, 200));
 
-        rink.setColor(Color.BLUE);//crease
-        rink.fillArc(190-40, 232, 86, 86, 90, -180);
+        rink.setColor(Color.BLUE);//creaserink.fillArc(190-40, 232, 86, 86, 90, -180);
         rink.fillArc(810-40-5, 232, 86, 86, 90, 180);
 
         rink.setColor(Color.BLACK);
@@ -129,8 +168,10 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener {
         System.out.println("RUNNING");
         int i = 0;
         while(i++ < 1000) {
+            moved = false;
+            dragged = false;
             try {
-                Thread.sleep(20);
+                Thread.sleep(33);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -147,16 +188,25 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener {
     public void updateAll(){
         // Collision detection
 
-
+        if(dragged || moved){
+            selectedPlayer.updateLocation(e.getX(),e.getY());
+        }
         for(MovingObject mo : objects){
             //System.out.println("Current Location: "+mo.location);
+
+            if(mo == selectedPlayer)
+                if (!dragged || !moved){
+                    mo.updateLocation();
+                }
+
+            //if(mo instanceof Player && mo != selectedPlayer)
             mo.updateLocation();
-            for(MovingObject ob : objects){
+            /*(for(MovingObject ob : objects){
                 if(mo != ob) {
                     //Collision.objectsCollide(mo, ob);
                 }
                 //collisionList.add(twoObjectsCollide);
-            }
+            }*/
 
             //System.out.println("Updated Location: "+mo.location);
         }
@@ -170,21 +220,24 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener {
         //
     }//test
 
-
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        dragged = true;
+        if(selectedPlayer != null) {
+            //selectedPlayer.updateLocation(e.getX(),e.getY());
+            //System.out.println(selectedPlayer.getPoint());
+            this.e = e;
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        movePlayer(e, p1);
+        moved = true;
+        if(selectedPlayer != null) {
+            //selectedPlayer.updateLocation(e.getX(),e.getY());
+            //System.out.println(selectedPlayer.getPoint());
+            this.e = e;
+        }
     }
 
-    public void movePlayer(MouseEvent e, Player p){
-        double slope = (double) (e.getY() - p.location.y) / (e.getX() - p.location.x);
-        double angle = Math.tan(slope);
-        p.setAngle(angle);
-        System.out.println("test");
-    }
 }
