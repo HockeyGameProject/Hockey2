@@ -38,7 +38,7 @@ public abstract class MovingObject extends Component {
         this.radius   = radius;
         this.color    = color;
     }
-
+    //test
     public Point getPoint() {
         return location;
     }
