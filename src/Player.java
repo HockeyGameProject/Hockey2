@@ -11,23 +11,20 @@ import java.awt.event.MouseMotionListener;
 public class Player extends MovingObject{
 
     Color teamColor;
+    Puck puck;
 
-
-    public Player(int id, Point point, int speed, double angle, int radius, Color color) {
+    public Player(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
         super(id, point, speed, angle, radius, color);
         this.teamColor = color;
+        this.puck = puck;
 
     }
 
 
-    public Player(int id, Point point, int speed, double angle, int radius, Color color, Color teamColor) {
-        super(id, point, speed, angle, radius, color);
-        this.teamColor = teamColor;
 
-
+    public void setPuck(Puck pk){
+        puck = pk;
     }
-
-
 
     //Graphics2D stick = (Graphics2D) g;
 
@@ -57,15 +54,38 @@ public class Player extends MovingObject{
 
     }
 
+    public void rubWalls(){
+        if ( hitWall == 1){
+            location.y = topBoundary + radius;
+        }
+        else if (hitWall == 2){
+            location.y = bottomBoundary - radius;
+        }
+        else if (hitWall == 3){
+            location.x = leftBoundary + radius;
+        }
+        else if (hitWall == 4){
+            location.x = rightBoundary - radius;
+        }
+
+    }
 
 
     public void hitWalls(){
-        if(location.y <= topBoundary + radius
-                || location.y >= bottomBoundary - radius
-                || location.x <= leftBoundary + radius
-                || location.x >= rightBoundary - radius ){
+        if(location.y <= topBoundary + radius){
+            hitWall = 1;
+        }
+        else if(location.y >= bottomBoundary - radius){
+            hitWall = 2;
 
-            setSpeed(0);
+        }
+        else if(location.x <= leftBoundary + radius){
+            hitWall = 3;
+
+        }
+        else if(location.x >= rightBoundary - radius ){
+            hitWall = 4;
+
         }
 
         if(location.x >= rightGoalLine - radius && location.y <= bottomGoalPost + radius
@@ -122,20 +142,26 @@ public class Player extends MovingObject{
 
     @Override
     public void updateLocation() {
+        double Y = puck.location.y - location.y;
+        double X = puck.location.x - location.x;
+        double angle = Math.atan2(Y, X);
+        setAngle(angle);
 
-        hitWalls();
         location.x = (int) (location.x + getSpeed() * Math.cos(angle));
         location.y = (int) (location.y + getSpeed() * Math.sin(angle));
     }
 
     public void updateLocation(double x, double y){
-
+        setSpeed(3);
         double Y = y - location.y;
         double X = x - location.x;
-        double slope = Y / X;
+        //double slope = Y / X;
         double angle = Math.atan2(Y, X);
         setAngle(angle);
-        updateLocation();
+
+        location.x = (int) (location.x + getSpeed() * Math.cos(angle));
+        location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+
     }
 
     /*

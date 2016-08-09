@@ -28,7 +28,7 @@ public abstract class MovingObject extends Component {
     static int horizontalMiddle = 275;
     static int leftGoalBack = 150;
     static int rightGoalBack = 850;
-
+    int hitWall = 0;
 
     public MovingObject(int id, Point point, int speed, double angle, int radius, Color color) {
         this.id       = id;

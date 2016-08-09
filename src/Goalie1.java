@@ -3,13 +3,9 @@ import java.awt.*;
 
 public class Goalie1 extends Player {
 
-    private Puck puck;
-    public Goalie1(int id, Point point, int speed, double angle, int radius, Color color) {
-        super(id, point, speed, angle, radius, color);
-    }
-
-    public void setPuck(Puck pk){
-        puck = pk;
+    //private Puck puck;
+    public Goalie1(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
+        super(id, point, speed, angle, radius, color, puck);
     }
 
 

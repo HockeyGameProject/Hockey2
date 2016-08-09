@@ -127,7 +127,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
         rink.setColor(Color.BLACK);
         rink.draw(new RoundRectangle2D.Double(100, 100, 800, 350, 200, 200));
 
-        rink.setColor(Color.BLUE);//creaserink.fillArc(190-40, 232, 86, 86, 90, -180);
+        rink.setColor(Color.BLUE);//crease
+        rink.fillArc(190-40, 232, 86, 86, 90, -180);
         rink.fillArc(810-40-5, 232, 86, 86, 90, 180);
 
         rink.setColor(Color.BLACK);
@@ -167,6 +168,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
     public void run() {
         System.out.println("RUNNING");
         int i = 0;
+
         while(i++ < 1000) {
             moved = false;
             dragged = false;
@@ -193,11 +195,21 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
         }
         for(MovingObject mo : objects){
             //System.out.println("Current Location: "+mo.location);
-
-            if(mo == selectedPlayer)
-                if (!dragged || !moved){
+            selectedPlayer.hitWalls();
+            if(mo == selectedPlayer) {
+                if (!dragged || !moved) {
+                    //System.out.println("test");
                     mo.updateLocation();
                 }
+
+                if(mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 || mo.hitWall == 4){
+
+                    selectedPlayer.rubWalls();
+                    selectedPlayer.updateLocation(e.getX(), e.getY());
+                    selectedPlayer.hitWall = 0;
+                }
+            }
+
 
             //if(mo instanceof Player && mo != selectedPlayer)
             mo.updateLocation();
