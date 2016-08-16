@@ -45,6 +45,9 @@ public class Stick extends MovingObject{
         b = (int)( location.y + radius * Math.sin(getAngle()));
     }
 
+    public void hitWalls(){
+
+    }
     @Override
     public void draw(Graphics2D g2d) {
 

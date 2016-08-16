@@ -28,6 +28,7 @@ public abstract class MovingObject extends Component {
     static int horizontalMiddle = 275;
     static int leftGoalBack = 150;
     static int rightGoalBack = 850;
+    Point firstArcCenter = new Point(rightBoundary - 100, bottomBoundary - 100);
     int hitWall = 0;
 
     public MovingObject(int id, Point point, int speed, double angle, int radius, Color color) {
@@ -71,6 +72,7 @@ public abstract class MovingObject extends Component {
 
 
     //test
+    public abstract void hitWalls();
     public abstract void updateLocation();
 
     public void draw(Graphics2D g2d){

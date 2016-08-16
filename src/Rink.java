@@ -170,10 +170,10 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
         int i = 0;
 
         while(i++ < 1000) {
-            moved = false;
-            dragged = false;
+            //moved = false;
+            //dragged = false;
             try {
-                Thread.sleep(33);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -190,44 +190,27 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
     public void updateAll(){
         // Collision detection
 
-        if(dragged || moved){
-            selectedPlayer.updateLocation(e.getX(),e.getY());
-        }
         for(MovingObject mo : objects){
             //System.out.println("Current Location: "+mo.location);
-            selectedPlayer.hitWalls();
+            mo.hitWalls();
+            if((mo instanceof Player) && (mo.hitWall == 1 ||
+                    mo.hitWall == 2 || mo.hitWall == 3 || mo.hitWall == 4)){
+                Player p = (Player) mo;
+                p.rubWalls();
+                //mo.updateLocation();
+                p.hitWall = 0;
+            }
             if(mo == selectedPlayer) {
-                if (!dragged || !moved) {
-                    //System.out.println("test");
-                    mo.updateLocation();
-                }
 
-                if(mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 || mo.hitWall == 4){
+                if(dragged || moved)
+                    selectedPlayer.updateLocation(e.getX(),e.getY());
 
-                    selectedPlayer.rubWalls();
-                    selectedPlayer.updateLocation(e.getX(), e.getY());
-                    selectedPlayer.hitWall = 0;
-                }
+            }else {
+                mo.updateLocation();
             }
 
-
-            //if(mo instanceof Player && mo != selectedPlayer)
-            mo.updateLocation();
-            /*(for(MovingObject ob : objects){
-                if(mo != ob) {
-                    //Collision.objectsCollide(mo, ob);
-                }
-                //collisionList.add(twoObjectsCollide);
-            }*/
-
-            //System.out.println("Updated Location: "+mo.location);
         }
 
-        for(ArrayList<MovingObject> col : collisionList){// for each list in the list of list
-            //handle collisions set angle and speed with
-            col.get(0);
-            col.get(1);
-        }
         // update objects
         //
     }//test
@@ -235,21 +218,20 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
     @Override
     public void mouseDragged(MouseEvent e) {
         dragged = true;
-        if(selectedPlayer != null) {
+
             //selectedPlayer.updateLocation(e.getX(),e.getY());
             //System.out.println(selectedPlayer.getPoint());
-            this.e = e;
-        }
+        this.e = e;
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         moved = true;
-        if(selectedPlayer != null) {
+
             //selectedPlayer.updateLocation(e.getX(),e.getY());
             //System.out.println(selectedPlayer.getPoint());
-            this.e = e;
-        }
+        this.e = e;
+
     }
 
 }

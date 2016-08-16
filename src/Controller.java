@@ -34,16 +34,14 @@ public class Controller {
 
 
         // Moving objects
-        puck = new Puck(6,new Point(800, 200), 5, 0.523599 * (-5.5), 10, Color.BLACK);
+        puck = new Puck(6,new Point(800, 200), 10, 0.523599, 10, Color.BLACK);
         // CREATING PLAYERS AND GOALIES
-        p1   = new Player(0,new Point(480, 275), 3, 3*Math.PI - 0.523599, 20, Color.RED, puck);
-
-
+        p1   = new Player(0,new Point(480, 275), 5, 3*Math.PI - 0.523599, 20, Color.RED, puck);
         p2   = new Player(1,new Point(690, 370), 5, 3*Math.PI - 0.523599, 20, Color.GREEN, puck);
         p3   = new Player(2,new Point(320, 170), 5, 4*Math.PI - 0.523599, 20, Color.MAGENTA, puck);
         p4   = new Player(3,new Point(530, 275), 5, 4*Math.PI - 0.523599, 20, Color.BLUE, puck);
-        g1   = new Goalie1(4,new Point(190+20, 275), 5, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY, puck);
-        g2   = new Goalie2(5,new Point(810-20, 275), 5, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY, puck);
+        g1   = new Goalie1(4,new Point(190+20, 275), 3, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY, puck);
+        g2   = new Goalie2(5,new Point(810-20, 275), 3, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY, puck);
 
         s1   = new Stick(7,p1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s2   = new Stick(8,p2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
@@ -51,6 +49,7 @@ public class Controller {
         s4   = new Stick(10,p4, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s5   = new Stick(11,g1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s6   = new Stick(12,g2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
+        Rink.selectedPlayer = p1;
         rink    = new Rink();
         //s1.setPlayer(p1);
         // GIVING PUCK REFERENCE TO GOALIES
@@ -78,7 +77,7 @@ public class Controller {
         ui.pack();
         ui.setVisible(true);
 
-        Rink.selectedPlayer = p1;
+
         rink.addMouseMotionListener(rink);
         rink.addKeyListener(rink);
     }
