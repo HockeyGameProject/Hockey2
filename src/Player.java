@@ -4,6 +4,7 @@ import java.awt.event.MouseMotionListener;
 
 /**
  * creates a player object
+ * @author Aditi Datta
  * @author Evan Mesa
  * @version 1
  */
@@ -74,6 +75,10 @@ public class Player extends MovingObject{
         double theta = Math.atan2((location.y-cy), (location.x-cx));
         return theta;
     }
+
+
+
+
 
 
     public void hitWalls(){

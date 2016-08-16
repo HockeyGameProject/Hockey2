@@ -34,7 +34,7 @@ public class Controller {
 
 
         // Moving objects
-        puck = new Puck(6,new Point(800, 200), 10, 0.523599, 10, Color.BLACK);
+        puck = new Puck(6,new Point(200, 200), 5, Math.PI - 0.523599, 10, Color.BLACK);
         // CREATING PLAYERS AND GOALIES
         p1   = new Player(0,new Point(480, 275), 5, 3*Math.PI - 0.523599, 20, Color.RED, puck);
         p2   = new Player(1,new Point(690, 370), 5, 3*Math.PI - 0.523599, 20, Color.GREEN, puck);

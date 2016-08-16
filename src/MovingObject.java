@@ -28,7 +28,12 @@ public abstract class MovingObject extends Component {
     static int horizontalMiddle = 275;
     static int leftGoalBack = 150;
     static int rightGoalBack = 850;
-    Point firstArcCenter = new Point(rightBoundary - 100, bottomBoundary - 100);
+
+    Point arcCenter1 = new Point(leftBoundary+100,topBoundary+100);
+    Point arcCenter2 = new Point(rightBoundary-100,topBoundary+100);
+    Point arcCenter3 = new Point(leftBoundary+100,bottomBoundary-100);
+    Point arcCenter4 = new Point(rightBoundary - 100, bottomBoundary - 100);
+
     int hitWall = 0;
 
     public MovingObject(int id, Point point, int speed, double angle, int radius, Color color) {

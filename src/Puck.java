@@ -1,7 +1,8 @@
 import java.awt.*;
 
 /**
- * creates and drwas a puck object on the rink
+ * creates and draws a puck object on the rink
+ * @author Aditi Datta
  * @author Evan Mesa
  * @version 1
  */
@@ -23,8 +24,8 @@ public class Puck extends MovingObject {
 
     @Override
     public void updateLocation() {
-        location.x = (int) (location.x + getSpeed() * Math.sin(getAngle()));
-        location.y = (int) (location.y + getSpeed() * Math.cos(getAngle()));
+        location.x = (int) (location.x + speed * Math.cos(angle));
+        location.y = (int) (location.y + speed * Math.sin(angle));
     }
 
     public void reflection(double angle, int n){
@@ -40,6 +41,24 @@ public class Puck extends MovingObject {
 
     }
 
+    double reflectionAngleWithTangent(Point center){
+        double angle = angleWithArcCenter(center.x, center.y);
+        Point end = new Point();
+        end.x = center.x + (int) (100*Math.cos(angle));
+        end.y = center.y + (int) (100*Math.sin(angle));
+        Line incident = new Line(center, end);
+        Point tangentStart = new Point(end);
+        Point tangentEnd = new Point();
+        double angle1 = angle + ((Math.PI/180)*1);
+        tangentEnd.x = center.x + (int) (100*Math.cos(angle1));
+        tangentEnd.y = center.y + (int) (100*Math.sin(angle1));
+        Line tangent = new Line(tangentStart, tangentEnd);
+        double tangentTheta = Math.atan2(tangent.slopeY, tangent.slopeX);
+        double lineTheta = Math.atan2(incident.slopeY, incident.slopeX);
+        double incidenceAngle = (Math.PI/180)*90 - (lineTheta - tangentTheta);
+        return ((Math.PI/180)*90) + (incidenceAngle*2);
+    }
+
     double angleWithArcCenter(int cx, int cy){
         double theta = Math.atan2((location.y-cy), (location.x-cx));
         return theta;
@@ -50,40 +69,40 @@ public class Puck extends MovingObject {
 
         if(location.y <= topBoundary + radius ||
                 location.y >= bottomBoundary - radius){
-            reflection(angle, 1);
+            reflection(angle, 2);
         }
         else if(location.x <= leftBoundary + radius ||
                 location.x >= rightBoundary - radius ){
-            reflection(angle, 2);
+            reflection(angle, 1);
         }
 
         // Arcs and tangents
         if(location.x >= rightBoundary - 100 &&
                 location.y >= bottomBoundary - 100){    // 4th corner
-            Point center = new Point(rightBoundary - 100, bottomBoundary - 100);
-            double distance = Math.hypot(location.x-center.x, location.y-center.y);
+            double distance = Math.hypot(location.x-arcCenter4.x,
+                    location.y-arcCenter4.y);
             if (distance >= 100-radius){
-                double angle = angleWithArcCenter(center.x, center.y);
-                reflection(angle, 1);
+                double refAngle = reflectionAngleWithTangent(arcCenter4);
+                reflection(refAngle,2);
             }
 
         }
         else if(location.y <= topBoundary+100 &&
                 location.x <= leftBoundary+100){    // 1st corner
-            Point center = new Point(leftBoundary+100,topBoundary+100);
-            double distance = Math.hypot(location.x-center.x, location.y-center.y);
+            double distance = Math.hypot(location.x-arcCenter1.x,
+                    location.y-arcCenter1.y);
             if (distance >= 100-radius){
-                double angle = angleWithArcCenter(center.x, center.y);
-                reflection(angle, 1);
+                double refAngle = reflectionAngleWithTangent(arcCenter1);
+                reflection(refAngle,1);
             }
         }
         else if(location.x <= leftBoundary+100 &&
                 location.y >= bottomBoundary - 100){    // 3rd corner
-            Point center = new Point(leftBoundary+100,bottomBoundary-100);
-            double distance = Math.hypot(location.x-center.x, location.y-center.y);
+            double distance = Math.hypot(location.x-arcCenter3.x,
+                    location.y-arcCenter3.y);
             if (distance >= 100-radius){
-                double angle = angleWithArcCenter(center.x, center.y);
-                reflection(angle, 1);
+                double refAngle = reflectionAngleWithTangent(arcCenter3);
+                reflection(refAngle,2);
             }
         }
         else if(location.y <= topBoundary+100 &&
@@ -91,8 +110,9 @@ public class Puck extends MovingObject {
             Point center = new Point(rightBoundary-100,topBoundary+100);
             double distance = Math.hypot(location.x-center.x, location.y-center.y);
             if (distance >= 100-radius){
-                double angle = angleWithArcCenter(center.x, center.y);
-                reflection(angle, 1);
+                double refAngle = reflectionAngleWithTangent(arcCenter2);
+                //setAngle(refAngle);
+                reflection(refAngle,1);
             }
         }
 
@@ -101,35 +121,35 @@ public class Puck extends MovingObject {
         // Left goal post
         if(location.x < leftGoalLine && location.y < topGoalPost){
             if(location.y >= topGoalPost-radius && location.x > leftGoalBack){
-                reflection(angle, 1);
+                reflection(angle, 2);
             }
         }
         else if(location.x < leftGoalLine  && location.y > bottomGoalPost){
             if(location.y <= bottomGoalPost+radius && location.x > leftGoalBack){
-                reflection(angle, 1);
+                reflection(angle, 2);
             }
         }
         else if(location.x < leftGoalBack && location.y > topGoalPost &&
                 location.y < bottomGoalPost){
             if(location.x >= leftGoalBack-radius)
-                reflection(angle, 2);
+                reflection(angle, 1);
         }
 
         // Right Goal post
         if(location.x > rightGoalLine && location.y < topGoalPost){
             if(location.y >= topGoalPost-radius && location.x < rightGoalBack){
-                reflection(angle, 1);
+                reflection(angle, 2);
             }
         }
         else if(location.x > rightGoalLine  && location.y > bottomGoalPost){
             if(location.y <= bottomGoalPost+radius && location.x < rightGoalBack){
-                reflection(angle, 1);
+                reflection(angle, 2);
             }
         }
         else if(location.x > rightGoalBack && location.y > topGoalPost &&
                 location.y < bottomGoalPost){
             if(location.x <= rightGoalBack+radius)
-                reflection(angle, 2);
+                reflection(angle, 1);
         }
 
     }
