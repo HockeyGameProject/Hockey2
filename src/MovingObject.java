@@ -15,6 +15,7 @@ public abstract class MovingObject extends Component {
     int     radius;
     Color   color;
     int     id;
+    int     mass = 10;
 
     static int topBoundary = 100;
     static int bottomBoundary = 450;
@@ -43,6 +44,7 @@ public abstract class MovingObject extends Component {
         this.angle    = angle;
         this.radius   = radius;
         this.color    = color;
+        //this.mass     = mass;
     }
     //test
     public Point getPoint() {
