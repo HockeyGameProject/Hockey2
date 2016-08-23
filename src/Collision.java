@@ -17,7 +17,7 @@ public class Collision {
         for (int i = 0; i < 7; i++){
             adjList[i] = new ArrayList<MovingObject>();
             color[i]   = WHITE;
-        }
+        }//jjjj
     }
 
     public boolean objectsCollide(MovingObject object1, MovingObject object2){
