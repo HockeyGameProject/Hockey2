@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.text.Keymap;
 import java.awt.*;
 import java.awt.List;
 import java.awt.event.*;
@@ -16,72 +17,14 @@ import java.util.ArrayList;
  * @author Evan Mesa
  * @version 1
  */
-public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyListener {
+public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
-    /**
-     * Invoked when a key has been typed.
-     * See the class description for {@link KeyEvent} for a definition of
-     * a key typed event.
-     *
-     * @param e
-     */
-    @Override
-    public void keyTyped(KeyEvent e) {
-        char c = e.getKeyChar();
-        if(c == 's' ){
-            System.out.println("pressed");
-            /*if( Rink.selectedPlayer == p1)
-                Rink.selectedPlayer = p2;
-            else
-                Rink.selectedPlayer = p1;
-                */
-        }
-    }
-
-    /**
-     * Invoked when a key has been pressed.
-     * See the class description for {@link KeyEvent} for a definition of
-     * a key pressed event.
-     *
-     * @param e
-     */
-    @Override
-    public void keyPressed(KeyEvent e) {
-        char c = e.getKeyChar();
-        if(c == 's' ){
-            System.out.println("pressed");
-            /*if( Rink.selectedPlayer == p1)
-                Rink.selectedPlayer = p2;
-            else
-                Rink.selectedPlayer = p1;
-            */
-        }
-    }
-
-    /**
-     * Invoked when a key has been released.
-     * See the class description for {@link KeyEvent} for a definition of
-     * a key released event.
-     *
-     * @param e
-     */
-    @Override
-    public void keyReleased(KeyEvent e) {
-        char c = e.getKeyChar();
-        if(c == 's' ){
-            System.out.println("pressed");
-            /*if( Rink.selectedPlayer == p1)
-                Rink.selectedPlayer = p2;
-            else
-                Rink.selectedPlayer = p1;
-            */
-        }
-    }
 
 
     Thread t;
     ArrayList<MovingObject> objects = new ArrayList<>();
     static Player selectedPlayer;
+    static Player selectedPlayer2;
     boolean dragged = false;
     boolean moved = false;
     MouseEvent e = null;
@@ -94,6 +37,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
 
     public void add(MovingObject mo){
         objects.add(mo);
+        super.add(mo);
+
     }
 
 
@@ -200,10 +145,11 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
                 //mo.updateLocation();
                 p.hitWall = 0;
             }
-            if(mo == selectedPlayer) {
+            if(mo == selectedPlayer || mo == selectedPlayer2) {
 
-                if(dragged || moved)
-                    selectedPlayer.updateLocation(e.getX(),e.getY());
+                if(dragged || moved) {
+                    selectedPlayer.updateLocation(e.getX(), e.getY());
+                }
 
             }else {
                 mo.updateLocation();
@@ -231,6 +177,136 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener, KeyLi
             //selectedPlayer.updateLocation(e.getX(),e.getY());
             //System.out.println(selectedPlayer.getPoint());
         this.e = e;
+    }
+    /*
+    public class MoveClass extends AbstractAction {
+        Player p1;
+        MoveClass(Player p){
+            p1 = selectedPlayer;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            System.out.println("test2");
+            p1.angle = 3*(Math.PI)/2;
+
+        }
+    }*/
+    private class MotionAction extends AbstractAction implements ActionListener
+    {
+
+
+        public MotionAction(Player p, double angle)
+        {
+
+            p = selectedPlayer2;
+            angle = selectedPlayer2.angle;
+        }
+
+        public void actionPerformed(ActionEvent e)
+        {
+
+        }
+    }
+
+    public void useKeys(Player p, double angle){
+
+    }
+
+
+    public void addKeys(){
+
+
+        selectedPlayer2.setFocusable(true);
+        selectedPlayer2.requestFocusInWindow();
+
+
+        KeyStroke w = KeyStroke.getKeyStroke("W");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(w, "up");
+        selectedPlayer2.getActionMap().put("up", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedPlayer2.moveY(5);
+                selectedPlayer2.setAngle(3 *Math.PI/2);
+            }
+        });
+
+
+        KeyStroke a = KeyStroke.getKeyStroke("A");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(a, "left");
+        selectedPlayer2.getActionMap().put("left", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedPlayer2.moveX(-5);
+                selectedPlayer2.setAngle(Math.PI);
+            }
+        });
+
+        KeyStroke d = KeyStroke.getKeyStroke("D");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(d, "right");
+        selectedPlayer2.getActionMap().put("right", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedPlayer2.moveX(5);
+                selectedPlayer2.setAngle(0);
+            }
+        });
+
+
+        KeyStroke s = KeyStroke.getKeyStroke("S");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(s, "down");
+        selectedPlayer2.getActionMap().put("down", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedPlayer2.moveY(-5);
+                selectedPlayer2.setAngle(Math.PI/2);
+            }
+        });
+
+        KeyStroke j = KeyStroke.getKeyStroke("J");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(j, "wrist shot");
+        selectedPlayer2.getActionMap().put("wrist shot", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //if puck is possessed, wrist shot
+                selectedPlayer2.wristShot(Controller.puck);
+            }
+        });
+
+        KeyStroke k = KeyStroke.getKeyStroke("K");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(j, "pass or steal");
+        selectedPlayer2.getActionMap().put("pass or steal", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //if puck is possesed, pass, if not, steal
+                selectedPlayer2.pass(Controller.puck);
+            }
+        });
+
+
+
+        selectedPlayer.getInputMap().put(KeyStroke.getKeyStroke("J"), "button 1");
+        selectedPlayer.getActionMap().put("J", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //wrist shot
+            }
+        });
+        selectedPlayer.getInputMap().put(KeyStroke.getKeyStroke("K"), "button 2");
+        selectedPlayer.getActionMap().put("up", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //pass
+            }
+        });
+        selectedPlayer.getInputMap().put(KeyStroke.getKeyStroke("L"), "button 3");
+        selectedPlayer.getActionMap().put("up", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //slap shot
+            }
+        });
 
     }
 

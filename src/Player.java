@@ -39,6 +39,8 @@ public class Player extends MovingObject{
     }
 
     public void wristShot(Puck puck){
+
+
         puck.setAngle(getAngle());
         puck.setSpeed(7);
     }
@@ -166,6 +168,17 @@ public class Player extends MovingObject{
         location.x = (int) (location.x + getSpeed() * Math.cos(angle));
         location.y = (int) (location.y + getSpeed() * Math.sin(angle));
 
+    }
+    public void updateLocationKeys(int x, int y){
+        location.x = (int) (location.x + x);
+        location.y = (int) (location.y + y);
+    }
+
+    public void moveX(int num){
+        updateLocationKeys(num, 0);
+    }
+    public void moveY(int num){
+        updateLocationKeys(0, (-1)*num);
     }
 
 }

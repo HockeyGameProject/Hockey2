@@ -35,12 +35,17 @@ public class Stick extends MovingObject{
         this.player = player;
     }
 
+    public void setAngle(Player p){
+        angle = p.angle;
+    }
+
 
     @Override
     public void updateLocation() {
         //a = player.getLocation().x;
         //b = player.getLocation().y;
         location = player.location;
+        setAngle(player);
         a = (int)( location.x + radius * Math.cos(getAngle()));
         b = (int)( location.y + radius * Math.sin(getAngle()));
     }
@@ -48,6 +53,8 @@ public class Stick extends MovingObject{
     public void hitWalls(){
 
     }
+
+
     @Override
     public void draw(Graphics2D g2d) {
 

@@ -15,6 +15,8 @@ public class Puck extends MovingObject {
         super(id, point, speed, angle, radius, color);
     }
 
+
+
     @Override
     public void setRadius(int radius) {
         super.setRadius(15);

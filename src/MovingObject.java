@@ -5,9 +5,10 @@
  * @version 2
  */
 
+import javax.swing.*;
 import java.awt.*;
 
-public abstract class MovingObject extends Component {
+public abstract class MovingObject extends JComponent {
 
     Point   location;
     int     speed;

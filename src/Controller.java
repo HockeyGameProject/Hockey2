@@ -20,7 +20,7 @@ public class Controller {
     Player   p4;
     Goalie1  g1;
     Goalie2  g2;
-    Puck     puck;
+    static Puck     puck;
     Stick    s1;
     Stick    s2;
     Stick    s3;
@@ -29,12 +29,17 @@ public class Controller {
     Stick    s6;
     MouseEvent e;
 
+
+
+
     public Controller(){
         ui      = new UI("Hockey");
 
 
         // Moving objects
         puck = new Puck(6,new Point(200, 200), 5, Math.PI - 0.523599, 10, Color.BLACK);
+
+
         // CREATING PLAYERS AND GOALIES
         p1   = new Player(0,new Point(480, 275), 5, 3*Math.PI - 0.523599, 20, Color.RED, puck);
         p2   = new Player(1,new Point(690, 370), 5, 3*Math.PI - 0.523599, 20, Color.GREEN, puck);
@@ -50,7 +55,12 @@ public class Controller {
         s5   = new Stick(11,g1, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         s6   = new Stick(12,g2, 5, 3*Math.PI - 0.523599, 40, Color.BLACK);
         Rink.selectedPlayer = p1;
+        Rink.selectedPlayer2 = p2;
+
+
+
         rink    = new Rink();
+        rink.addKeys();
         //s1.setPlayer(p1);
         // GIVING PUCK REFERENCE TO GOALIES
         //g1.setPuck(puck);
@@ -79,7 +89,8 @@ public class Controller {
 
 
         rink.addMouseMotionListener(rink);
-        rink.addKeyListener(rink);
+
+       // rink.addKeyListener(rink);
     }
 
     private class KBListener implements KeyListener {
