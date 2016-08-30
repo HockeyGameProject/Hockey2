@@ -22,12 +22,19 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
     Thread t;
-    ArrayList<MovingObject> objects = new ArrayList<>();
+    ArrayList<Player> players = new ArrayList<>();
     static Player selectedPlayer;
     static Player selectedPlayer2;
     boolean dragged = false;
     boolean moved = false;
     MouseEvent e = null;
+    int possession = 0;
+    Puck puck;
+    int frames = 0;
+    boolean flag = false;
+
+
+
 
     Rink() {
         // set a preferred size for the custom panel.
@@ -35,10 +42,15 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         setLayout(new BorderLayout());
     }
 
-    public void add(MovingObject mo){
-        objects.add(mo);
-        super.add(mo);
 
+    public void add(Player mo){
+        players.add(mo);
+        super.add(mo);
+    }
+
+    public void add(Puck puck){
+        this.puck = puck;
+        super.add(puck);
     }
 
 
@@ -89,9 +101,10 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         rink.draw(arc4);
 
 
-        for(MovingObject mo : objects){
+        for(Player mo : players){
             mo.draw(rink);
         }
+        puck.draw(rink);
     }
 
     @Override
@@ -113,6 +126,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     public void run() {
         System.out.println("RUNNING");
         int i = 0;
+        //int frames = 0;
+
 
         while(i++ < 1000) {
             //moved = false;
@@ -130,20 +145,37 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
 
-    ArrayList<ArrayList<MovingObject>> collisionList = new ArrayList<>();
-    ArrayList<MovingObject> twoObjectsCollide = new ArrayList<>();
+
     public void updateAll(){
         // Collision detection
 
-        for(MovingObject mo : objects){
+        puck.hitWalls();
+        puck.updateLocation();
+        for(Player mo : players){
             //System.out.println("Current Location: "+mo.location);
+
+            if(flag == true){ // for body check
+                frames++;
+                selectedPlayer.bodyCheck();
+            }
+
+            if(frames > 4 && frames < 120){
+                frames++;
+                flag = false;
+                selectedPlayer.speed = 0;
+            }
+            if(frames == 120){
+                selectedPlayer.setSpeed(3);
+            }
+            //button mashing is working, take this out
+            //hel;l;m
+
             mo.hitWalls();
-            if((mo instanceof Player) && (mo.hitWall == 1 ||
-                    mo.hitWall == 2 || mo.hitWall == 3 || mo.hitWall == 4)){
-                Player p = (Player) mo;
-                p.rubWalls();
+            if((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 || mo.hitWall == 4)){
+
+                mo.rubWalls();
                 //mo.updateLocation();
-                p.hitWall = 0;
+                mo.hitWall = 0;
             }
             if(mo == selectedPlayer || mo == selectedPlayer2) {
 
@@ -154,7 +186,11 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }else {
                 mo.updateLocation();
             }
+            selectedPlayer.stickHandling();
 
+            if( selectedPlayer.hold == 1 ) {
+                selectedPlayer.holdPuck();
+            }
         }
 
         // update objects
@@ -178,21 +214,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             //System.out.println(selectedPlayer.getPoint());
         this.e = e;
     }
-    /*
-    public class MoveClass extends AbstractAction {
-        Player p1;
-        MoveClass(Player p){
-            p1 = selectedPlayer;
-        }
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            System.out.println("test2");
-            p1.angle = 3*(Math.PI)/2;
-
-        }
-    }*/
     private class MotionAction extends AbstractAction implements ActionListener
     {
 
@@ -218,8 +240,10 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     public void addKeys(){
 
 
-        selectedPlayer2.setFocusable(true);
-        selectedPlayer2.requestFocusInWindow();
+        //selectedPlayer2.setFocusable(true);
+        //selectedPlayer2.requestFocusInWindow();
+        //selectedPlayer.setFocusable(true);
+        //selectedPlayer.requestFocusInWindow();
 
 
         KeyStroke w = KeyStroke.getKeyStroke("W");
@@ -259,54 +283,65 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         selectedPlayer2.getActionMap().put("down", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("testS");
                 selectedPlayer2.moveY(-5);
                 selectedPlayer2.setAngle(Math.PI/2);
             }
         });
 
+        KeyStroke Q = KeyStroke.getKeyStroke("Q");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(Q, "diag");
+        selectedPlayer2.getActionMap().put("diag", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("testq");
+                selectedPlayer2.moveY(5);
+                selectedPlayer2.moveX(-5);
+                selectedPlayer2.setAngle(-3 * Math.PI/4);
+            }
+        });
+
         KeyStroke j = KeyStroke.getKeyStroke("J");
-        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(j, "wrist shot");
-        selectedPlayer2.getActionMap().put("wrist shot", new AbstractAction() {
+        selectedPlayer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(j, "button1");
+        selectedPlayer.getActionMap().put("button1", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //if puck is possessed, wrist shot
-                selectedPlayer2.wristShot(Controller.puck);
+                System.out.println("testJ");
+                if(selectedPlayer.hold == 1){
+                    selectedPlayer.wristShot();
+                }
+
             }
         });
 
-        KeyStroke k = KeyStroke.getKeyStroke("K");
-        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(j, "pass or steal");
-        selectedPlayer2.getActionMap().put("pass or steal", new AbstractAction() {
+        KeyStroke l = KeyStroke.getKeyStroke("L");
+        selectedPlayer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(l, "button3");
+        selectedPlayer.getActionMap().put("button3", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //if puck is possesed, pass, if not, steal
-                selectedPlayer2.pass(Controller.puck);
+                System.out.println("testL");
+                if(selectedPlayer.hold == 1){
+                    selectedPlayer.slapShot();
+                }
+                else{
+                    if(frames >= 120 || frames == 0) {
+
+                        System.out.println("body check");
+                        flag = true;
+                        frames = 0;
+                    }
+                }
+
             }
         });
 
 
 
-        selectedPlayer.getInputMap().put(KeyStroke.getKeyStroke("J"), "button 1");
-        selectedPlayer.getActionMap().put("J", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //wrist shot
-            }
-        });
-        selectedPlayer.getInputMap().put(KeyStroke.getKeyStroke("K"), "button 2");
-        selectedPlayer.getActionMap().put("up", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //pass
-            }
-        });
-        selectedPlayer.getInputMap().put(KeyStroke.getKeyStroke("L"), "button 3");
-        selectedPlayer.getActionMap().put("up", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //slap shot
-            }
-        });
+
+
+
+
+
 
     }
 

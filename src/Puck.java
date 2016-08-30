@@ -31,16 +31,62 @@ public class Puck extends MovingObject {
     }
 
     public void reflection(double angle, int n){
-        double reflectAngle;
+        double reflectAngle =0;
+
         if(n == 1){
-            reflectAngle = (-1)*angle+Math.PI;
-            setAngle(reflectAngle);
+            /*if(initAngle == Math.PI){
+                reflectAngle = 0;
+            }
+            else if( initAngle == 0){
+                reflectAngle = Math.PI;
+            }
+            else {
+                reflectAngle = (-1) * angle + Math.PI;
+            }*/
+
+            reflectAngle = (-1) * angle + Math.PI;
         }
         else if(n == 2){
+            /*
+            if(initAngle == Math.PI/2){
+                reflectAngle = 3* Math.PI/2;
+            }
+            else if( initAngle == 3/2 * Math.PI){
+                reflectAngle = Math.PI/2;
+
+            }
+            else {
+                reflectAngle = (-1)*angle;
+            }*/
             reflectAngle = (-1)*angle;
-            setAngle(reflectAngle);
+        }
+        setAngle(reflectAngle);
+        /*
+        double adjust;
+        if(initAngle >= 2 * Math.PI){
+            angle = angle % 2*Math.PI;
         }
 
+        if(n == 1){
+            if ( initAngle > Math.PI/2 && initAngle < 3/2 * Math.PI){
+                adjust = initAngle - Math.PI;
+                angle = initAngle + adjust * 2;
+            }
+            else if( (initAngle >= -Math.PI/2 && initAngle < Math.PI) || (initAngle > 3/2 * Math.PI) ){
+                adjust = Math.PI - initAngle;
+                angle = initAngle+ adjust * 2;
+            }
+        }
+        else if( n == 2){
+            if( initAngle < Math.PI){
+                adjust = Math.PI - initAngle;
+                angle = initAngle+ adjust * 2;
+            }
+            else if ( initAngle > Math.PI){
+                adjust = initAngle - Math.PI;
+                angle = initAngle + adjust * 2;
+            }
+        }*/
     }
 
     double reflectionAngleWithTangent(Point center){
@@ -69,15 +115,51 @@ public class Puck extends MovingObject {
     @Override
     public void hitWalls(){
 
-        if(location.y <= topBoundary + radius ||
-                location.y >= bottomBoundary - radius){
-            reflection(angle, 2);
+
+        /*
+        double slope = Math.tan(angle);
+        double topCollisionPointX    =  ( location.x - (location.y - topBoundary + radius)/slope );
+        double bottomCollisionPointX =  ( location.x - (location.y - bottomBoundary - radius)/slope );
+        double leftCollisionPointY   =  ( location.y - (location.x - leftBoundary + radius)*slope);
+        double rightCollisonPointY   =  ( location.y - (location.x - rightBoundary - radius)*slope);
+
+        double topDistance = Math.sqrt(Math.pow((location.x - topCollisionPointX), 2)
+                + Math.pow((location.y - topBoundary), 2));
+        double bottomDistance = Math.sqrt(Math.pow((location.x - bottomCollisionPointX), 2)
+                + Math.pow((location.y - bottomBoundary), 2));
+
+        double leftDistance = Math.sqrt(Math.pow((location.x - leftBoundary), 2)
+                + Math.pow((location.y - leftCollisionPointY), 2));
+
+        double rightDistance = Math.sqrt(Math.pow((location.x - rightBoundary), 2)
+                + Math.pow((location.y - rightCollisonPointY), 2));
+
+
+        int initSpeed = speed;
+        System.out.println(initSpeed);
+        if(topDistance < speed ){
+            speed = (int)topDistance;
         }
-        else if(location.x <= leftBoundary + radius ||
-                location.x >= rightBoundary - radius ){
-            reflection(angle, 1);
+        else if ( bottomDistance < speed) {
+            speed = (int )bottomDistance;
+        }
+        else if(leftDistance < speed ){
+            speed = (int) leftDistance;
+        }
+        else if(rightDistance< speed ){
+            speed = (int) rightDistance;
         }
 
+        */
+        if(location.y <= topBoundary + radius || location.y >= bottomBoundary - radius){
+            reflection(angle, 2);
+          //  speed = initSpeed;
+        }
+        else if(location.x <= leftBoundary + radius || location.x >= rightBoundary - radius ){
+            reflection(angle, 1);
+            //speed = initSpeed;
+        }
+        System.out.println(speed);
         // Arcs and tangents
         if(location.x >= rightBoundary - 100 &&
                 location.y >= bottomBoundary - 100){    // 4th corner
@@ -86,6 +168,7 @@ public class Puck extends MovingObject {
             if (distance >= 100-radius){
                 double refAngle = reflectionAngleWithTangent(arcCenter4);
                 reflection(refAngle,2);
+                //speed = initSpeed;
             }
 
         }
