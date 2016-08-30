@@ -19,12 +19,14 @@ public class Goalie2 extends Player {
 
     @Override
     public void updateLocation() {
+        stick.updateLocation();
         location.x = 790;
+        double Y = puck.location.y - location.y;
+        double X = puck.location.x - location.x;
+        setAngle(Math.atan2(Y, X));
 
         double slope = (double) (horizontalMiddle - puck.location.y) / (rightGoalLine - puck.location.x);
-
         double saveSpot = (horizontalMiddle + (790-rightGoalLine)*slope);
-
 
         //test
         if (puck.location.x >= rightGoalLine){

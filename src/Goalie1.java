@@ -3,9 +3,12 @@ import java.awt.*;
 
 public class Goalie1 extends Player {
 
+    //Stick stick;
+
     //private Puck puck;
     public Goalie1(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
         super(id, point, speed, angle, radius, color, puck);
+        //this.stick = new Stick(40);
     }
 
 
@@ -17,12 +20,17 @@ public class Goalie1 extends Player {
 
     @Override
     public void updateLocation() {
+        stick.updateLocation();
         location.x = 210;
+        double Y = puck.location.y - location.y;//makes it face puck
+        double X = puck.location.x - location.x;
+
+        setAngle(Math.atan2(Y, X));
 
         double slope = (double) (horizontalMiddle - puck.location.y) / (leftGoalLine - puck.location.x);
+        double saveSpot = (horizontalMiddle + (210- leftGoalLine)*slope);
 
-        double saveSpot = (horizontalMiddle + (210- leftGoalLine)*slope);//wrong
-
+        //updateLocationGoalie(location.x, location.y, angle);
 
 
         if (puck.location.x <= leftGoalLine){
