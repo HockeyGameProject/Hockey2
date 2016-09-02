@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 /**
  * creates a player object
@@ -14,8 +12,9 @@ public class Player extends MovingObject{
     Color teamColor;
     Puck puck;
     Stick stick;
-    int hold = 0;
+    static int hold = 0;
     int release = 0;
+    int steal = 0;
 
 
     public Player(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
@@ -27,24 +26,18 @@ public class Player extends MovingObject{
     }
 
 
-
+//lolololthshisfhfhfh
     public void setPuck(Puck pk){
         puck = pk;
     }
 
-    //Graphics2D stick = (Graphics2D) g;
-
-
-   // public void followMouse(e)
 
 
 
 
 
 
-    public void steal(){
 
-    }
 
     public void draw(Graphics2D g2d){
         stick.draw(g2d);
@@ -54,13 +47,18 @@ public class Player extends MovingObject{
     }
 
     public void rubWalls(){
+
         if ( hitWall == 1){
+
             location.y = topBoundary + radius;
+
         }
         else if (hitWall == 2){
+
             location.y = bottomBoundary - radius;
         }
-        if (hitWall == 3){
+
+        else if (hitWall == 3){
             location.x = leftBoundary + radius;
         }
         else if (hitWall == 4){
@@ -80,19 +78,22 @@ public class Player extends MovingObject{
 
 
     public void hitWalls(){
-        if(location.y <= topBoundary + radius){
+
+        if(location.y <= topBoundary + radius ){
             hitWall = 1;
         }
         else if(location.y >= bottomBoundary - radius){
             hitWall = 2;
         }
+
+
         if(location.x <= leftBoundary + radius){
             hitWall = 3;
         }
         else if(location.x >= rightBoundary - radius){
             hitWall = 4;
-
         }
+
 
         if(location.x >= rightBoundary - 100 &&
                 location.y >= bottomBoundary - 100){
@@ -138,10 +139,18 @@ public class Player extends MovingObject{
     }
 
 
+    public void updateLocationCol() {
+
+        location.x = (int) (location.x + getSpeed() * Math.cos(angle));
+        location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+        stick.updateLocation();
+    }
+
     @Override
     public void updateLocation() {
         double Y = puck.location.y - location.y;
         double X = puck.location.x - location.x;
+
 
         setAngle(Math.atan2(Y, X));
 
@@ -155,17 +164,31 @@ public class Player extends MovingObject{
                 + Math.pow((location.y - y), 2));
         double Y = y - location.y;
         double X = x - location.x;
-        if( distance < 80){
+        if( distance < 80){// controller grace area. allows you to turn without moving
+
             setAngle(Math.atan2(Y, X));
             stick.updateLocation();
         }
         else {
             //setSpeed(3);
+
             setAngle(Math.atan2(Y, X));
+            /*
+            if(stickOnWall == 1) {
+
+                stick.b = topBoundary;
+
+                location.x = (int) (stick.a - stick.length * Math.cos(angle));
+                location.y = (int) (stick.b - stick.length * Math.sin(angle));
+                stick.updateLocation();
+
+            }*/
             stick.updateLocation();
             location.x = (int) (location.x + getSpeed() * Math.cos(angle));
             location.y = (int) (location.y + getSpeed() * Math.sin(angle));
-        }
+            }
+
+
     }
 
 
@@ -191,18 +214,24 @@ public class Player extends MovingObject{
         double distance = Math.sqrt(Math.pow((puck.location.x - stickHoldingPointX), 2)
                 + Math.pow((puck.location.y - stickHoldingPointY), 2));
 
-        if (distance <= puck.radius && release != 1) {
+        if (distance <= puck.radius* 2 && release != 1) {
 
-            puck.location.x = stickHoldingPointX;
-            puck.location.y = stickHoldingPointY;
-            puck.speed = speed;
-            puck.angle = angle;
-            hold = 1;
+            if(hold == 0){
+                hold = id;
+            }
+            else if (steal == 1){
+                hold = id;
+                steal = 0;
+            }
 
-        } else if (distance > puck.radius && release == 1) {
-            //hold = 0;
-            release = 0;
+            //Rink.possession = id;
         }
+        else if (distance > puck.radius*3 && release == 1) {
+            //System.out.println("distance");
+            release = 0;
+            //Rink.possession = 0;
+        }
+
     }
 
     public void holdPuck() {
@@ -215,10 +244,12 @@ public class Player extends MovingObject{
         puck.speed = speed;
         puck.angle = angle;
     }
+
     public void wristShot(){
         //Rink.possession = 0;
         release = 1;
         hold = 0;
+        //Rink.possession = 0;
         puck.setAngle(angle);
         puck.setSpeed(8);
         puck.updateLocation();
@@ -244,6 +275,8 @@ public class Player extends MovingObject{
         location.y = (int) (location.y + getSpeed() * Math.sin(angle));
 
     }
+
+
 
     protected class Stick {
 

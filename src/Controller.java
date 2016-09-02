@@ -32,12 +32,12 @@ public class Controller {
 
 
         // Moving objects
-        puck = new Puck(6,new Point(200, 200), 5, Math.PI - 0.523599, 10, Color.BLACK);
+        puck = new Puck(0,new Point(500, 250), 5, 0, 10, Color.BLACK);
 
 
         // CREATING PLAYERS AND GOALIES
         p1   = new Player(1,new Point(480, 275), 3, 3*Math.PI - 0.523599, 20, Color.RED, puck);
-        p2   = new Player(2,new Point(690, 370), 3, 3*Math.PI - 0.523599, 20, Color.GREEN, puck);
+        p2   = new Player(2,new Point(690, 370), 0, 3*Math.PI - 0.523599, 20, Color.GREEN, puck);
         p3   = new Player(3,new Point(320, 170), 3, 4*Math.PI - 0.523599, 20, Color.MAGENTA, puck);
         p4   = new Player(4,new Point(530, 275), 3, 4*Math.PI - 0.523599, 20, Color.BLUE, puck);
         g1   = new Goalie1(5,new Point(190+20, 275), 3, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY, puck);

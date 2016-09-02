@@ -22,16 +22,18 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
     Thread t;
-    ArrayList<Player> players = new ArrayList<>();
+    //ArrayList<Player> players = new ArrayList<>();
+    Player[] players = new Player[7];
     static Player selectedPlayer;
     static Player selectedPlayer2;
     boolean dragged = false;
     boolean moved = false;
     MouseEvent e = null;
-    int possession = 0;
+    static int possession = 0;
     Puck puck;
     int frames = 0;
     boolean flag = false;
+
 
 
 
@@ -44,7 +46,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
     public void add(Player mo){
-        players.add(mo);
+        players[mo.id] = mo;
         super.add(mo);
     }
 
@@ -101,8 +103,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         rink.draw(arc4);
 
 
-        for(Player mo : players){
-            mo.draw(rink);
+        for(int i = 1; i < players.length; i++){
+            players[i].draw(rink);
         }
         puck.draw(rink);
     }
@@ -148,18 +150,21 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
     public void updateAll(){
         // Collision detection
+        possession = Player.hold;
+       // System.out.println(possession);
+
 
         puck.hitWalls();
         puck.updateLocation();
-        for(Player mo : players){
+        for(int i = 1; i < players.length; i++){
             //System.out.println("Current Location: "+mo.location);
-
+            Player mo = players[i];
             if(flag == true){ // for body check
                 frames++;
                 selectedPlayer.bodyCheck();
             }
 
-            if(frames > 4 && frames < 120){
+            if(frames > 2 && frames < 120){
                 frames++;
                 flag = false;
                 selectedPlayer.speed = 0;
@@ -167,34 +172,50 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             if(frames == 120){
                 selectedPlayer.setSpeed(3);
             }
-            //button mashing is working, take this out
-            //hel;l;m
 
-            mo.hitWalls();
-            if((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 || mo.hitWall == 4)){
-
-                mo.rubWalls();
-                //mo.updateLocation();
-                mo.hitWall = 0;
-            }
-            if(mo == selectedPlayer || mo == selectedPlayer2) {
-
+            if(mo == selectedPlayer || mo == selectedPlayer2){
                 if(dragged || moved) {
                     selectedPlayer.updateLocation(e.getX(), e.getY());
+                    //System.out.println(selectedPlayer.stick.b);
+                    //System.out.println(MovingObject.topBoundary);
+
                 }
 
-            }else {
+            }
+            else {
+
                 mo.updateLocation();
             }
-            selectedPlayer.stickHandling();
 
-            if( selectedPlayer.hold == 1 ) {
-                selectedPlayer.holdPuck();
+
+
+            mo.hitWalls();
+            if((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 || mo.hitWall == 4 || mo.hitWall == 5)){
+                mo.rubWalls();
+                mo.hitWall = 0;
+            }
+
+            if(i != possession)
+                mo.stickHandling();
+            //selectedPlayer.stickHandling();
+
+            if(Player.hold != 0) {
+                //System.out.println(Player.hold);
+                players[Player.hold].holdPuck();
             }
         }
 
-        // update objects
-        //
+        Collision collision = new Collision(players.length+1);
+        for(int i = 1; i < players.length; i++){
+            for (int j = i+1; j < players.length; j++){
+                collision.objectsCollide(players[i], players[j]);
+            }
+        }
+        collision.handleCollisions();
+        selectedPlayer.updateLocation();
+        selectedPlayer2.updateLocationCol();
+//hey
+
     }//test
 
     @Override
@@ -310,6 +331,10 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 if(selectedPlayer.hold == 1){
                     selectedPlayer.wristShot();
                 }
+                else{
+                    selectedPlayer.steal = 1;
+                }
+
 
             }
         });
