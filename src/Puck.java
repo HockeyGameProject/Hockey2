@@ -159,7 +159,7 @@ public class Puck extends MovingObject {
             reflection(angle, 1);
             //speed = initSpeed;
         }
-        System.out.println(speed);
+        //System.out.println(speed);
         // Arcs and tangents
         if(location.x >= rightBoundary - 100 &&
                 location.y >= bottomBoundary - 100){    // 4th corner
