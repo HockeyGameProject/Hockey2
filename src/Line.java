@@ -46,4 +46,19 @@ public class Line {
         B = 1;
         slopeAngle = Math.atan2(slopeY, slopeX);
     }
+
+    public double distanceFrom(int m, int n){
+        //d = |Am+Bn+C| / sqrt(A^2+B^2)
+        double distance = Math.abs(A*m + B*n + C) / Math.sqrt(Math.pow(A,2)+Math.pow(B,2));
+        return distance;
+    }
+
+    public double distanceFrom(Point mn){
+        //d = |Am+Bn+C| / sqrt(A^2+B^2)
+        int m = mn.x;
+        int n = mn.y;
+        double distance = Math.abs(A*m + B*n + C) / Math.sqrt(Math.pow(A,2)+Math.pow(B,2));
+        return distance;
+    }
+
 }
