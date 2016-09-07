@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
-
+//lll
     Thread t;
     //ArrayList<Player> players = new ArrayList<>();
     Player[] players = new Player[7];
@@ -32,6 +32,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     static int possession = 0;
     Puck puck;
     int frames = 0;
+    int goalieTimer = 0;
     boolean flag = false;
 
 
@@ -104,6 +105,9 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
         for(int i = 1; i < players.length; i++){
+            if(players[i] == null){
+                continue;
+            }
             players[i].draw(rink);
         }
         puck.draw(rink);
@@ -131,7 +135,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         //int frames = 0;
 
 
-        while(i++ < 1000) {
+        while(i++ < 2000) {
             //moved = false;
             //dragged = false;
             try {
@@ -157,8 +161,13 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         puck.hitWalls();
         puck.updateLocation();
         for(int i = 1; i < players.length; i++){
+
+            if(players[i] == null){
+                continue;
+            }
             //System.out.println("Current Location: "+mo.location);
             Player mo = players[i];
+
             if(flag == true){ // for body check
                 frames++;
                 selectedPlayer.bodyCheck();
@@ -202,9 +211,38 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             if(Player.hold != 0) {
                 //System.out.println(Player.hold);
                 players[Player.hold].holdPuck();
+
+                //when goalie gets the puck
+                if(Player.hold == 5 || Player.hold == 6){
+                    goalieTimer++;
+                    System.out.println("goalie catch");
+                    if(goalieTimer == 200){
+                        if(Player.hold == 5) {
+
+                            if(players[1].location.x > players[1].leftGoalLine || players[2].location.x > players[2].leftGoalLine) {
+                                goaliePassToTeammates1();
+                            }
+                            else{
+                                players[Player.hold].wristShot();
+                            }
+                            goalieTimer = 0;
+                        }
+                        else if(Player.hold == 6) {
+
+                            if(players[3].location.x < players[3].rightGoalLine || players[4].location.x < players[4].rightGoalLine) {
+                                goaliePassToTeammates2();
+                            }
+                            else{
+                                players[Player.hold].wristShot();
+                            }
+                            goalieTimer = 0;
+                        }
+
+                    }
+                }
             }
         }
-
+        /*
         Collision collision = new Collision(players.length+1);
         for(int i = 1; i < players.length; i++){
             for (int j = i+1; j < players.length; j++){
@@ -213,10 +251,126 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         }
         collision.handleCollisions();
         selectedPlayer.updateLocation();
-        selectedPlayer2.updateLocationCol();
-//hey
+        selectedPlayer2.updateLocationCol();*/
 
-    }//test
+
+    }
+
+    public void goaliePassToTeammates1(){
+        double Y1 = players[1].location.y - players[5].location.y;
+        double X1 = players[1].location.x - players[5].location.x;
+        double Y2 = players[2].location.y - players[5].location.y;
+        double X2 = players[2].location.x - players[5].location.x;
+
+        double toPlayer1 = Math.sqrt(Math.pow((players[1].location.x - players[5].location.x), 2)
+                + Math.pow((players[1].location.y - players[5].location.x), 2));
+
+        double toPlayer2 = Math.sqrt(Math.pow((players[2].location.x - players[5].location.x), 2)
+                + Math.pow((players[2].location.y - players[5].location.x), 2));
+
+        double toPlayer3 = Math.sqrt(Math.pow((players[3].location.x - players[5].location.x), 2)
+                + Math.pow((players[3].location.y - players[5].location.x), 2));
+
+        double toPlayer4 = Math.sqrt(Math.pow((players[4].location.x - players[5].location.x), 2)
+                + Math.pow((players[4].location.y - players[5].location.x), 2));
+
+
+        if (toPlayer1 < toPlayer3 && toPlayer1 < toPlayer4 && toPlayer1 < toPlayer2) {// if player one is closest
+            System.out.println("pass back to player 1");
+
+            players[5].setAngle(Math.atan2(Y1, X1));
+        }
+        else if (toPlayer2 < toPlayer3 && toPlayer2 < toPlayer4 && toPlayer2 < toPlayer1) {// if player 2 is closest
+            System.out.println("pass back to player 2");
+            players[5].setAngle(Math.atan2(Y2, X2));
+        }
+        else if( (toPlayer3 < toPlayer1 || toPlayer3 < toPlayer2 || toPlayer4 < toPlayer1 || toPlayer4 < toPlayer2)){
+
+            Line line1 = new Line(players[5].location.x, players[1].location.x, players[5].location.y, players[1].location.y );//goalie to player 1
+            Line line2 = new Line(players[5].location.x, players[2].location.x, players[5].location.y, players[2].location.y );//goalie to player 2
+
+            double[] distance = new double[4];
+            distance[0] = line1.distanceFrom(players[3].location.x, players[3].location.y);
+            distance[1]= line1.distanceFrom(players[4].location.x, players[4].location.y);
+
+            distance[2] = line2.distanceFrom(players[3].location.x, players[3].location.y);
+            distance[3] = line2.distanceFrom(players[4].location.x, players[4].location.y);
+            double max = distance[0];
+            for(int i = 1; i < 4; i++){
+                if(distance[i] > max){
+                    max = distance[i];
+                }
+            }
+
+            if(max == distance[0] || max == distance[1]){// if the defenders are farthest from the player 1 passing lane, pass to p1
+                players[5].setAngle(Math.atan2(Y1, X1));
+            }
+            if(max == distance[2] || max == distance[3]){// if the defenders are farthest from the player 2 passing lane, pass to p2
+                players[5].setAngle(Math.atan2(Y2, X2));
+            }
+        }
+
+        players[Player.hold].wristShot();
+        goalieTimer = 0;
+    }
+
+    public void goaliePassToTeammates2(){
+        double Y3 = players[3].location.y - players[6].location.y;
+        double X3 = players[3].location.x - players[6].location.x;
+        double Y4 = players[4].location.y - players[6].location.y;
+        double X4 = players[4].location.x - players[6].location.x;
+
+        double toPlayer1 = Math.sqrt(Math.pow((players[1].location.x - players[6].location.x), 2)
+                + Math.pow((players[1].location.y - players[6].location.x), 2));
+
+        double toPlayer2 = Math.sqrt(Math.pow((players[2].location.x - players[6].location.x), 2)
+                + Math.pow((players[2].location.y - players[6].location.x), 2));
+
+        double toPlayer3 = Math.sqrt(Math.pow((players[3].location.x - players[6].location.x), 2)
+                + Math.pow((players[3].location.y - players[6].location.x), 2));
+
+        double toPlayer4 = Math.sqrt(Math.pow((players[4].location.x - players[6].location.x), 2)
+                + Math.pow((players[4].location.y - players[6].location.x), 2));
+
+
+        if (toPlayer3 < toPlayer1 && toPlayer3 < toPlayer2 && toPlayer3 < toPlayer4) {// if player one is closest
+            System.out.println("pass back to player 3");
+
+            players[5].setAngle(Math.atan2(Y3, X3));
+        }
+        else if (toPlayer4 < toPlayer1 && toPlayer4 < toPlayer2 && toPlayer4 < toPlayer3) {// if player 2 is closest
+            System.out.println("pass back to player 4");
+            players[5].setAngle(Math.atan2(Y4, X4));
+        }
+        else if( (toPlayer3 < toPlayer1 || toPlayer3 < toPlayer2 || toPlayer4 < toPlayer1 || toPlayer4 < toPlayer2)){
+
+            Line line1 = new Line(players[6].location.x, players[3].location.x, players[6].location.y, players[3].location.y );//goalie to player 1
+            Line line2 = new Line(players[6].location.x, players[4].location.x, players[6].location.y, players[4].location.y );//goalie to player 2
+
+            double[] distance = new double[4];
+            distance[0] = line1.distanceFrom(players[1].location.x, players[1].location.y);
+            distance[1]= line1.distanceFrom(players[2].location.x, players[2].location.y);
+
+            distance[2] = line2.distanceFrom(players[1].location.x, players[1].location.y);
+            distance[3] = line2.distanceFrom(players[2].location.x, players[2].location.y);
+            double max = distance[0];
+            for(int i = 1; i < 4; i++){
+                if(distance[i] > max){
+                    max = distance[i];
+                }
+            }
+
+            if(max == distance[0] || max == distance[1]){// if the defenders are farthest from the player 1 passing lane, pass to p1
+                players[6].setAngle(Math.atan2(Y3, X3));
+            }
+            if(max == distance[2] || max == distance[3]){// if the defenders are farthest from the player 2 passing lane, pass to p2
+                players[6].setAngle(Math.atan2(Y4, X4));
+            }
+        }
+
+        players[Player.hold].wristShot();
+        goalieTimer = 0;
+    }
 
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -311,8 +465,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         });
 
         KeyStroke Q = KeyStroke.getKeyStroke("Q");
-        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(Q, "diag");
-        selectedPlayer2.getActionMap().put("diag", new AbstractAction() {
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(Q, "diagUpLeft");
+        selectedPlayer2.getActionMap().put("diagUpLeft", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("testq");
@@ -321,6 +475,42 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 selectedPlayer2.setAngle(-3 * Math.PI/4);
             }
         });
+
+        KeyStroke Z = KeyStroke.getKeyStroke("Z");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(Z, "diagDownLeft");
+        selectedPlayer2.getActionMap().put("diagDownLeft", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedPlayer2.moveY(-5);
+                selectedPlayer2.moveX(-5);
+                selectedPlayer2.setAngle(3 * Math.PI/4);
+            }
+        });
+
+        KeyStroke X = KeyStroke.getKeyStroke("X");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(X, "diagDownRight");
+        selectedPlayer2.getActionMap().put("diagDownRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedPlayer2.moveY(-5);
+                selectedPlayer2.moveX(5);
+                selectedPlayer2.setAngle(Math.PI/4);
+            }
+        });
+
+        KeyStroke E = KeyStroke.getKeyStroke("E");
+        selectedPlayer2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(E, "diagUpRight");
+        selectedPlayer2.getActionMap().put("diagUpRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedPlayer2.moveY(5);
+                selectedPlayer2.moveX(5);
+                selectedPlayer2.setAngle(-Math.PI/4);
+            }
+        });
+
+
+
 
         KeyStroke j = KeyStroke.getKeyStroke("J");
         selectedPlayer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(j, "button1");

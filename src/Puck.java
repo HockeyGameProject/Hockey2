@@ -8,7 +8,7 @@ import java.awt.*;
  */
 public class Puck extends MovingObject {
 
-
+//kkk
 
 
     public Puck(int id, Point point, int speed, double angle, int radius, Color color) {

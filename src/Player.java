@@ -21,7 +21,7 @@ public class Player extends MovingObject{
         super(id, point, speed, angle, radius, color);
         this.teamColor = color;
         this.puck = puck;
-        this.stick = new Stick(40);
+        this.stick = new Stick(25);
 
     }
 
@@ -42,7 +42,8 @@ public class Player extends MovingObject{
     public void draw(Graphics2D g2d){
         stick.draw(g2d);
         g2d.setColor(color);
-        g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
+        //g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
+        g2d.fillOval(location.x-16, location.y-16, 32, 32); // i think this is right
 
     }
 
@@ -50,7 +51,7 @@ public class Player extends MovingObject{
 
         if ( hitWall == 1){
 
-            location.y = topBoundary + radius;
+            location.y = topBoundary + radius + 4;
 
         }
         else if (hitWall == 2){
@@ -74,13 +75,15 @@ public class Player extends MovingObject{
 
 
 
-
+//jjj
 
 
     public void hitWalls(){
 
-        if(location.y <= topBoundary + radius ){
+        if(location.y <= topBoundary + radius + 4){
             hitWall = 1;
+            System.out.println("radius " + radius);
+            System.out.println(location.y - topBoundary);
         }
         else if(location.y >= bottomBoundary - radius){
             hitWall = 2;
@@ -147,7 +150,7 @@ public class Player extends MovingObject{
     }
 
     @Override
-    public void updateLocation() {
+    public void updateLocation() {/*
         double Y = puck.location.y - location.y;
         double X = puck.location.x - location.x;
 
@@ -156,7 +159,7 @@ public class Player extends MovingObject{
 
         location.x = (int) (location.x + getSpeed() * Math.cos(angle));
         location.y = (int) (location.y + getSpeed() * Math.sin(angle));
-        stick.updateLocation();
+        stick.updateLocation();*/
     }
 
     public void updateLocation(double x, double y){
@@ -164,6 +167,8 @@ public class Player extends MovingObject{
                 + Math.pow((location.y - y), 2));
         double Y = y - location.y;
         double X = x - location.x;
+
+
         if( distance < 80){// controller grace area. allows you to turn without moving
 
             setAngle(Math.atan2(Y, X));
@@ -209,8 +214,8 @@ public class Player extends MovingObject{
     public void stickHandling() {// of its close itll turn on the hold method
 
         //Puck puck = player.puck;
-        int stickHoldingPointX = (int) (location.x + 30 * Math.cos(angle));
-        int stickHoldingPointY = (int) (location.y + 30 * Math.sin(angle));
+        int stickHoldingPointX = (int) (location.x + 16 * Math.cos(angle));
+        int stickHoldingPointY = (int) (location.y + 16 * Math.sin(angle));
         double distance = Math.sqrt(Math.pow((puck.location.x - stickHoldingPointX), 2)
                 + Math.pow((puck.location.y - stickHoldingPointY), 2));
 
@@ -236,8 +241,8 @@ public class Player extends MovingObject{
 
     public void holdPuck() {
         //possession = id;
-        int stickHoldingPointX = (int) (location.x + 30 * Math.cos(angle));
-        int stickHoldingPointY = (int) (location.y + 30 * Math.sin(angle));
+        int stickHoldingPointX = (int) (location.x + 12 * Math.cos(angle));
+        int stickHoldingPointY = (int) (location.y + 12 * Math.sin(angle));
 
         puck.location.x = stickHoldingPointX;
         puck.location.y = stickHoldingPointY;

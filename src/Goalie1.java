@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Goalie1 extends Player {
 
-    //Stick stick;
+    //Stick stick; m
 
     //private Puck puck;
     public Goalie1(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
