@@ -12,6 +12,9 @@ public class Line {
     int slopeY;
     double slope;
     double slopeAngle;
+    double A;
+    double B;
+    double C;
 
 
     public Line(int x1, int x2, int y1, int y2){
@@ -22,6 +25,10 @@ public class Line {
         slopeX = x2 - x1;
         slopeY = y2 - y1;
         slope = ((double)slopeY)/slopeX;
+        //C = y2 - mx2
+        C = (-1)*(y2-(slope*x2));
+        A = (-1)*slope;
+        B = 1;
         slopeAngle = Math.atan2(slopeY, slopeX);
     }
 
@@ -33,6 +40,10 @@ public class Line {
         slopeX = x2 - x1;
         slopeY = y2 - y1;
         slope = ((double)slopeY)/slopeX;
+        //C = y2 - mx2
+        C = (-1)*(y2-(slope*x2));
+        A = (-1)*slope;
+        B = 1;
         slopeAngle = Math.atan2(slopeY, slopeX);
     }
 }
