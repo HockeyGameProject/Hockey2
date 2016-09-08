@@ -15,6 +15,8 @@ public class Player extends MovingObject{
     static int hold = 0;
     int release = 0;
     int steal = 0;
+    int adjustment = 4;
+    int puckGrabArea = 16;
 
 
     public Player(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
@@ -43,7 +45,7 @@ public class Player extends MovingObject{
         stick.draw(g2d);
         g2d.setColor(color);
         //g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
-        g2d.fillOval(location.x-16, location.y-16, 32, 32); // i think this is right
+        g2d.fillOval(location.x - (radius - 4), location.y - (radius-4), 32, 32); // i think this is right
 
     }
 
@@ -214,12 +216,12 @@ public class Player extends MovingObject{
     public void stickHandling() {// of its close itll turn on the hold method
 
         //Puck puck = player.puck;
-        int stickHoldingPointX = (int) (location.x + 16 * Math.cos(angle));
-        int stickHoldingPointY = (int) (location.y + 16 * Math.sin(angle));
+        int stickHoldingPointX = (int) (location.x + (radius - adjustment) * Math.cos(angle));
+        int stickHoldingPointY = (int) (location.y + (radius - adjustment) * Math.sin(angle));
         double distance = Math.sqrt(Math.pow((puck.location.x - stickHoldingPointX), 2)
                 + Math.pow((puck.location.y - stickHoldingPointY), 2));
 
-        if (distance <= puck.radius* 2 && release != 1) {
+        if (distance <= puckGrabArea && release != 1) {
 
             if(hold == 0){
                 hold = id;
@@ -231,7 +233,7 @@ public class Player extends MovingObject{
 
             //Rink.possession = id;
         }
-        else if (distance > puck.radius*3 && release == 1) {
+        else if (distance > puckGrabArea && release == 1) {
             //System.out.println("distance");
             release = 0;
             //Rink.possession = 0;
