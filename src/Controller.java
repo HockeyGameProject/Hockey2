@@ -10,6 +10,7 @@ import java.util.Random;
  * @author Aditi Datta
  */
 
+
 //test1
 public class Controller {
     UI       ui;
@@ -36,12 +37,12 @@ public class Controller {
 
 
         // CREATING PLAYERS AND GOALIES mmm
-        p1   = new Player(1,new Point(480, 275), 3, 3*Math.PI - 0.523599, 20, Color.RED, puck);
-        p2   = new Player(2,new Point(690, 370), 0, 3*Math.PI - 0.523599, 20, Color.GREEN, puck);
-        p3   = new Player(3,new Point(320, 170), 3, 4*Math.PI - 0.523599, 20, Color.MAGENTA, puck);
-        p4   = new Player(4,new Point(530, 275), 3, 4*Math.PI - 0.523599, 20, Color.BLUE, puck);
-        g1   = new Goalie1(5,new Point(190+20, 275), 3, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY, puck);
-        g2   = new Goalie2(6,new Point(810-20, 275), 3, 4*Math.PI - 0.523599, 20, Color.LIGHT_GRAY, puck);
+        p1   = new Player(1,new Point(480, 275), 3, 3*Math.PI - 0.523599, 16, Color.RED, puck);
+        p2   = new Player(2,new Point(690, 370), 0, 3*Math.PI - 0.523599, 16, Color.GREEN, puck);
+        p3   = new Player(3,new Point(320, 170), 3, 4*Math.PI - 0.523599, 16, Color.MAGENTA, puck);
+        p4   = new Player(4,new Point(530, 275), 3, 4*Math.PI - 0.523599, 16, Color.BLUE, puck);
+        g1   = new Goalie1(5,new Point(190+20, 275), 3, 4*Math.PI - 0.523599, 12, Color.LIGHT_GRAY, puck);
+        g2   = new Goalie2(6,new Point(810-20, 275), 3, 4*Math.PI - 0.523599, 12, Color.LIGHT_GRAY, puck);
 
         Rink.selectedPlayer = p1;
         Rink.selectedPlayer2 = p2;
