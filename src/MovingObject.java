@@ -14,9 +14,12 @@ public abstract class MovingObject extends JComponent {
     int     speed;
     double  angle;
     int     radius;
+    int     adjustment;
     Color   color;
     int     id;
     int     mass = 10;
+    boolean colliding = false;
+    int     dummy_radius;
 
     static int topBoundary = 100;
     static int bottomBoundary = 450;
@@ -45,6 +48,8 @@ public abstract class MovingObject extends JComponent {
         this.angle    = angle;
         this.radius   = radius;
         this.color    = color;
+        adjustment    = 0;
+        dummy_radius  = radius + adjustment;
         //this.mass     = mass;
     }
     //test

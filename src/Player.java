@@ -15,7 +15,7 @@ public class Player extends MovingObject{
     static int hold = 0;
     int release = 0;
     int steal = 0;
-    int adjustment = 4;
+
     int puckGrabArea = 16;
 
 
@@ -24,48 +24,37 @@ public class Player extends MovingObject{
         this.teamColor = color;
         this.puck = puck;
         this.stick = new Stick(25);
+        dummy_radius = stick.length;
+
 
     }
 
 
-//lolololthshisfhfhfh
     public void setPuck(Puck pk){
         puck = pk;
     }
 
-
-
-
-
-
-
-
-
     public void draw(Graphics2D g2d){
         stick.draw(g2d);
+        g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 60));
+        g2d.fillOval(location.x-dummy_radius, location.y-dummy_radius, dummy_radius*2, dummy_radius*2);
         g2d.setColor(color);
-        //g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
-        g2d.fillOval(location.x - (radius - 4), location.y - (radius-4), 32, 32); // i think this is right
-
+        g2d.fillOval(location.x - radius, location.y - radius, radius*2, radius*2); // i think this is right
     }
 
     public void rubWalls(){
 
         if ( hitWall == 1){
-
-            location.y = topBoundary + radius + 4;
-
+            location.y = topBoundary + dummy_radius;
         }
         else if (hitWall == 2){
-
-            location.y = bottomBoundary - radius;
+            location.y = bottomBoundary - dummy_radius;
         }
-
         else if (hitWall == 3){
-            location.x = leftBoundary + radius;
+            location.x = leftBoundary + dummy_radius;
         }
         else if (hitWall == 4){
-            location.x = rightBoundary - radius;
+            location.x = rightBoundary - dummy_radius;
         }
 
     }
@@ -82,20 +71,21 @@ public class Player extends MovingObject{
 
     public void hitWalls(){
 
-        if(location.y <= topBoundary + radius + 4){
+        if(location.y <= topBoundary + dummy_radius || stick.b <= topBoundary){
             hitWall = 1;
-            System.out.println("radius " + radius);
-            System.out.println(location.y - topBoundary);
+            //System.out.println("radius " + radius);
+            //System.out.println(location.y - topBoundary);
+            //System.out.println(stick.b);
         }
-        else if(location.y >= bottomBoundary - radius){
+        else if(location.y >= bottomBoundary - dummy_radius || stick.b >= bottomBoundary){
             hitWall = 2;
         }
 
 
-        if(location.x <= leftBoundary + radius){
+        if(location.x <= leftBoundary + dummy_radius || stick.a <= leftBoundary){
             hitWall = 3;
         }
-        else if(location.x >= rightBoundary - radius){
+        else if(location.x >= rightBoundary - dummy_radius || stick.a >= rightBoundary){
             hitWall = 4;
         }
 
@@ -104,10 +94,10 @@ public class Player extends MovingObject{
                 location.y >= bottomBoundary - 100){
             Point center = new Point(rightBoundary - 100, bottomBoundary - 100);
             double distance = Math.hypot(location.x-center.x, location.y-center.y);
-            if (distance >= 100-radius){
+            if (distance >= 100-dummy_radius){
                 double angle = angleWithArcCenter(center.x, center.y);
-                location.x = center.x + (int) ((100-radius)*Math.cos(angle));
-                location.y = center.y + (int) ((100-radius)*Math.sin(angle));
+                location.x = center.x + (int) ((100-dummy_radius)*Math.cos(angle));
+                location.y = center.y + (int) ((100-dummy_radius)*Math.sin(angle));
             }
 
         }
@@ -115,30 +105,30 @@ public class Player extends MovingObject{
                 location.x <= leftBoundary+100){
             Point center = new Point(leftBoundary+100,topBoundary+100);
             double distance = Math.hypot(location.x-center.x, location.y-center.y);
-            if (distance >= 100-radius){
+            if (distance >= 100-dummy_radius){
                 double angle = angleWithArcCenter(center.x, center.y);
-                location.x = center.x + (int) ((100-radius)*Math.cos(angle));
-                location.y = center.y + (int) ((100-radius)*Math.sin(angle));
+                location.x = center.x + (int) ((100-dummy_radius)*Math.cos(angle));
+                location.y = center.y + (int) ((100-dummy_radius)*Math.sin(angle));
             }
         }
         else if(location.x <= leftBoundary+100 &&
                 location.y >= bottomBoundary - 100){
             Point center = new Point(leftBoundary+100,bottomBoundary-100);
             double distance = Math.hypot(location.x-center.x, location.y-center.y);
-            if (distance >= 100-radius){
+            if (distance >= 100-dummy_radius){
                 double angle = angleWithArcCenter(center.x, center.y);
-                location.x = center.x + (int) ((100-radius)*Math.cos(angle));
-                location.y = center.y + (int) ((100-radius)*Math.sin(angle));
+                location.x = center.x + (int) ((100-dummy_radius)*Math.cos(angle));
+                location.y = center.y + (int) ((100-dummy_radius)*Math.sin(angle));
             }
         }
         else if(location.y <= topBoundary+100 &&
                 location.x >= rightBoundary - 100){
             Point center = new Point(rightBoundary-100,topBoundary+100);
             double distance = Math.hypot(location.x-center.x, location.y-center.y);
-            if (distance >= 100-radius){
+            if (distance >= 100-dummy_radius){
                 double angle = angleWithArcCenter(center.x, center.y);
-                location.x = center.x + (int) ((100-radius)*Math.cos(angle));
-                location.y = center.y + (int) ((100-radius)*Math.sin(angle));
+                location.x = center.x + (int) ((100-dummy_radius)*Math.cos(angle));
+                location.y = center.y + (int) ((100-dummy_radius)*Math.sin(angle));
             }
         }
     }
@@ -190,9 +180,10 @@ public class Player extends MovingObject{
                 stick.updateLocation();
 
             }*/
-            stick.updateLocation();
+
             location.x = (int) (location.x + getSpeed() * Math.cos(angle));
             location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+            stick.updateLocation();
             }
 
 

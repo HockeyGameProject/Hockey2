@@ -11,8 +11,12 @@ public class Puck extends MovingObject {
 //kkk
 
 
+    //int dummy_radius;
+
     public Puck(int id, Point point, int speed, double angle, int radius, Color color) {
         super(id, point, speed, angle, radius, color);
+        adjustment = 4;
+        dummy_radius = radius + adjustment;
     }
 
 
@@ -151,11 +155,11 @@ public class Puck extends MovingObject {
         }
 
         */
-        if(location.y <= topBoundary + radius || location.y >= bottomBoundary - radius){
+        if(location.y <= topBoundary + dummy_radius || location.y >= bottomBoundary -  dummy_radius){
             reflection(angle, 2);
           //  speed = initSpeed;
         }
-        else if(location.x <= leftBoundary + radius || location.x >= rightBoundary - radius ){
+        else if(location.x <= leftBoundary + dummy_radius || location.x >= rightBoundary -  dummy_radius ){
             reflection(angle, 1);
             //speed = initSpeed;
         }
@@ -165,7 +169,7 @@ public class Puck extends MovingObject {
                 location.y >= bottomBoundary - 100){    // 4th corner
             double distance = Math.hypot(location.x-arcCenter4.x,
                     location.y-arcCenter4.y);
-            if (distance >= 100-radius){
+            if (distance >= 100- dummy_radius){
                 double refAngle = reflectionAngleWithTangent(arcCenter4);
                 reflection(refAngle,2);
                 //speed = initSpeed;
@@ -176,7 +180,7 @@ public class Puck extends MovingObject {
                 location.x <= leftBoundary+100){    // 1st corner
             double distance = Math.hypot(location.x-arcCenter1.x,
                     location.y-arcCenter1.y);
-            if (distance >= 100-radius){
+            if (distance >= 100- dummy_radius){
                 double refAngle = reflectionAngleWithTangent(arcCenter1);
                 reflection(refAngle,1);
             }
@@ -185,7 +189,7 @@ public class Puck extends MovingObject {
                 location.y >= bottomBoundary - 100){    // 3rd corner
             double distance = Math.hypot(location.x-arcCenter3.x,
                     location.y-arcCenter3.y);
-            if (distance >= 100-radius){
+            if (distance >= 100- dummy_radius){
                 double refAngle = reflectionAngleWithTangent(arcCenter3);
                 reflection(refAngle,2);
             }
@@ -194,7 +198,7 @@ public class Puck extends MovingObject {
                 location.x >= rightBoundary - 100){     // 2nd Corner
             Point center = new Point(rightBoundary-100,topBoundary+100);
             double distance = Math.hypot(location.x-center.x, location.y-center.y);
-            if (distance >= 100-radius){
+            if (distance >= 100- dummy_radius){
                 double refAngle = reflectionAngleWithTangent(arcCenter2);
                 //setAngle(refAngle);
                 reflection(refAngle,1);
@@ -205,35 +209,35 @@ public class Puck extends MovingObject {
 
         // Left goal post
         if(location.x < leftGoalLine && location.y < topGoalPost){
-            if(location.y >= topGoalPost-radius && location.x > leftGoalBack){
+            if(location.y >= topGoalPost- dummy_radius && location.x > leftGoalBack){
                 reflection(angle, 2);
             }
         }
         else if(location.x < leftGoalLine  && location.y > bottomGoalPost){
-            if(location.y <= bottomGoalPost+radius && location.x > leftGoalBack){
+            if(location.y <= bottomGoalPost+ dummy_radius && location.x > leftGoalBack){
                 reflection(angle, 2);
             }
         }
         else if(location.x < leftGoalBack && location.y > topGoalPost &&
                 location.y < bottomGoalPost){
-            if(location.x >= leftGoalBack-radius)
+            if(location.x >= leftGoalBack- dummy_radius)
                 reflection(angle, 1);
         }
 
         // Right Goal post
         if(location.x > rightGoalLine && location.y < topGoalPost){
-            if(location.y >= topGoalPost-radius && location.x < rightGoalBack){
+            if(location.y >= topGoalPost- dummy_radius && location.x < rightGoalBack){
                 reflection(angle, 2);
             }
         }
         else if(location.x > rightGoalLine  && location.y > bottomGoalPost){
-            if(location.y <= bottomGoalPost+radius && location.x < rightGoalBack){
+            if(location.y <= bottomGoalPost+ dummy_radius && location.x < rightGoalBack){
                 reflection(angle, 2);
             }
         }
         else if(location.x > rightGoalBack && location.y > topGoalPost &&
                 location.y < bottomGoalPost){
-            if(location.x <= rightGoalBack+radius)
+            if(location.x <= rightGoalBack+ dummy_radius)
                 reflection(angle, 1);
         }
 
