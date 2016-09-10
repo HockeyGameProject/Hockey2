@@ -25,8 +25,6 @@ public class Player extends MovingObject{
         this.puck = puck;
         this.stick = new Stick(25);
         dummy_radius = stick.length;
-
-
     }
 
 
@@ -135,7 +133,11 @@ public class Player extends MovingObject{
 
 
     public void updateLocationCol() {
-
+        collisionFrames++;
+        if(collisionFrames >= collisionDuration){
+            collisionFrames = 0;
+            colliding = false;
+        }
         location.x = (int) (location.x + getSpeed() * Math.cos(angle));
         location.y = (int) (location.y + getSpeed() * Math.sin(angle));
         stick.updateLocation();
@@ -167,7 +169,7 @@ public class Player extends MovingObject{
             stick.updateLocation();
         }
         else {
-            //setSpeed(3);
+            setSpeed(3);
 
             setAngle(Math.atan2(Y, X));
             /*

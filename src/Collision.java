@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Collision {
@@ -39,10 +38,13 @@ public class Collision {
             //System.out.println(object1.id + " and " + object2.id + " are colliding");
             adjList[object1.id].add(object2.id);
             adjList[object2.id].add(object1.id);
+            object1.colliding = true;
+            object2.colliding = true;
             if(movingObjects[object1.id] == null)
                 movingObjects[object1.id] = object1;
             if(movingObjects[object2.id] == null)
                 movingObjects[object2.id] = object2;
+
             return true;
         }
         return false;
@@ -129,7 +131,7 @@ public class Collision {
         System.out.println(ob2.angle);
     }*/
 
-    /*
+/*
     public void calculateCollisions(MovingObject ob1, MovingObject ob2){
         double Y = ob1.location.y - ob1.location.y;
         double X = ob1.location.x - ob2.location.x;
@@ -171,11 +173,11 @@ public class Collision {
         ob2.setAngle(Math.abs(ob2Angle));//TE
         System.out.println(ob1.angle);
         System.out.println(ob2.angle);//ll
-    }*/
-
+    }
+*/
 
     public void calculateCollisions(MovingObject ob1, MovingObject ob2){
-        System.out.println("Calculating for " + ob1.id + " and " + ob2.id);
+        System.out.println("Calculating for " + ob1.color + " and " + ob2.color);
         double ob1VelocityX = ob1.speed * Math.cos(ob1.angle);
         double ob1VelocityY = ob1.speed * Math.sin(ob1.angle);
 

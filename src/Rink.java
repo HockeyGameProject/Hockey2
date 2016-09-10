@@ -63,7 +63,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         super.paintComponent(g);
         Graphics2D rink = (Graphics2D) g;
 
-        rink.setStroke(new BasicStroke(5));
+        rink.setStroke(new BasicStroke(3));
 
         rink.setColor(Color.RED);
         rink.draw(new Line2D.Double(190, 100, 190, 450)); // first vertical lines on rink
@@ -183,23 +183,31 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }
 
             if(mo == selectedPlayer || mo == selectedPlayer2){
-                if(dragged || moved) {
+                if(mo.colliding){
+                    mo.updateLocationCol();
+                }
+                else if(dragged || moved) {
                     selectedPlayer.updateLocation(e.getX(), e.getY());
                     //System.out.println(selectedPlayer.stick.b);
                     //System.out.println(MovingObject.topBoundary);
-
                 }
 
             }
             else {
 
-                mo.updateLocation();
+                if(mo.colliding) {
+                    mo.updateLocationCol();
+                }
+                else {
+                    mo.updateLocation();
+                }
             }
 
 
 
             mo.hitWalls();
-            if((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 || mo.hitWall == 4 || mo.hitWall == 5)){
+            if((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 ||
+                    mo.hitWall == 4 || mo.hitWall == 5)){
                 mo.rubWalls();
                 mo.hitWall = 0;
             }
@@ -215,11 +223,12 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 //when goalie gets the puck
                 if(Player.hold == 5 || Player.hold == 6){
                     goalieTimer++;
-                    System.out.println("goalie catch");
+                    //System.out.println("goalie catch");
                     if(goalieTimer == 200){
                         if(Player.hold == 5) {
 
-                            if(players[1].location.x > players[1].leftGoalLine || players[2].location.x > players[2].leftGoalLine) {
+                            if(players[1].location.x > players[1].leftGoalLine ||
+                                    players[2].location.x > players[2].leftGoalLine) {
                                 goaliePassToTeammates1();
                             }
                             else{
@@ -229,7 +238,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                         }
                         else if(Player.hold == 6) {
 
-                            if(players[3].location.x < players[3].rightGoalLine || players[4].location.x < players[4].rightGoalLine) {
+                            if(players[3].location.x < players[3].rightGoalLine ||
+                                    players[4].location.x < players[4].rightGoalLine) {
                                 goaliePassToTeammates2();
                             }
                             else{
@@ -242,16 +252,16 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 }
             }
         }
-        /*
+
         Collision collision = new Collision(players.length+1);
         for(int i = 1; i < players.length; i++){
             for (int j = i+1; j < players.length; j++){
-                collision.objectsCollide(players[i], players[j]);
+
+                if(collision.objectsCollide(players[i], players[j]))
+                    collision.calculateCollisions(players[i], players[j]);
             }
         }
-        collision.handleCollisions();
-        selectedPlayer.updateLocation();
-        selectedPlayer2.updateLocationCol();*/
+
 
 
     }
@@ -286,8 +296,10 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         }
         else if( (toPlayer3 < toPlayer1 || toPlayer3 < toPlayer2 || toPlayer4 < toPlayer1 || toPlayer4 < toPlayer2)){
 
-            Line line1 = new Line(players[5].location.x, players[1].location.x, players[5].location.y, players[1].location.y );//goalie to player 1
-            Line line2 = new Line(players[5].location.x, players[2].location.x, players[5].location.y, players[2].location.y );//goalie to player 2
+            Line line1 = new Line(players[5].location.x, players[1].location.x,
+                    players[5].location.y, players[1].location.y );//goalie to player 1
+            Line line2 = new Line(players[5].location.x, players[2].location.x,
+                    players[5].location.y, players[2].location.y );//goalie to player 2
 
             double[] distance = new double[4];
             distance[0] = line1.distanceFrom(players[3].location.x, players[3].location.y);
@@ -344,8 +356,10 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         }
         else if( (toPlayer3 < toPlayer1 || toPlayer3 < toPlayer2 || toPlayer4 < toPlayer1 || toPlayer4 < toPlayer2)){
 
-            Line line1 = new Line(players[6].location.x, players[3].location.x, players[6].location.y, players[3].location.y );//goalie to player 1
-            Line line2 = new Line(players[6].location.x, players[4].location.x, players[6].location.y, players[4].location.y );//goalie to player 2
+            Line line1 = new Line(players[6].location.x, players[3].location.x,
+                    players[6].location.y, players[3].location.y );//goalie to player 1
+            Line line2 = new Line(players[6].location.x, players[4].location.x,
+                    players[6].location.y, players[4].location.y );//goalie to player 2
 
             double[] distance = new double[4];
             distance[0] = line1.distanceFrom(players[1].location.x, players[1].location.y);

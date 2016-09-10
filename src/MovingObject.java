@@ -20,6 +20,8 @@ public abstract class MovingObject extends JComponent {
     int     mass = 10;
     boolean colliding = false;
     int     dummy_radius;
+    int     collisionFrames = 0;
+    int     collisionDuration = 10;
 
     static int topBoundary = 100;
     static int bottomBoundary = 450;

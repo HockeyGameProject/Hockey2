@@ -41,25 +41,32 @@ public class Goalie2 extends Player {
         double Y = puck.location.y - location.y;//makes it face puck
         double X = puck.location.x - location.x;
 
-
+        //System.out.println(angle);
 
         // if puck is behind goal line
         if (puck.location.x >= rightGoalLine){
 
-            if(puck.location.y < horizontalMiddle){
+            if(puck.location.y < location.y){
                 moveGoalieUp();
-                setAngle(angle + 4*Math.PI/180);//rotates clockwise
+                double A = angle + 4*Math.PI/180;
+                if(A < 0)
+                    A = A + 2*Math.PI;
                 System.out.println(angle);
-                if(angle >= -Math.PI/2){
+                if(A >= 3*Math.PI/2){
                     setAngle( 3*Math.PI/2);
                 }
+                else
+                    setAngle(A);
             }
-            else if(puck.location.y > horizontalMiddle){
+            else if(puck.location.y > location.y){
                 moveGoalieDown();
-                setAngle(angle - 4*Math.PI/180);//roates goalie coutner clockwise
-                if(angle <= Math.PI/2){
+                double A = angle - 4*Math.PI/180;
+
+                if(A <= Math.PI/2){
                     setAngle( -3*Math.PI/2);// i dont know how this works
-                }
+                }else
+                    setAngle(A);
+
             }
         }
         else {
