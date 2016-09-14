@@ -8,11 +8,6 @@ import java.awt.*;
  */
 public class Puck extends MovingObject {
 
-//kkk
-
-
-    //int dummy_radius;
-
 
     public Puck(int id, Point point, int speed, double angle, int radius, Color color) {
         super(id, point, speed, angle, radius, color);
@@ -27,8 +22,6 @@ public class Puck extends MovingObject {
     }
 
 
-
-
     @Override
     public void updateLocation() {
         location.x = (int) (location.x + speed * Math.cos(angle));
@@ -38,14 +31,11 @@ public class Puck extends MovingObject {
     public void goalScoredLeft(){
         if(location.x - radius - adjustment > leftGoalBack
                 && location.x + radius + adjustment < leftGoalLine
-                && location.y - radius - adjustment/2  > topGoalPost
-                && location.y + radius + adjustment/2 < bottomGoalPost ){
+                && location.y - radius  > topGoalPost
+                && location.y + radius  < bottomGoalPost ){
             setSpeed(0);
             Rink.score = 1;
         }
-
-
-
     }
 
     public void goalScoredRight(){
@@ -57,6 +47,28 @@ public class Puck extends MovingObject {
             setSpeed(0);
             Rink.score = 2;
         }
+    }
+
+    public void hitThePost(){
+        double distanceFromLeftTopPost = Math.sqrt(Math.pow((leftGoalLine - location.x), 2)
+                + Math.pow((topGoalPost - location.y), 2));
+        double distanceFromLeftBottomPost = Math.sqrt(Math.pow((leftGoalLine - location.x), 2)
+                + Math.pow((bottomGoalPost - location.y), 2));
+        double distanceFromRightTopPost = Math.sqrt(Math.pow((rightGoalLine - location.x), 2)
+                + Math.pow((topGoalPost - location.y), 2));
+        double distanceFromRightBottomPost = Math.sqrt(Math.pow((rightGoalLine - location.x), 2)
+                + Math.pow((bottomGoalPost - location.y), 2));
+
+        if((distanceFromLeftBottomPost < radius
+                || distanceFromLeftTopPost < radius
+                || distanceFromRightBottomPost < radius
+                || distanceFromRightTopPost < radius)
+                && (location.x - radius > leftGoalLine
+                || location.x + radius < rightGoalLine)) {
+            System.out.println("hit post");
+            setAngle((-1) * angle + Math.PI);
+        }
+
 
     }
 
@@ -64,59 +76,12 @@ public class Puck extends MovingObject {
         double reflectAngle =0;
 
         if(n == 1){
-            /*if(initAngle == Math.PI){
-                reflectAngle = 0;
-            }
-            else if( initAngle == 0){
-                reflectAngle = Math.PI;
-            }
-            else {
-                reflectAngle = (-1) * angle + Math.PI;ss
-            }*/
-
             reflectAngle = (-1) * angle + Math.PI;
         }
         else if(n == 2){
-            /*
-            if(initAngle == Math.PI/2){
-                reflectAngle = 3* Math.PI/2;
-            }
-            else if( initAngle == 3/2 * Math.PI){
-                reflectAngle = Math.PI/2;
-
-            }
-            else {
-                reflectAngle = (-1)*angle;
-            }*/
             reflectAngle = (-1)*angle;
         }
         setAngle(reflectAngle);
-        /*
-        double adjust;
-        if(initAngle >= 2 * Math.PI){
-            angle = angle % 2*Math.PI;
-        }
-
-        if(n == 1){
-            if ( initAngle > Math.PI/2 && initAngle < 3/2 * Math.PI){
-                adjust = initAngle - Math.PI;
-                angle = initAngle + adjust * 2;
-            }
-            else if( (initAngle >= -Math.PI/2 && initAngle < Math.PI) || (initAngle > 3/2 * Math.PI) ){
-                adjust = Math.PI - initAngle;
-                angle = initAngle+ adjust * 2;
-            }
-        }
-        else if( n == 2){
-            if( initAngle < Math.PI){
-                adjust = Math.PI - initAngle;
-                angle = initAngle+ adjust * 2;
-            }
-            else if ( initAngle > Math.PI){
-                adjust = initAngle - Math.PI;
-                angle = initAngle + adjust * 2;
-            }
-        }*/
     }
 
     double reflectionAngleWithTangent(Point center){
@@ -145,51 +110,23 @@ public class Puck extends MovingObject {
     @Override
     public void hitWalls(){
 
+        double distanceFromLeftTopPost = Math.sqrt(Math.pow((leftGoalLine - location.x), 2)
+                + Math.pow((topGoalPost + 3 - location.y), 2));
+        double distanceFromLeftBottomPost = Math.sqrt(Math.pow((leftGoalLine - location.x), 2)
+                + Math.pow((bottomGoalPost - 3 - location.y), 2));
+        double distanceFromRightTopPost = Math.sqrt(Math.pow((rightGoalLine - location.x), 2)
+                + Math.pow((topGoalPost + 3 - location.y), 2));
+        double distanceFromRightBottomPost = Math.sqrt(Math.pow((rightGoalLine - location.x), 2)
+                + Math.pow((bottomGoalPost - 3 - location.y), 2));
 
-        /*
-        double slope = Math.tan(angle);
-        double topCollisionPointX    =  ( location.x - (location.y - topBoundary + radius)/slope );
-        double bottomCollisionPointX =  ( location.x - (location.y - bottomBoundary - radius)/slope );
-        double leftCollisionPointY   =  ( location.y - (location.x - leftBoundary + radius)*slope);
-        double rightCollisonPointY   =  ( location.y - (location.x - rightBoundary - radius)*slope);
-
-        double topDistance = Math.sqrt(Math.pow((location.x - topCollisionPointX), 2)
-                + Math.pow((location.y - topBoundary), 2));
-        double bottomDistance = Math.sqrt(Math.pow((location.x - bottomCollisionPointX), 2)
-                + Math.pow((location.y - bottomBoundary), 2));
-
-        double leftDistance = Math.sqrt(Math.pow((location.x - leftBoundary), 2)
-                + Math.pow((location.y - leftCollisionPointY), 2));
-
-        double rightDistance = Math.sqrt(Math.pow((location.x - rightBoundary), 2)
-                + Math.pow((location.y - rightCollisonPointY), 2));
-
-
-        int initSpeed = speed;
-        System.out.println(initSpeed);
-        if(topDistance < speed ){
-            speed = (int)topDistance;
-        }
-        else if ( bottomDistance < speed) {
-            speed = (int )bottomDistance;
-        }
-        else if(leftDistance < speed ){
-            speed = (int) leftDistance;
-        }
-        else if(rightDistance< speed ){
-            speed = (int) rightDistance;
-        }
-
-        */
         if(location.y <= topBoundary + dummy_radius || location.y >= bottomBoundary -  dummy_radius){
             reflection(angle, 2);
-          //  speed = initSpeed;
         }
         else if(location.x <= leftBoundary + dummy_radius || location.x >= rightBoundary -  dummy_radius ){
             reflection(angle, 1);
-            //speed = initSpeed;
         }
-        //System.out.println(speed);
+
+
         // Arcs and tangents
         if(location.x >= rightBoundary - 100 &&
                 location.y >= bottomBoundary - 100){    // 4th corner
@@ -198,9 +135,7 @@ public class Puck extends MovingObject {
             if (distance >= 100- dummy_radius){
                 double refAngle = reflectionAngleWithTangent(arcCenter4);
                 reflection(refAngle,2);
-                //speed = initSpeed;
             }
-
         }
         else if(location.y <= topBoundary+100 &&
                 location.x <= leftBoundary+100){    // 1st corner
@@ -250,6 +185,7 @@ public class Puck extends MovingObject {
                 reflection(angle, 1);
         }
 
+
         // Right Goal post
         if(location.x > rightGoalLine && location.y < topGoalPost){
             if(location.y >= topGoalPost- dummy_radius && location.x < rightGoalBack){
@@ -265,6 +201,19 @@ public class Puck extends MovingObject {
                 location.y < bottomGoalPost){
             if(location.x <= rightGoalBack+ dummy_radius)
                 reflection(angle, 1);
+        }
+
+        else if((distanceFromLeftBottomPost < radius + adjustment
+                || distanceFromLeftTopPost < radius + adjustment
+                || distanceFromRightBottomPost < radius + adjustment
+                || distanceFromRightTopPost < radius + adjustment)
+                && (location.x - radius > leftGoalLine
+                || location.x + radius < rightGoalLine)){
+
+            System.out.println("hit post");
+            setAngle((-1) * angle + Math.PI);
+
+
         }
 
     }
