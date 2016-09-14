@@ -234,6 +234,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         puck.goalScoredLeft();
         puck.goalScoredRight();
 
+
         for(int i = 1; i < players.length; i++){
 
             if(players[i] == null){
@@ -254,10 +255,9 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             else if(score == 2){
                 reset = 2;
                 afterGoalTimer++;
-                players[6].afterGoal();
                 reset();
                 if(afterGoalTimer >= 90) {
-                    players[5].afterGoal();
+                    players[6].afterGoal();
                 }
             }
 
@@ -364,22 +364,21 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         double Y2 = players[2].location.y - players[5].location.y;
         double X2 = players[2].location.x - players[5].location.x;
 
-        double toPlayer1 = Math.sqrt(Math.pow((players[1].location.x - players[5].location.x), 2)
-                + Math.pow((players[1].location.y - players[5].location.x), 2));
+        double toPlayer1 = Math.sqrt(Math.pow((X1), 2)
+                + Math.pow((Y1), 2));
 
-        double toPlayer2 = Math.sqrt(Math.pow((players[2].location.x - players[5].location.x), 2)
-                + Math.pow((players[2].location.y - players[5].location.x), 2));
+        double toPlayer2 = Math.sqrt(Math.pow((X2), 2)
+                + Math.pow((Y2), 2));
 
         double toPlayer3 = Math.sqrt(Math.pow((players[3].location.x - players[5].location.x), 2)
-                + Math.pow((players[3].location.y - players[5].location.x), 2));
+                + Math.pow((players[3].location.y - players[5].location.y), 2));
 
         double toPlayer4 = Math.sqrt(Math.pow((players[4].location.x - players[5].location.x), 2)
-                + Math.pow((players[4].location.y - players[5].location.x), 2));
+                + Math.pow((players[4].location.y - players[5].location.y), 2));
 
 
         if (toPlayer1 < toPlayer3 && toPlayer1 < toPlayer4 && toPlayer1 < toPlayer2) {// if player one is closest
             System.out.println("pass back to player 1");
-
             players[5].setAngle(Math.atan2(Y1, X1));
         }
         else if (toPlayer2 < toPlayer3 && toPlayer2 < toPlayer4 && toPlayer2 < toPlayer1) {// if player 2 is closest
@@ -425,16 +424,16 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         double X4 = players[4].location.x - players[6].location.x;
 
         double toPlayer1 = Math.sqrt(Math.pow((players[1].location.x - players[6].location.x), 2)
-                + Math.pow((players[1].location.y - players[6].location.x), 2));
+                + Math.pow((players[1].location.y - players[6].location.y), 2));
 
         double toPlayer2 = Math.sqrt(Math.pow((players[2].location.x - players[6].location.x), 2)
-                + Math.pow((players[2].location.y - players[6].location.x), 2));
+                + Math.pow((players[2].location.y - players[6].location.y), 2));
 
-        double toPlayer3 = Math.sqrt(Math.pow((players[3].location.x - players[6].location.x), 2)
-                + Math.pow((players[3].location.y - players[6].location.x), 2));
+        double toPlayer3 = Math.sqrt(Math.pow((X3), 2)
+                + Math.pow((Y3), 2));
 
-        double toPlayer4 = Math.sqrt(Math.pow((players[4].location.x - players[6].location.x), 2)
-                + Math.pow((players[4].location.y - players[6].location.x), 2));
+        double toPlayer4 = Math.sqrt(Math.pow((X4), 2)
+                + Math.pow((Y4), 2));
 
 
         if (toPlayer3 < toPlayer1 && toPlayer3 < toPlayer2 && toPlayer3 < toPlayer4) {// if player one is closest
