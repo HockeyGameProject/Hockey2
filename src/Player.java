@@ -288,7 +288,7 @@ public class Player extends MovingObject{
 
         stick.updateLocation();
 
-        //puck.location.x = (int) (location.x + 1 * Math.cos(0) );
+        //puck.location.x = (int) (location.x + 1 * Math.cos(0) );ss
 
 
         if(hold == 5){

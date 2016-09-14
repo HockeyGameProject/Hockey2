@@ -71,7 +71,7 @@ public class Puck extends MovingObject {
                 reflectAngle = Math.PI;
             }
             else {
-                reflectAngle = (-1) * angle + Math.PI;
+                reflectAngle = (-1) * angle + Math.PI;ss
             }*/
 
             reflectAngle = (-1) * angle + Math.PI;

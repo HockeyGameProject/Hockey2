@@ -204,6 +204,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
         if(puck.location.x == puck.horizontalMiddle && puck.location.y == puck.verticalCenter){
             reset = 0;
+            score = 0;
         }
     }
 
@@ -226,12 +227,12 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             if(players[i] == null){
                 continue;
             }
-            //System.out.println("Current Location: "+mo.location);
+            //System.out.println("Current Location: "+mo.location);ss
             Player mo = players[i];
 
             if( score == 1 ){
                 reset = 1;
-                score = 0;
+
                 players[5].afterGoal();
                 reset();
 
