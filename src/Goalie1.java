@@ -49,21 +49,16 @@ public class Goalie1 extends Player {
 
         // if puck is behind goal line
         if (puck.location.x <= leftGoalLine){
-            if ( puck.location.y < horizontalMiddle){
+
+            if(puck.location.y < location.y){
                 moveGoalieUp();
-            }
-            else if ( puck.location.y > horizontalMiddle){
-                moveGoalieDown();
-            }
-
-
-            if(puck.location.y < horizontalMiddle){
                 setAngle(angle - 4*Math.PI/180);
                 if(angle <= -Math.PI/2){
                     setAngle( -Math.PI/2);
                 }
             }
-            else if(puck.location.y > horizontalMiddle){
+            else if(puck.location.y > location.y){
+                moveGoalieDown();
                 setAngle(angle + 4*Math.PI/180);
                 if(angle >= Math.PI/2){
                     setAngle( Math.PI/2);
@@ -96,4 +91,6 @@ public class Goalie1 extends Player {
             }*/
         }
     }
+
+
 }

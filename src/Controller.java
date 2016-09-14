@@ -28,21 +28,23 @@ public class Controller {
 
 
 
+
     public Controller(){
         ui      = new UI("Hockey");
 
 
         // Moving objects
-        puck = new Puck(0,new Point(500, 250), 5, 0, 8, Color.BLACK);
+        puck = new Puck(0,new Point(500, 275), 0, 0, 8, Color.BLACK);
 
 
         // CREATING PLAYERS AND GOALIES mmm
+
         p1   = new Player(1,new Point(480, 275), 3, 3*Math.PI - 0.523599, 16, Color.RED, puck);
         p2   = new Player(2,new Point(690, 370), 0, 3*Math.PI - 0.523599, 16, Color.GREEN, puck);
         p3   = new Player(3,new Point(320, 170), 3, 4*Math.PI - 0.523599, 16, Color.MAGENTA, puck);
         p4   = new Player(4,new Point(530, 275), 3, 4*Math.PI - 0.523599, 16, Color.BLUE, puck);
         g1   = new Goalie1(5,new Point(190+20, 275), 3, 4*Math.PI - 0.523599, 12, Color.LIGHT_GRAY, puck);
-        g2   = new Goalie2(6,new Point(810-20, 275), 3, 4*Math.PI - 0.523599, 12, Color.LIGHT_GRAY, puck);
+        g2   = new Goalie2(6,new Point(810-20, 275), 3, Math.PI, 12, Color.LIGHT_GRAY, puck);
 
         Rink.selectedPlayer = p1;
         Rink.selectedPlayer2 = p2;

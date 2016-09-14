@@ -186,7 +186,7 @@ public class Player extends MovingObject{
             location.x = (int) (location.x + getSpeed() * Math.cos(angle));
             location.y = (int) (location.y + getSpeed() * Math.sin(angle));
             stick.updateLocation();
-            }
+        }
 
 
     }
@@ -273,6 +273,34 @@ public class Player extends MovingObject{
         speed = 4;
         location.x = (int) (location.x + getSpeed() * Math.cos(angle));
         location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+
+    }
+
+    public void afterGoal() {
+
+        double Y = puck.location.y - location.y;
+        double X = puck.location.x - location.x;
+
+        setAngle(Math.atan2(Y, X));
+
+        location.x = (int) (location.x + getSpeed() * Math.cos(angle));
+        location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+
+        stick.updateLocation();
+
+        //puck.location.x = (int) (location.x + 1 * Math.cos(0) );
+
+
+        if(hold == 5){
+            System.out.println("yo");
+            Y = horizontalMiddle - location.y;
+            X = verticalCenter - location.x;
+            setAngle(Math.atan2(Y, X));
+
+            slapShot();
+
+        }
+
 
     }
 

@@ -13,12 +13,12 @@ public class Puck extends MovingObject {
 
     //int dummy_radius;
 
+
     public Puck(int id, Point point, int speed, double angle, int radius, Color color) {
         super(id, point, speed, angle, radius, color);
         adjustment = 4;
         dummy_radius = radius + adjustment;
     }
-
 
 
     @Override
@@ -28,10 +28,36 @@ public class Puck extends MovingObject {
 
 
 
+
     @Override
     public void updateLocation() {
         location.x = (int) (location.x + speed * Math.cos(angle));
         location.y = (int) (location.y + speed * Math.sin(angle));
+    }
+
+    public void goalScoredLeft(){
+        if(location.x - radius - adjustment > leftGoalBack
+                && location.x + radius + adjustment < leftGoalLine
+                && location.y - radius - adjustment/2  > topGoalPost
+                && location.y + radius + adjustment/2 < bottomGoalPost ){
+            setSpeed(0);
+            Rink.score = 1;
+        }
+
+
+
+    }
+
+    public void goalScoredRight(){
+        if(location.x + radius + adjustment < rightGoalBack
+                && location.x - radius - adjustment > rightGoalLine
+                && location.y - radius - adjustment/2 > topGoalPost
+                && location.y + radius + adjustment/2 < bottomGoalPost ){
+
+            setSpeed(0);
+            Rink.score = 2;
+        }
+
     }
 
     public void reflection(double angle, int n){

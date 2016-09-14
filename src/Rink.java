@@ -34,6 +34,20 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     int frames = 0;
     int goalieTimer = 0;
     boolean flag = false;
+    static int reset = 0;
+    static int score = 0;
+
+    static int p1startx = 480;
+    static int p1starty = 275;
+
+    static int p2startx = 690;
+    static int p2starty = 370;
+
+    static int p3startx = 320;
+    static int p3starty = 170;
+
+    static int p4startx = 530;
+    static int p4starty = 275;
 
 
 
@@ -135,7 +149,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         //int frames = 0;
 
 
-        while(i++ < 2000) {
+        while(true) {
+            i++;
             //moved = false;
             //dragged = false;
             try {
@@ -146,6 +161,49 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             updateAll();
             repaint();
 
+        }
+    }
+
+    public void reset(){
+        /*
+        p1   = new Player(1,new Point(480, 275), 3, 3*Math.PI - 0.523599, 16, Color.RED, puck);
+        p2   = new Player(2,new Point(690, 370), 0, 3*Math.PI - 0.523599, 16, Color.GREEN, puck);
+        p3   = new Player(3,new Point(320, 170), 3, 4*Math.PI - 0.523599, 16, Color.MAGENTA, puck);
+        p4   = new Player(4,new Point(530, 275), 3, 4*Math.PI - 0.523599, 16, Color.BLUE, puck);
+        g1   = new Goalie1(5,new Point(190+20, 275), 3, 4*Math.PI - 0.523599, 12, Color.LIGHT_GRAY, puck);
+        g2   = new Goalie2(6,new Point(810-20, 275), 3, Math.PI, 12, Color.LIGHT_GRAY, puck);
+         */
+
+        double Y1 = p1starty - players[1].location.y;
+        double X1 = p1startx - players[1].location.x;
+        players[1].setAngle(Math.atan2(Y1, X1));
+        players[1].location.x = (int) (players[1].location.x + players[1].speed * Math.cos(players[1].angle));
+        players[1].location.y = (int) (players[1].location.y + players[1].speed * Math.sin(players[1].angle));
+        players[1].stick.updateLocation();
+
+        double Y2 = p2starty - players[2].location.y;
+        double X2 = p2startx - players[2].location.x;
+        players[2].setAngle(Math.atan2(Y2, X2));
+        players[2].location.x = (int) (players[2].location.x + players[2].speed * Math.cos(players[2].angle));
+        players[2].location.y = (int) (players[2].location.y + players[2].speed * Math.sin(players[2].angle));
+        players[2].stick.updateLocation();
+
+        double Y3 = p3starty - players[3].location.y;
+        double X3 = p3startx - players[3].location.x;
+        players[3].setAngle(Math.atan2(Y3, X3));
+        players[3].location.x = (int) (players[3].location.x + players[3].speed * Math.cos(players[3].angle));
+        players[3].location.y = (int) (players[3].location.y + players[3].speed * Math.sin(players[3].angle));
+        players[3].stick.updateLocation();
+
+        double Y4 = p4starty - players[4].location.y;
+        double X4 = p4startx - players[4].location.x;
+        players[4].setAngle(Math.atan2(Y4, X4));
+        players[4].location.x = (int) (players[4].location.x + players[4].speed * Math.cos(players[4].angle));
+        players[4].location.y = (int) (players[4].location.y + players[4].speed * Math.sin(players[4].angle));
+        players[4].stick.updateLocation();
+
+        if(puck.location.x == puck.horizontalMiddle && puck.location.y == puck.verticalCenter){
+            reset = 0;
         }
     }
 
@@ -160,6 +218,9 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
         puck.hitWalls();
         puck.updateLocation();
+        puck.goalScoredLeft();
+        puck.goalScoredRight();
+
         for(int i = 1; i < players.length; i++){
 
             if(players[i] == null){
@@ -168,91 +229,105 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             //System.out.println("Current Location: "+mo.location);
             Player mo = players[i];
 
-            if(flag == true){ // for body check
-                frames++;
-                selectedPlayer.bodyCheck();
+            if( score == 1 ){
+                reset = 1;
+                score = 0;
+                players[5].afterGoal();
+                reset();
+
+            }
+            else if(score == 2){
+
+                reset();
+
             }
 
-            if(frames > 2 && frames < 120){
-                frames++;
-                flag = false;
-                selectedPlayer.speed = 0;
-            }
-            if(frames == 120){
-                selectedPlayer.setSpeed(3);
-            }
+            if(reset == 0) {
 
-            if(mo == selectedPlayer || mo == selectedPlayer2){
-                if(mo.colliding){
-                    mo.updateLocationCol();
-                }
-                else if(dragged || moved) {
-                    selectedPlayer.updateLocation(e.getX(), e.getY());
-                    //System.out.println(selectedPlayer.stick.b);
-                    //System.out.println(MovingObject.topBoundary);
+                if (flag == true) { // for body check
+                    frames++;
+                    selectedPlayer.bodyCheck();
                 }
 
-            }
-            else {
-
-                if(mo.colliding) {
-                    mo.updateLocationCol();
+                if (frames > 2 && frames < 120) {
+                    frames++;
+                    flag = false;
+                    selectedPlayer.speed = 0;
                 }
-                else {
-                    mo.updateLocation();
+                if (frames == 120) {
+                    selectedPlayer.setSpeed(3);
                 }
-            }
+
+                if (mo == selectedPlayer || mo == selectedPlayer2) {
+                    if (mo.colliding) {
+                        mo.updateLocationCol();
+                    }
+                    else if (dragged || moved) {
+                        selectedPlayer.updateLocation(e.getX(), e.getY());
+                        //System.out.println(selectedPlayer.stick.b);
+                        //System.out.println(MovingObject.topBoundary);
+                    }
+
+                } else {
+
+                    if (mo.colliding) {
+                        mo.updateLocationCol();
+                    } else {
+                        mo.updateLocation();
+                    }
+                }
 
 
+                mo.hitWalls();
+                if ((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 ||
+                        mo.hitWall == 4 || mo.hitWall == 5)) {
+                    mo.rubWalls();
+                    mo.hitWall = 0;
+                }
 
-            mo.hitWalls();
-            if((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 ||
-                    mo.hitWall == 4 || mo.hitWall == 5)){
-                mo.rubWalls();
-                mo.hitWall = 0;
-            }
+                if (i != possession) {
+                    mo.stickHandling();
+                }
+                //selectedPlayer.stickHandling();
 
-            if(i != possession)
-                mo.stickHandling();
-            //selectedPlayer.stickHandling();
 
-            if(Player.hold != 0) {
-                //System.out.println(Player.hold);
-                players[Player.hold].holdPuck();
+                if (Player.hold != 0) {
+                    //System.out.println(Player.hold);
+                    players[Player.hold].holdPuck();
 
-                //when goalie gets the puck
-                if(Player.hold == 5 || Player.hold == 6){
-                    goalieTimer++;
-                    //System.out.println("goalie catch");
-                    if(goalieTimer == 200){
-                        if(Player.hold == 5) {
+                    //when goalie gets the puck
+                    if (Player.hold == 5 || Player.hold == 6) {
+                        goalieTimer++;
+                        //System.out.println("goalie catch");
+                        if (goalieTimer == 200) {
+                            if (Player.hold == 5) {
+                                if (players[1].location.x > players[1].leftGoalLine ||
+                                        players[2].location.x > players[2].leftGoalLine) {
+                                    goaliePassToTeammates1();
+                                } else {
+                                    players[Player.hold].wristShot();
+                                }
+                                goalieTimer = 0;
+                            } else if (Player.hold == 6) {
 
-                            if(players[1].location.x > players[1].leftGoalLine ||
-                                    players[2].location.x > players[2].leftGoalLine) {
-                                goaliePassToTeammates1();
+                                if (players[3].location.x < players[3].rightGoalLine ||
+                                        players[4].location.x < players[4].rightGoalLine) {
+                                    goaliePassToTeammates2();
+                                } else {
+                                    players[Player.hold].wristShot();
+                                }
+
+                                goalieTimer = 0;
                             }
-                            else{
-                                players[Player.hold].wristShot();
-                            }
-                            goalieTimer = 0;
+
                         }
-                        else if(Player.hold == 6) {
-
-                            if(players[3].location.x < players[3].rightGoalLine ||
-                                    players[4].location.x < players[4].rightGoalLine) {
-                                goaliePassToTeammates2();
-                            }
-                            else{
-                                players[Player.hold].wristShot();
-                            }
-                            goalieTimer = 0;
-                        }
-
                     }
                 }
             }
+
         }
 
+        /*
         Collision collision = new Collision(players.length+1);
         for(int i = 1; i < players.length; i++){
             for (int j = i+1; j < players.length; j++){
@@ -260,7 +335,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 if(collision.objectsCollide(players[i], players[j]))
                     collision.calculateCollisions(players[i], players[j]);
             }
-        }
+        }*/
 
 
 
