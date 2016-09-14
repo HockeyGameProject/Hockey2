@@ -217,6 +217,7 @@ public class Player extends MovingObject{
         if (distance <= puckGrabArea && release != 1) {
 
             if(hold == 0){
+                System.out.println("noooooooooooo");
                 hold = id;
             }
             else if (steal == 1){
@@ -278,26 +279,32 @@ public class Player extends MovingObject{
 
     public void afterGoal() {
 
-        double Y = puck.location.y - location.y;
-        double X = puck.location.x - location.x;
-
-        setAngle(Math.atan2(Y, X));
-
-        location.x = (int) (location.x + getSpeed() * Math.cos(angle));
-        location.y = (int) (location.y + getSpeed() * Math.sin(angle));
 
         stick.updateLocation();
-
-        //puck.location.x = (int) (location.x + 1 * Math.cos(0) );ss
-
-
-        if(hold == 5){
-            System.out.println("yo");
+        double Y;
+        double X;
+        if(release == 0 && hold == 0) {
+            stickHandling();
+            holdPuck();
+            Y = puck.location.y - location.y;
+            X = puck.location.x - location.x;
+            setAngle(Math.atan2(Y, X));
+            location.x = (int) (location.x + getSpeed() * Math.cos(angle));
+            location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+        }
+        else if(hold == 5 || hold == 6){
             Y = horizontalMiddle - location.y;
             X = verticalCenter - location.x;
             setAngle(Math.atan2(Y, X));
+            stick.updateLocation();
 
-            slapShot();
+            double puckY = puck.horizontalMiddle - puck.location.y;
+            double puckX = puck.verticalCenter - puck.location.x;
+
+            puck.setAngle(Math.atan2(puckY, puckX));
+            puck.setSpeed(2);
+            puck.location.x = (int) (puck.location.x + puck.speed * Math.cos(puck.angle));
+            puck.location.y = (int) (puck.location.y + puck.speed * Math.sin(puck.angle));
 
         }
 

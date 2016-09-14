@@ -33,6 +33,9 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     Puck puck;
     int frames = 0;
     int goalieTimer = 0;
+    int resetTimer = 0;
+    int afterGoalTimer = 0;
+
     boolean flag = false;
     static int reset = 0;
     static int score = 0;
@@ -202,9 +205,20 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         players[4].location.y = (int) (players[4].location.y + players[4].speed * Math.sin(players[4].angle));
         players[4].stick.updateLocation();
 
-        if(puck.location.x == puck.horizontalMiddle && puck.location.y == puck.verticalCenter){
-            reset = 0;
-            score = 0;
+        if(puck.location.y > puck.horizontalMiddle - 50
+                && puck.location.y < puck.horizontalMiddle + 50
+                && puck.location.x > puck.verticalCenter - 50
+                && puck.location.x < puck.verticalCenter + 50){
+
+            puck.speed = 0;
+            resetTimer++;
+            if( resetTimer == 300) {
+                Player.hold = 0;
+                reset = 0;
+                score = 0;
+                afterGoalTimer = 0;
+                resetTimer = 0;
+            }
         }
     }
 
@@ -212,10 +226,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
     public void updateAll(){
-        // Collision detection
-        possession = Player.hold;
-       // System.out.println(possession);
 
+        possession = Player.hold;
 
         puck.hitWalls();
         puck.updateLocation();
@@ -227,23 +239,29 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             if(players[i] == null){
                 continue;
             }
-            //System.out.println("Current Location: "+mo.location);ss
+
             Player mo = players[i];
 
-            if( score == 1 ){
+            if( score == 1 ){ //
                 reset = 1;
-
-                players[5].afterGoal();
+                afterGoalTimer++;
                 reset();
+                if(afterGoalTimer >= 90) {
+                    players[5].afterGoal();
+                }
 
             }
             else if(score == 2){
-
+                reset = 2;
+                afterGoalTimer++;
+                players[6].afterGoal();
                 reset();
-
+                if(afterGoalTimer >= 90) {
+                    players[5].afterGoal();
+                }
             }
 
-            if(reset == 0) {
+            if(reset == 0) {// if its in reset mode it will skip everything
 
                 if (flag == true) { // for body check
                     frames++;
@@ -265,8 +283,6 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                     }
                     else if (dragged || moved) {
                         selectedPlayer.updateLocation(e.getX(), e.getY());
-                        //System.out.println(selectedPlayer.stick.b);
-                        //System.out.println(MovingObject.topBoundary);
                     }
 
                 } else {
@@ -280,7 +296,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
                 mo.hitWalls();
-                if ((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 ||
+                if ((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 ||// if its along any wall, rub
                         mo.hitWall == 4 || mo.hitWall == 5)) {
                     mo.rubWalls();
                     mo.hitWall = 0;
