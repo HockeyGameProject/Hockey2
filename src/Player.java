@@ -169,7 +169,7 @@ public class Player extends MovingObject{
             stick.updateLocation();
         }
         else {
-            setSpeed(3);
+            setSpeed(2);
 
             setAngle(Math.atan2(Y, X));
             /*
@@ -217,7 +217,7 @@ public class Player extends MovingObject{
         if (distance <= puckGrabArea && release != 1) {
 
             if(hold == 0){
-                System.out.println("noooooooooooo");
+
                 hold = id;
             }
             else if (steal == 1){
@@ -252,7 +252,7 @@ public class Player extends MovingObject{
         hold = 0;
         //Rink.possession = 0;
         puck.setAngle(angle);
-        puck.setSpeed(8);
+        puck.setSpeed(4);
         puck.updateLocation();
     }
 
@@ -261,7 +261,7 @@ public class Player extends MovingObject{
         release = 1;
         hold = 0;
         puck.setAngle(angle);
-        puck.setSpeed(16);
+        puck.setSpeed(8);
         puck.updateLocation();
     }
 

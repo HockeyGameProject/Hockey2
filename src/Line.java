@@ -61,6 +61,8 @@ public class Line {
         A = (-1)*slopeY;
         B = slopeX;
         slopeAngle = Math.atan2(slopeY, slopeX);
+
+
     }
 
     public double distanceFrom(int m, int n){

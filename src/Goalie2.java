@@ -11,7 +11,7 @@ public class Goalie2 extends Player {
 
     public void moveGoalieDown(){
         count++;
-        if(count == 2) {
+        if(count == 4) {
             location.y = location.y + 1; // moves down one pixel per frame
             count = 0;
         }
@@ -23,7 +23,7 @@ public class Goalie2 extends Player {
     }
     public void moveGoalieUp(){
         count++;
-        if(count == 2) {
+        if(count == 4) {
             location.y = location.y - 1;
             count = 0;
         }
@@ -51,7 +51,7 @@ public class Goalie2 extends Player {
                 double A = angle + 4*Math.PI/180;
                 if(A < 0)
                     A = A + 2*Math.PI;
-                System.out.println(angle);
+
                 if(A >= 3*Math.PI/2){
                     setAngle( 3*Math.PI/2);
                 }

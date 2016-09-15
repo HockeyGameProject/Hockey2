@@ -52,14 +52,18 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     static int p4startx = 530;
     static int p4starty = 275;
 
-
+    ScorePanel scorePanel = new ScorePanel();
+    boolean setScore1 = false;
+    boolean setScore2 = false;
 
 
 
     Rink() {
         // set a preferred size for the custom panel.
         setPreferredSize(new Dimension(1000,550));
-        setLayout(new BorderLayout());
+        //setLayout(new BorderLayout());
+        add(scorePanel);
+        setVisible(true);
     }
 
 
@@ -148,16 +152,16 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     @Override
     public void run() {
         System.out.println("RUNNING");
-        int i = 0;
+        //int i = 0;
         //int frames = 0;
 
 
         while(true) {
-            i++;
+            //i++;
             //moved = false;
             //dragged = false;
             try {
-                Thread.sleep(20);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -212,10 +216,12 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
             puck.speed = 0;
             resetTimer++;
-            if( resetTimer == 300) {
+            if( resetTimer == 600) {
                 Player.hold = 0;
                 reset = 0;
                 score = 0;
+                setScore1 = false;
+                setScore2 = false;
                 afterGoalTimer = 0;
                 resetTimer = 0;
             }
@@ -243,20 +249,28 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
             Player mo = players[i];
 
-            if( score == 1 ){ //
+            if( score == 1 ){
+                if(!setScore1) {
+                    setScore1 = true;
+                    scorePanel.addScore1(1);
+                }
                 reset = 1;
                 afterGoalTimer++;
                 reset();
-                if(afterGoalTimer >= 90) {
+                if(afterGoalTimer >= 180) {
                     players[5].afterGoal();
                 }
 
             }
             else if(score == 2){
+                if(!setScore2) {
+                    setScore2 = true;
+                    scorePanel.addScore2(1);
+                }
                 reset = 2;
                 afterGoalTimer++;
                 reset();
-                if(afterGoalTimer >= 90) {
+                if(afterGoalTimer >= 180) {
                     players[6].afterGoal();
                 }
             }
@@ -268,12 +282,12 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                     selectedPlayer.bodyCheck();
                 }
 
-                if (frames > 2 && frames < 120) {
+                if (frames > 4 && frames < 240) {
                     frames++;
                     flag = false;
                     selectedPlayer.speed = 0;
                 }
-                if (frames == 120) {
+                if (frames == 20) {
                     selectedPlayer.setSpeed(3);
                 }
 

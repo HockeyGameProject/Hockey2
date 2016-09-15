@@ -12,7 +12,7 @@ public class Goalie1 extends Player {
 
     public void moveGoalieDown(){
         count++;
-        if(count == 2) {
+        if(count == 4) {
             location.y = location.y + 1; // moves down one pixel per frame
             count = 0;
         }
@@ -24,7 +24,7 @@ public class Goalie1 extends Player {
     }
     public void moveGoalieUp(){
         count++;
-        if(count == 2) {
+        if(count == 4) {
             location.y = location.y - 1;
             count = 0;
         }
@@ -52,14 +52,14 @@ public class Goalie1 extends Player {
 
             if(puck.location.y < location.y){
                 moveGoalieUp();
-                setAngle(angle - 4*Math.PI/180);
+                setAngle(angle - 2*Math.PI/180);
                 if(angle <= -Math.PI/2){
                     setAngle( -Math.PI/2);
                 }
             }
             else if(puck.location.y > location.y){
                 moveGoalieDown();
-                setAngle(angle + 4*Math.PI/180);
+                setAngle(angle + 2*Math.PI/180);
                 if(angle >= Math.PI/2){
                     setAngle( Math.PI/2);
                 }
