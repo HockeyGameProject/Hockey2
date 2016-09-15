@@ -12,12 +12,12 @@ public class Line {
     int slopeY;
     double slope;
     double slopeAngle;
-    double A;
-    double B;
-    double C;
+    int A;
+    int B;
+    int C;
 
 
-    public Line(int x1, int x2, int y1, int y2){
+    public Line(int x1, int y1, int x2, int y2){
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
@@ -25,11 +25,22 @@ public class Line {
         slopeX = x2 - x1;
         slopeY = y2 - y1;
         slope = ((double)slopeY)/slopeX;
-        //C = y2 - mx2
-        C = (-1)*(y2-(slope*x2));
-        A = (-1)*slope;
-        B = 1;
+        // C = y2 - mx2
+        // m = sy / sx
+        // -sy*x + sx*y + sy*x2 - sx*y2 = 0
+        // A = -sy
+        // B = sx
+        // C = sy*x2 - sx*y2
+        C = slopeY*x1 - slopeX*y1;
+        A = (-1)*slopeY;
+        B = slopeX;
         slopeAngle = Math.atan2(slopeY, slopeX);
+    }
+
+    public Line(int a, int b, int c){
+        A = a;
+        B = b;
+        C = c;
     }
 
     public Line(Point x1y1, Point x2y2){
@@ -40,10 +51,15 @@ public class Line {
         slopeX = x2 - x1;
         slopeY = y2 - y1;
         slope = ((double)slopeY)/slopeX;
-        //C = y2 - mx2
-        C = (-1)*(y2-(slope*x2));
-        A = (-1)*slope;
-        B = 1;
+        // C = y2 - mx2
+        // m = sy / sx
+        // -sy*x + sx*y + sy*x2 - sx*y2 = 0
+        // A = -sy
+        // B = sx
+        // C = sy*x2 - sx*y2
+        C = slopeY*x2 - slopeX*y2;
+        A = (-1)*slopeY;
+        B = slopeX;
         slopeAngle = Math.atan2(slopeY, slopeX);
     }
 
@@ -59,6 +75,17 @@ public class Line {
         int n = mn.y;
         double distance = Math.abs(A*m + B*n + C) / Math.sqrt(Math.pow(A,2)+Math.pow(B,2));
         return distance;
+    }
+
+    public void calculateY1Y2(int x1, int x2){
+        this.x1 = x1;
+        this.x2 = x2;
+        y1 = (C-A*x1)/B;
+        y2 = (C-A*x2)/B;
+    }
+
+    public String toString(){
+        return "Line{ ("+x1+", "+y1+") -> ("+x2+", "+y2+")} => ("+A+")x + (" + B+")y + (" + C +") = 0";
     }
 
 }
