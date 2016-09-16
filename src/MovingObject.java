@@ -34,11 +34,11 @@ public abstract class MovingObject extends JComponent {
     static int bottomGoalPost = 325;
     static int horizontalMiddle = 275;
     static int verticalCenter = 500;//ss
-    static int leftGoalBack = 150;
-    static int rightGoalBack = 850;
+    static int leftGoalBack = 160;
+    static int rightGoalBack = 840;
 
-    static int goalLength = 100;
-    static int goalWidth = 40;
+    static int goalLength = 80;
+    static int goalWidth = 30;
 
     Point arcCenter1 = new Point(leftBoundary+100,topBoundary+100);
     Point arcCenter2 = new Point(rightBoundary-100,topBoundary+100);

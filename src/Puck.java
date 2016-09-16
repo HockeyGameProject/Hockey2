@@ -149,8 +149,8 @@ public class Puck extends MovingObject {
 
 
         // Left goal post
-        if(location.x < leftGoalLine && location.y + dummy_radius < topGoalPost){
-            if(location.y - dummy_radius >= topGoalPost  && location.x - dummy_radius > leftGoalBack){
+        if(location.x < leftGoalLine && location.y < topGoalPost){
+            if(location.y >= topGoalPost- dummy_radius && location.x > leftGoalBack){
                 reflection(angle, 2);
             }
         }
@@ -164,8 +164,6 @@ public class Puck extends MovingObject {
             if(location.x >= leftGoalBack- dummy_radius)
                 reflection(angle, 1);
         }
-
-
         // Right Goal post
         else if(location.x > rightGoalLine && location.y < topGoalPost){
             if(location.y >= topGoalPost- dummy_radius && location.x < rightGoalBack){

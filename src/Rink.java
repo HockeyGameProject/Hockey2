@@ -101,8 +101,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         rink.draw(new Line2D.Double(190, 275, 810, 275));
 
         rink.setColor(Color.RED); //goals
-        rink.draw(new Rectangle2D.Double(150, 235, 40, 80));
-        rink.draw(new Rectangle2D.Double(810, 235, 40, 80));
+        rink.draw(new Rectangle2D.Double(160, 235, 30, 80));
+        rink.draw(new Rectangle2D.Double(810, 235, 30, 80));
 
         rink.drawOval(445, 220, 110, 110);
         rink.setColor(Color.BLACK);
@@ -310,8 +310,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
                 mo.hitWalls();
-                if ((mo.hitWall == 1 || mo.hitWall == 2 || mo.hitWall == 3 ||// if its along any wall, rub
-                        mo.hitWall == 4 || mo.hitWall == 5)) {
+                if (mo.hitWall != 0) {
                     mo.rubWalls();
                     mo.hitWall = 0;
                 }

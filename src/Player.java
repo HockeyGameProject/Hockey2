@@ -23,7 +23,7 @@ public class Player extends MovingObject{
         super(id, point, speed, angle, radius, color);
         this.teamColor = color;
         this.puck = puck;
-        this.stick = new Stick(25);
+        this.stick = new Stick(20);
         dummy_radius = stick.length;
     }
 
@@ -42,18 +42,35 @@ public class Player extends MovingObject{
 
     public void rubWalls(){
 
-        if ( hitWall == 1){
-            location.y = topBoundary + dummy_radius;
+
+        switch (hitWall){
+            case 1:
+                location.y = topBoundary + dummy_radius;
+                break;
+            case 2:
+                location.y = bottomBoundary - dummy_radius;
+                break;
+            case 3:
+                location.x = leftBoundary + dummy_radius;
+                break;
+            case 4:
+                location.x = rightBoundary - dummy_radius;
+                break;
+            case 5:
+                location.y = topGoalPost - dummy_radius;//left and right goal top
+                break;
+            case 6:
+                location.y = bottomGoalPost + dummy_radius;//left and right goal bottom
+                break;
+            case 7:
+                location.x = leftGoalBack - dummy_radius;//left  goal side
+                break;
+            case 8:
+                location.x= rightGoalBack + dummy_radius;//right goal side
+                break;
+
         }
-        else if (hitWall == 2){
-            location.y = bottomBoundary - dummy_radius;
-        }
-        else if (hitWall == 3){
-            location.x = leftBoundary + dummy_radius;
-        }
-        else if (hitWall == 4){
-            location.x = rightBoundary - dummy_radius;
-        }
+
 
     }
 
@@ -61,11 +78,6 @@ public class Player extends MovingObject{
         double theta = Math.atan2((location.y-cy), (location.x-cx));
         return theta;
     }
-
-
-
-//jjj
-
 
     public void hitWalls(){
 
@@ -78,13 +90,42 @@ public class Player extends MovingObject{
         else if(location.y >= bottomBoundary - dummy_radius || stick.b >= bottomBoundary){
             hitWall = 2;
         }
-
-
-        if(location.x <= leftBoundary + dummy_radius || stick.a <= leftBoundary){
+        else if(location.x <= leftBoundary + dummy_radius || stick.a <= leftBoundary){
             hitWall = 3;
         }
         else if(location.x >= rightBoundary - dummy_radius || stick.a >= rightBoundary){
             hitWall = 4;
+        }
+        else if(location.x - radius < leftGoalLine && location.y < topGoalPost){//left goal top
+            if(location.y >= topGoalPost- dummy_radius && location.x > leftGoalBack){
+                hitWall = 5;
+            }
+        }
+        else if(location.x - radius < leftGoalLine  && location.y > bottomGoalPost){//left goal bottom
+            if(location.y <= bottomGoalPost+ dummy_radius && location.x > leftGoalBack){
+                hitWall = 6;
+            }
+        }
+        else if(location.x < leftGoalBack && location.y > topGoalPost &&//left goal back
+                location.y < bottomGoalPost){
+            if(location.x >= leftGoalBack- dummy_radius)
+                hitWall = 7;
+        }
+        // Right Goal post
+        else if(location.x > rightGoalLine && location.y < topGoalPost){//right goal top
+            if(location.y >= topGoalPost- dummy_radius && location.x < rightGoalBack){
+                hitWall = 5;
+            }
+        }
+        else if(location.x > rightGoalLine  && location.y > bottomGoalPost){//right goal bottom
+            if(location.y <= bottomGoalPost+ dummy_radius && location.x < rightGoalBack){
+                hitWall = 6;
+            }
+        }
+        else if(location.x > rightGoalBack && location.y > topGoalPost &&//right goal back
+                location.y < bottomGoalPost){
+            if(location.x <= rightGoalBack+ dummy_radius)
+                hitWall = 8;
         }
 
 
