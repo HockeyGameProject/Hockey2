@@ -12,7 +12,7 @@ public class Player extends MovingObject{
     Color teamColor;
     Puck puck;
     Stick stick;
-    static int hold = 0;
+
     int release = 0;
     int steal = 0;
 
@@ -68,6 +68,10 @@ public class Player extends MovingObject{
             case 8:
                 location.x= rightGoalBack + dummy_radius;//right goal side
                 break;
+            case 9:
+                location.x= leftGoalLine + radius;//right goal side
+                break;
+
 
         }
 
@@ -96,7 +100,7 @@ public class Player extends MovingObject{
         else if(location.x >= rightBoundary - dummy_radius || stick.a >= rightBoundary){
             hitWall = 4;
         }
-        else if(location.x - radius < leftGoalLine && location.y < topGoalPost){//left goal top
+        else if(location.x - radius < leftGoalLine && location.y  < topGoalPost){//left goal top
             if(location.y >= topGoalPost- dummy_radius && location.x > leftGoalBack){
                 hitWall = 5;
             }
@@ -127,6 +131,13 @@ public class Player extends MovingObject{
             if(location.x <= rightGoalBack+ dummy_radius)
                 hitWall = 8;
         }
+
+        else if(location.x > leftGoalLine && location.y > topGoalPost &&//left goal front
+                location.y < bottomGoalPost){
+            if(location.x <= leftGoalLine + radius)
+                hitWall = 9;
+        }
+
 
 
         if(location.x >= rightBoundary - 100 &&
@@ -257,12 +268,12 @@ public class Player extends MovingObject{
 
         if (distance <= puckGrabArea && release != 1) {
 
-            if(hold == 0){
+            if(puck.hold == 0){
 
-                hold = id;
+                puck.hold = id;
             }
             else if (steal == 1){
-                hold = id;
+                puck.hold = id;
                 steal = 0;
             }
 
@@ -290,7 +301,7 @@ public class Player extends MovingObject{
     public void wristShot(){
         //Rink.possession = 0;
         release = 1;
-        hold = 0;
+        puck.hold = 0;
         //Rink.possession = 0;
         puck.setAngle(angle);
         puck.setSpeed(4);
@@ -300,7 +311,7 @@ public class Player extends MovingObject{
     public void slapShot(){
         //Rink.possession = 0;
         release = 1;
-        hold = 0;
+        puck.hold = 0;
         puck.setAngle(angle);
         puck.setSpeed(8);
         puck.updateLocation();
@@ -322,18 +333,22 @@ public class Player extends MovingObject{
 
 
         stick.updateLocation();
+        stickHandling();
+        holdPuck();
+
         double Y;
         double X;
-        if(release == 0 && hold == 0) {
-            stickHandling();
-            holdPuck();
+
+        if(release == 0 && puck.hold == 0) {
+
             Y = puck.location.y - location.y;
             X = puck.location.x - location.x;
             setAngle(Math.atan2(Y, X));
             location.x = (int) (location.x + getSpeed() * Math.cos(angle));
             location.y = (int) (location.y + getSpeed() * Math.sin(angle));
         }
-        else if(hold == 5 || hold == 6){
+        else if(puck.hold == 5 || puck.hold == 6){
+
             Y = horizontalMiddle - location.y;
             X = verticalCenter - location.x;
             setAngle(Math.atan2(Y, X));

@@ -216,8 +216,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
             puck.speed = 0;
             resetTimer++;
-            if( resetTimer == 600) {
-                Player.hold = 0;
+            if( resetTimer == 100) {
+                puck.hold = 0;
                 reset = 0;
                 score = 0;
                 setScore1 = false;
@@ -233,12 +233,50 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
     public void updateAll(){
 
-        possession = Player.hold;
+        possession = puck.hold;
 
         puck.hitWalls();
         puck.updateLocation();
-        puck.goalScoredLeft();
-        puck.goalScoredRight();
+
+        if(score == 0 && puck.goalScoredLeft()){
+
+            score = 1;
+            players[possession].release = 0;
+            //players[possession].hold = 0;
+        }
+        else if(score == 0 && puck.goalScoredRight()){
+            score = 2;
+            players[possession].release = 0;
+            //players[possession].hold = 0;
+        }
+
+        if( score == 1 ){
+            if(!setScore1) {
+                setScore1 = true;
+                scorePanel.addScore1(1);
+            }
+            reset = 1;
+            afterGoalTimer++;
+            reset();
+            puck.hold = 0;
+            if(afterGoalTimer >= 40) {
+                players[5].afterGoal();
+            }
+
+        }
+        else if(score == 2){
+            if(!setScore2) {
+                setScore2 = true;
+                scorePanel.addScore2(1);
+            }
+            reset = 2;
+            afterGoalTimer++;
+            reset();
+            puck.hold = 0;
+            if(afterGoalTimer >= 40) {
+                players[6].afterGoal();
+            }
+        }
 
 
         for(int i = 1; i < players.length; i++){
@@ -249,31 +287,6 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
             Player mo = players[i];
 
-            if( score == 1 ){
-                if(!setScore1) {
-                    setScore1 = true;
-                    scorePanel.addScore1(1);
-                }
-                reset = 1;
-                afterGoalTimer++;
-                reset();
-                if(afterGoalTimer >= 180) {
-                    players[5].afterGoal();
-                }
-
-            }
-            else if(score == 2){
-                if(!setScore2) {
-                    setScore2 = true;
-                    scorePanel.addScore2(1);
-                }
-                reset = 2;
-                afterGoalTimer++;
-                reset();
-                if(afterGoalTimer >= 180) {
-                    players[6].afterGoal();
-                }
-            }
 
             if(reset == 0) {// if its in reset mode it will skip everything
 
@@ -282,7 +295,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                     selectedPlayer.bodyCheck();
                 }
 
-                if (frames > 4 && frames < 240) {
+                if (frames > 8 && frames < 240) {
                     frames++;
                     flag = false;
                     selectedPlayer.speed = 0;
@@ -321,30 +334,30 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 //selectedPlayer.stickHandling();
 
 
-                if (Player.hold != 0) {
+                if (puck.hold != 0) {
                     //System.out.println(Player.hold);
-                    players[Player.hold].holdPuck();
+                    players[puck.hold].holdPuck();
 
                     //when goalie gets the puck
-                    if (Player.hold == 5 || Player.hold == 6) {
+                    if (puck.hold == 5 || puck.hold == 6) {
                         goalieTimer++;
                         //System.out.println("goalie catch");
-                        if (goalieTimer == 200) {
-                            if (Player.hold == 5) {
+                        if (goalieTimer == 400) {
+                            if (puck.hold == 5) {
                                 if (players[1].location.x > players[1].leftGoalLine ||
                                         players[2].location.x > players[2].leftGoalLine) {
                                     goaliePassToTeammates1();
                                 } else {
-                                    players[Player.hold].wristShot();
+                                    players[puck.hold].wristShot();
                                 }
                                 goalieTimer = 0;
-                            } else if (Player.hold == 6) {
+                            } else if (puck.hold == 6) {
 
                                 if (players[3].location.x < players[3].rightGoalLine ||
                                         players[4].location.x < players[4].rightGoalLine) {
                                     goaliePassToTeammates2();
                                 } else {
-                                    players[Player.hold].wristShot();
+                                    players[puck.hold].wristShot();
                                 }
 
                                 goalieTimer = 0;
@@ -426,7 +439,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }
         }
 
-        players[Player.hold].wristShot();
+        players[puck.hold].wristShot();
         goalieTimer = 0;
     }
 
@@ -486,7 +499,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }
         }
 
-        players[Player.hold].wristShot();
+        players[puck.hold].wristShot();
         goalieTimer = 0;
     }
 
@@ -636,7 +649,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("testJ");
-                if(selectedPlayer.hold == 1){
+                if(puck.hold == 1){
                     selectedPlayer.wristShot();
                 }
                 else{
@@ -653,7 +666,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("testL");
-                if(selectedPlayer.hold == 1){
+                if(puck.hold == 1){
                     selectedPlayer.slapShot();
                 }
                 else{

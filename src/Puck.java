@@ -9,6 +9,7 @@ import java.awt.*;
 public class Puck extends MovingObject {
 
     int postTimer = 0;
+    static int hold = 0;
     public Puck(int id, Point point, int speed, double angle, int radius, Color color) {
         super(id, point, speed, angle, radius, color);
         adjustment = 4;
@@ -28,25 +29,31 @@ public class Puck extends MovingObject {
         location.y = (int) (location.y + speed * Math.sin(angle));
     }
 
-    public void goalScoredLeft(){
-        if(location.x - dummy_radius > leftGoalBack
-                && location.x + radius + adjustment < leftGoalLine
-                && location.y - dummy_radius  > topGoalPost
-                && location.y + dummy_radius  < bottomGoalPost ){
+    public boolean goalScoredLeft(){
+        if(location.x > leftGoalBack
+                && location.x < leftGoalLine
+                && location.y  - dummy_radius > topGoalPost
+                && location.y  + dummy_radius< bottomGoalPost ){
+            System.out.println("test");
             setSpeed(0);
-            Rink.score = 1;
+
+            //Player.release = 0;
+
+            return true;
         }
+        return false;
     }
 
-    public void goalScoredRight(){
-        if(location.x + dummy_radius < rightGoalBack
-                && location.x - radius > rightGoalLine
+    public boolean goalScoredRight(){
+        if(location.x < rightGoalBack
+                && location.x > rightGoalLine
                 && location.y - dummy_radius > topGoalPost
                 && location.y + dummy_radius < bottomGoalPost ){
-
             setSpeed(0);
-            Rink.score = 2;
+
+            return true;
         }
+        return false;
     }
 
 
