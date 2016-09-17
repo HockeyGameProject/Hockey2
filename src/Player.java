@@ -358,7 +358,7 @@ public class Player extends MovingObject{
             double puckX = puck.verticalCenter - puck.location.x;
 
             puck.setAngle(Math.atan2(puckY, puckX));
-            puck.setSpeed(2);
+            puck.setSpeed(4);
             puck.location.x = (int) (puck.location.x + puck.speed * Math.cos(puck.angle));
             puck.location.y = (int) (puck.location.y + puck.speed * Math.sin(puck.angle));
 

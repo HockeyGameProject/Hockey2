@@ -332,7 +332,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                     mo.stickHandling();
                 }
                 //selectedPlayer.stickHandling();
-
+//
 
                 if (puck.hold != 0) {
                     //System.out.println(Player.hold);

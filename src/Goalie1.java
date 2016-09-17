@@ -33,7 +33,7 @@ public class Goalie1 extends Player {
 
         }
     }
-
+//
     @Override
     public void updateLocation() {
         stick.updateLocation();
