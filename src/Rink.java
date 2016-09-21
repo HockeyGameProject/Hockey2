@@ -163,7 +163,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             //moved = false;
             //dragged = false;
             try {
-                Thread.sleep(10);
+                Thread.sleep(30);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -239,7 +239,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
         puck.hitWalls();
 
-        if(i%30 == 0){
+        if(i%40 == 0){
             puck.setSpeedFriction();
         }
         puck.updateLocation();

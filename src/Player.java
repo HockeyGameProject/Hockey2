@@ -12,11 +12,10 @@ public class Player extends MovingObject{
     Color teamColor;
     Puck puck;
     Stick stick;
-
     int release = 0;
     int steal = 0;
-
     int puckGrabArea = 16;
+    double slideAngle= 0;
 
 
     public Player(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
@@ -248,30 +247,40 @@ public class Player extends MovingObject{
                 + Math.pow((location.y - y), 2));
         double Y = y - location.y;
         double X = x - location.x;
-
+        double prevAngle = angle;
+        double newAngle = Math.atan2(Y, X);
+        //prevAngle = (prevAngle + newAngle)/2;
 
         if( distance < 80){// controller grace area. allows you to turn without moving
 
-            setAngle(Math.atan2(Y, X));
+            setAngle(newAngle);
             stick.updateLocation();
-           /* if(Rink.i%40 == 0){
-                System.out.println("slide");
-                setSpeedFriction();
-                location.x = (int) (location.x + speed * Math.cos(angle));
-                location.y = (int) (location.y + speed * Math.sin(angle));
-            }*/
+            if(speed == 0){
+                slideAngle = angle;
+            }
 
+            //setSpeedFriction();
+            //location.x = (int) (location.x + speed * Math.cos(prevAngle));
+            //location.y = (int) (location.y + speed * Math.sin(prevAngle));
 
         }
 
         else {
+
+            setAngle(newAngle);
+            stick.updateLocation();
+
+            System.out.println("slide");
+            //setSpeedFriction();
+            location.x = (int) (location.x + speed * Math.cos(slideAngle));
+            location.y = (int) (location.y + speed * Math.sin(slideAngle));
             setSpeed(3);
 
-            setAngle(Math.atan2(Y, X));
 
-            location.x = (int) (location.x + speed * Math.cos(angle));
-            location.y = (int) (location.y + speed * Math.sin(angle));
-            stick.updateLocation();
+            if(Rink.i%5 == 0){
+                slideAngle = angle;
+
+            }
 
         }
 
