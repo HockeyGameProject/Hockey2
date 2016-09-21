@@ -27,7 +27,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     static Player selectedPlayer;
     static Player selectedPlayer2;
     boolean dragged = false;
-    boolean moved = false;
+    static boolean moved = false;
     MouseEvent e = null;
     static int possession = 0;
     Puck puck;
@@ -55,6 +55,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     ScorePanel scorePanel = new ScorePanel();
     boolean setScore1 = false;
     boolean setScore2 = false;
+
+    static int i = 0;
 
 
 
@@ -101,8 +103,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         rink.draw(new Line2D.Double(190, 275, 810, 275));
 
         rink.setColor(Color.RED); //goals
-        rink.draw(new Rectangle2D.Double(160, 235, 30, 80));
-        rink.draw(new Rectangle2D.Double(810, 235, 30, 80));
+        rink.draw(new Rectangle2D.Double(MovingObject.leftGoalBack, MovingObject.topGoalPost, 30, 80));
+        rink.draw(new Rectangle2D.Double(MovingObject.rightGoalLine, MovingObject.topGoalPost, 30, 80));
 
         rink.drawOval(445, 220, 110, 110);
         rink.setColor(Color.BLACK);
@@ -152,12 +154,12 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     @Override
     public void run() {
         System.out.println("RUNNING");
-        //int i = 0;
+
         //int frames = 0;
 
 
         while(true) {
-            //i++;
+            i++;
             //moved = false;
             //dragged = false;
             try {
@@ -184,29 +186,29 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         double Y1 = p1starty - players[1].location.y;
         double X1 = p1startx - players[1].location.x;
         players[1].setAngle(Math.atan2(Y1, X1));
-        players[1].location.x = (int) (players[1].location.x + players[1].speed * Math.cos(players[1].angle));
-        players[1].location.y = (int) (players[1].location.y + players[1].speed * Math.sin(players[1].angle));
+        players[1].location.x = (int) (players[1].location.x + 6 * Math.cos(players[1].angle));
+        players[1].location.y = (int) (players[1].location.y + 6 * Math.sin(players[1].angle));
         players[1].stick.updateLocation();
 
         double Y2 = p2starty - players[2].location.y;
         double X2 = p2startx - players[2].location.x;
         players[2].setAngle(Math.atan2(Y2, X2));
-        players[2].location.x = (int) (players[2].location.x + players[2].speed * Math.cos(players[2].angle));
-        players[2].location.y = (int) (players[2].location.y + players[2].speed * Math.sin(players[2].angle));
+        players[2].location.x = (int) (players[2].location.x + 6 * Math.cos(players[2].angle));
+        players[2].location.y = (int) (players[2].location.y + 6 * Math.sin(players[2].angle));
         players[2].stick.updateLocation();
 
         double Y3 = p3starty - players[3].location.y;
         double X3 = p3startx - players[3].location.x;
         players[3].setAngle(Math.atan2(Y3, X3));
-        players[3].location.x = (int) (players[3].location.x + players[3].speed * Math.cos(players[3].angle));
-        players[3].location.y = (int) (players[3].location.y + players[3].speed * Math.sin(players[3].angle));
+        players[3].location.x = (int) (players[3].location.x + 6 * Math.cos(players[3].angle));
+        players[3].location.y = (int) (players[3].location.y + 6 * Math.sin(players[3].angle));
         players[3].stick.updateLocation();
 
         double Y4 = p4starty - players[4].location.y;
         double X4 = p4startx - players[4].location.x;
         players[4].setAngle(Math.atan2(Y4, X4));
-        players[4].location.x = (int) (players[4].location.x + players[4].speed * Math.cos(players[4].angle));
-        players[4].location.y = (int) (players[4].location.y + players[4].speed * Math.sin(players[4].angle));
+        players[4].location.x = (int) (players[4].location.x + 6 * Math.cos(players[4].angle));
+        players[4].location.y = (int) (players[4].location.y + 6 * Math.sin(players[4].angle));
         players[4].stick.updateLocation();
 
         if(puck.location.y > puck.horizontalMiddle - 50
@@ -236,18 +238,23 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         possession = puck.hold;
 
         puck.hitWalls();
+
+        if(i%30 == 0){
+            puck.setSpeedFriction();
+        }
         puck.updateLocation();
+
 
         if(score == 0 && puck.goalScoredLeft()){
 
             score = 1;
-            players[possession].release = 0;
-            //players[possession].hold = 0;
+            players[5].release = 0;
+            puck.hold = 0;
         }
         else if(score == 0 && puck.goalScoredRight()){
             score = 2;
-            players[possession].release = 0;
-            //players[possession].hold = 0;
+            players[6].release = 0;
+            puck.hold = 0;
         }
 
         if( score == 1 ){
@@ -258,8 +265,9 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             reset = 1;
             afterGoalTimer++;
             reset();
-            puck.hold = 0;
+            //puck.hold = 0;
             if(afterGoalTimer >= 40) {
+
                 players[5].afterGoal();
             }
 
@@ -272,7 +280,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             reset = 2;
             afterGoalTimer++;
             reset();
-            puck.hold = 0;
+            //puck.hold = 0;
             if(afterGoalTimer >= 40) {
                 players[6].afterGoal();
             }
@@ -286,6 +294,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }
 
             Player mo = players[i];
+
 
 
             if(reset == 0) {// if its in reset mode it will skip everything
@@ -311,6 +320,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                     else if (dragged || moved) {
                         selectedPlayer.updateLocation(e.getX(), e.getY());
                     }
+
 
                 } else {
 

@@ -9,13 +9,24 @@ import java.awt.*;
 public class Puck extends MovingObject {
 
     int postTimer = 0;
-    static int hold = 0;
+    int hold = 0;
     public Puck(int id, Point point, int speed, double angle, int radius, Color color) {
         super(id, point, speed, angle, radius, color);
         adjustment = 4;
         dummy_radius = radius + adjustment;
+
     }
 
+    public void setSpeedFriction(){
+
+        double tempSpeed = speed * .95;
+        if((tempSpeed%tempSpeed) >= .5 ){
+            speed = (int)Math.ceil(tempSpeed);
+        }
+        else{
+            speed = (int)Math.floor(tempSpeed);
+        }
+    }
 
     @Override
     public void setRadius(int radius) {
@@ -28,6 +39,8 @@ public class Puck extends MovingObject {
         location.x = (int) (location.x + speed * Math.cos(angle));
         location.y = (int) (location.y + speed * Math.sin(angle));
     }
+
+
 
     public boolean goalScoredLeft(){
         if(location.x > leftGoalBack

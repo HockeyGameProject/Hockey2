@@ -40,6 +40,17 @@ public class Player extends MovingObject{
         g2d.fillOval(location.x - radius, location.y - radius, radius*2, radius*2); // i think this is right
     }
 
+    public void setSpeedFriction(){
+
+        double tempSpeed = speed * .95;
+        if((tempSpeed%tempSpeed) >= .5 ){
+            speed = (int)Math.ceil(tempSpeed);
+        }
+        else{
+            speed = (int)Math.floor(tempSpeed);
+        }
+    }
+
     public void rubWalls(){
 
 
@@ -63,15 +74,21 @@ public class Player extends MovingObject{
                 location.y = bottomGoalPost + dummy_radius;//left and right goal bottom
                 break;
             case 7:
-                location.x = leftGoalBack - dummy_radius;//left  goal side
+                location.x = leftGoalBack - dummy_radius;//left  goal back
                 break;
             case 8:
-                location.x= rightGoalBack + dummy_radius;//right goal side
+                location.x = rightGoalBack + dummy_radius;//right goal back
                 break;
             case 9:
-                location.x= leftGoalLine + radius;//right goal side
+                location.x = leftGoalLine + radius;//left goal front
                 break;
-
+            case 10:
+                location.x = rightGoalLine - radius;//right goal front
+                break;
+            case 11:
+                location.x = leftGoalBack - dummy_radius;
+                location.y = topGoalPost - dummy_radius;
+                break;
 
         }
 
@@ -85,11 +102,9 @@ public class Player extends MovingObject{
 
     public void hitWalls(){
 
+        dummy_radius = stick.length;
         if(location.y <= topBoundary + dummy_radius || stick.b <= topBoundary){
             hitWall = 1;
-            //System.out.println("radius " + radius);
-            //System.out.println(location.y - topBoundary);
-            //System.out.println(stick.b);
         }
         else if(location.y >= bottomBoundary - dummy_radius || stick.b >= bottomBoundary){
             hitWall = 2;
@@ -100,9 +115,22 @@ public class Player extends MovingObject{
         else if(location.x >= rightBoundary - dummy_radius || stick.a >= rightBoundary){
             hitWall = 4;
         }
-        else if(location.x - radius < leftGoalLine && location.y  < topGoalPost){//left goal top
-            if(location.y >= topGoalPost- dummy_radius && location.x > leftGoalBack){
+        else if (location.y < topGoalPost && location.x < leftGoalBack) {
+            //System.out.println("enter region");
+            if (location.y + dummy_radius >= topGoalPost && location.x + dummy_radius >= leftGoalBack) {
+                hitWall = 11;
+            }
+        }
+        else if(location.x < leftGoalLine && location.y  <= topGoalPost){//left goal top
+            if(location.y >= topGoalPost - dummy_radius && location.x >= leftGoalBack){
+                //System.out.println(location.x + " " + location.y);
                 hitWall = 5;
+            }
+
+             if (location.y < topGoalPost && location.x < leftGoalBack) {
+                if (location.y + dummy_radius + getSpeed() >= topGoalPost && location.x + dummy_radius + getSpeed()>= leftGoalBack) {
+                    hitWall = 11;
+                }
             }
         }
         else if(location.x - radius < leftGoalLine  && location.y > bottomGoalPost){//left goal bottom
@@ -130,14 +158,21 @@ public class Player extends MovingObject{
                 location.y < bottomGoalPost){
             if(location.x <= rightGoalBack+ dummy_radius)
                 hitWall = 8;
+
+            else if (location.y + getSpeed() < topGoalPost && location.x+getSpeed() < leftGoalBack) {
+                if (location.y + dummy_radius + getSpeed() >= topGoalPost && location.x + dummy_radius + getSpeed()>= leftGoalBack) {
+                    hitWall = 11;
+                }
+            }
         }
 
         else if(location.x > leftGoalLine && location.y > topGoalPost &&//left goal front
                 location.y < bottomGoalPost){
             if(location.x <= leftGoalLine + radius)
                 hitWall = 9;
+            else if(location.x >= rightGoalLine - radius) //right goal front
+                hitWall = 10;
         }
-
 
 
         if(location.x >= rightBoundary - 100 &&
@@ -219,25 +254,25 @@ public class Player extends MovingObject{
 
             setAngle(Math.atan2(Y, X));
             stick.updateLocation();
-        }
-        else {
-            setSpeed(2);
-
-            setAngle(Math.atan2(Y, X));
-            /*
-            if(stickOnWall == 1) {
-
-                stick.b = topBoundary;
-
-                location.x = (int) (stick.a - stick.length * Math.cos(angle));
-                location.y = (int) (stick.b - stick.length * Math.sin(angle));
-                stick.updateLocation();
-
+           /* if(Rink.i%40 == 0){
+                System.out.println("slide");
+                setSpeedFriction();
+                location.x = (int) (location.x + speed * Math.cos(angle));
+                location.y = (int) (location.y + speed * Math.sin(angle));
             }*/
 
-            location.x = (int) (location.x + getSpeed() * Math.cos(angle));
-            location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+
+        }
+
+        else {
+            setSpeed(3);
+
+            setAngle(Math.atan2(Y, X));
+
+            location.x = (int) (location.x + speed * Math.cos(angle));
+            location.y = (int) (location.y + speed * Math.sin(angle));
             stick.updateLocation();
+
         }
 
 
@@ -304,7 +339,7 @@ public class Player extends MovingObject{
         puck.hold = 0;
         //Rink.possession = 0;
         puck.setAngle(angle);
-        puck.setSpeed(4);
+        puck.setSpeed(6);
         puck.updateLocation();
     }
 
@@ -333,19 +368,22 @@ public class Player extends MovingObject{
 
 
         stick.updateLocation();
-        stickHandling();
-        holdPuck();
+
 
         double Y;
         double X;
+        System.out.println(puck.hold);
 
         if(release == 0 && puck.hold == 0) {
+            stickHandling();
+            holdPuck();
 
             Y = puck.location.y - location.y;
             X = puck.location.x - location.x;
             setAngle(Math.atan2(Y, X));
-            location.x = (int) (location.x + getSpeed() * Math.cos(angle));
-            location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+            //goalie frozen on its track
+            location.x = (int) (location.x + 5 * Math.cos(angle));
+            location.y = (int) (location.y + 5 * Math.sin(angle));
         }
         else if(puck.hold == 5 || puck.hold == 6){
 
@@ -354,11 +392,13 @@ public class Player extends MovingObject{
             setAngle(Math.atan2(Y, X));
             stick.updateLocation();
 
-            double puckY = puck.horizontalMiddle - puck.location.y;
-            double puckX = puck.verticalCenter - puck.location.x;
+            double puckY = horizontalMiddle - puck.location.y;
+            double puckX = verticalCenter - puck.location.x;
+
 
             puck.setAngle(Math.atan2(puckY, puckX));
             puck.setSpeed(4);
+            //slapShot();
             puck.location.x = (int) (puck.location.x + puck.speed * Math.cos(puck.angle));
             puck.location.y = (int) (puck.location.y + puck.speed * Math.sin(puck.angle));
 
