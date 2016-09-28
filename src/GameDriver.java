@@ -1,8 +1,12 @@
+import net.java.games.input.*;
+import net.java.games.input.Component;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -12,7 +16,7 @@ import java.util.Random;
 
 
 //test1
-public class Controller {
+public class GameDriver {
     UI       ui;
     Rink     rink;
     Player   p1;
@@ -25,11 +29,33 @@ public class Controller {
 
     MouseEvent e;
 
+    public ArrayList<Controller> foundControllers = new ArrayList<>();
 
 
 
+   // Component.Identifier componentIdentifier = component.getIdentifier();
 
-    public Controller(){
+    private void searchForControllers() {
+        Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+
+        for(int i = 0; i < controllers.length; i++){
+            Controller controller = controllers[i];
+
+            if (controller.getType() == net.java.games.input.Controller.Type.GAMEPAD ) {
+                // Add new controller to the list of all controllers.
+                foundControllers.add(controller);
+
+                // Add new controller to the list on the window.
+                //window.addControllerName(controller.getName() + " - " + controller.getType().toString() + " type");
+            }
+
+        }
+        System.out.println(foundControllers);
+    }
+
+
+
+    public GameDriver(){
         ui      = new UI("Hockey");
 
 
@@ -50,8 +76,9 @@ public class Controller {
         Rink.selectedPlayer2 = p2;
 
 
-
-        rink    = new Rink();
+        searchForControllers();
+        System.out.println(foundControllers.get(0));
+        rink    = new Rink(foundControllers.get(0));
         rink.addKeys();
         //s1.setPlayer(p1);
         // GIVING PUCK REFERENCE TO GOALIES

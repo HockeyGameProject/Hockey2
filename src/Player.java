@@ -1,4 +1,9 @@
+import net.java.games.input.*;
+import net.java.games.input.Component;
+import net.java.games.input.Controller;
+
 import java.awt.*;
+import java.util.LinkedList;
 
 /**
  * creates a player object
@@ -16,6 +21,8 @@ public class Player extends MovingObject{
     int steal = 0;
     int puckGrabArea = 16;
     double slideAngle= 0;
+    int start = 0;
+    LinkedList <Double> slideList = new LinkedList<>();
 
 
     public Player(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
@@ -84,9 +91,21 @@ public class Player extends MovingObject{
             case 10:
                 location.x = rightGoalLine - radius;//right goal front
                 break;
-            case 11:
+            case 11://top left net corner
                 location.x = leftGoalBack - dummy_radius;
                 location.y = topGoalPost - dummy_radius;
+                break;
+            case 12://bottom left net corner
+                location.x = leftGoalBack - dummy_radius;
+                location.y = bottomGoalPost + dummy_radius;
+                break;
+            case 13://top right net corner
+                location.x = rightGoalBack + dummy_radius;
+                location.y = topGoalPost - dummy_radius;
+                break;
+            case 14://bottom right net corner
+                location.x = rightGoalBack + dummy_radius;
+                location.y = bottomGoalPost + dummy_radius;
                 break;
 
         }
@@ -114,26 +133,15 @@ public class Player extends MovingObject{
         else if(location.x >= rightBoundary - dummy_radius || stick.a >= rightBoundary){
             hitWall = 4;
         }
-        else if (location.y < topGoalPost && location.x < leftGoalBack) {
-            //System.out.println("enter region");
-            if (location.y + dummy_radius >= topGoalPost && location.x + dummy_radius >= leftGoalBack) {
-                hitWall = 11;
-            }
-        }
+
         else if(location.x < leftGoalLine && location.y  <= topGoalPost){//left goal top
             if(location.y >= topGoalPost - dummy_radius && location.x >= leftGoalBack){
                 //System.out.println(location.x + " " + location.y);
                 hitWall = 5;
             }
-
-             if (location.y < topGoalPost && location.x < leftGoalBack) {
-                if (location.y + dummy_radius + getSpeed() >= topGoalPost && location.x + dummy_radius + getSpeed()>= leftGoalBack) {
-                    hitWall = 11;
-                }
-            }
         }
-        else if(location.x - radius < leftGoalLine  && location.y > bottomGoalPost){//left goal bottom
-            if(location.y <= bottomGoalPost+ dummy_radius && location.x > leftGoalBack){
+        else if(location.x  < leftGoalLine  && location.y >= bottomGoalPost){//left goal bottom
+            if(location.y <= bottomGoalPost + dummy_radius && location.x >= leftGoalBack){
                 hitWall = 6;
             }
         }
@@ -143,13 +151,13 @@ public class Player extends MovingObject{
                 hitWall = 7;
         }
         // Right Goal post
-        else if(location.x > rightGoalLine && location.y < topGoalPost){//right goal top
-            if(location.y >= topGoalPost- dummy_radius && location.x < rightGoalBack){
+        else if(location.x > rightGoalLine && location.y <= topGoalPost){//right goal top
+            if(location.y >= topGoalPost- dummy_radius && location.x <= rightGoalBack){
                 hitWall = 5;
             }
         }
-        else if(location.x > rightGoalLine  && location.y > bottomGoalPost){//right goal bottom
-            if(location.y <= bottomGoalPost+ dummy_radius && location.x < rightGoalBack){
+        else if(location.x > rightGoalLine  && location.y >= bottomGoalPost){//right goal bottom
+            if(location.y <= bottomGoalPost+ dummy_radius && location.x <= rightGoalBack){
                 hitWall = 6;
             }
         }
@@ -157,12 +165,6 @@ public class Player extends MovingObject{
                 location.y < bottomGoalPost){
             if(location.x <= rightGoalBack+ dummy_radius)
                 hitWall = 8;
-
-            else if (location.y + getSpeed() < topGoalPost && location.x+getSpeed() < leftGoalBack) {
-                if (location.y + dummy_radius + getSpeed() >= topGoalPost && location.x + dummy_radius + getSpeed()>= leftGoalBack) {
-                    hitWall = 11;
-                }
-            }
         }
 
         else if(location.x > leftGoalLine && location.y > topGoalPost &&//left goal front
@@ -171,6 +173,27 @@ public class Player extends MovingObject{
                 hitWall = 9;
             else if(location.x >= rightGoalLine - radius) //right goal front
                 hitWall = 10;
+        }
+
+        else if (location.y < topGoalPost && location.x < leftGoalBack) {//left goal top right corner
+            if (location.y + dummy_radius + getSpeed() >= topGoalPost && location.x + dummy_radius + getSpeed()>= leftGoalBack) {
+                hitWall = 11;
+            }
+        }
+        else if (location.y > bottomGoalPost && location.x < leftGoalBack) {//left goal bottom  corner
+            if (location.y - dummy_radius - getSpeed() <= bottomGoalPost && location.x + dummy_radius + getSpeed()>= leftGoalBack) {
+                hitWall = 12;
+            }
+        }
+        else if (location.y < topGoalPost && location.x > rightGoalBack) {//right goal top  corner
+            if (location.y + dummy_radius + getSpeed() >= topGoalPost && location.x - dummy_radius - getSpeed()<= rightGoalBack) {
+                hitWall = 13;
+            }
+        }
+        else if (location.y > bottomGoalPost && location.x > rightGoalBack) {//right goal bottom  corner
+            if (location.y - dummy_radius - getSpeed() <= bottomGoalPost && location.x - dummy_radius - getSpeed()<= rightGoalBack) {
+                hitWall = 14;
+            }
         }
 
 
@@ -242,46 +265,55 @@ public class Player extends MovingObject{
         stick.updateLocation();*/
     }
 
+    public void controlPlayer(){
+
+
+
+    }
+
     public void updateLocation(double x, double y){
         double distance = Math.sqrt(Math.pow((location.x - x), 2)
                 + Math.pow((location.y - y), 2));
         double Y = y - location.y;
         double X = x - location.x;
-        double prevAngle = angle;
+        //double prevAngle = angle;
         double newAngle = Math.atan2(Y, X);
         //prevAngle = (prevAngle + newAngle)/2;
+        setAngle(newAngle);
+        stick.updateLocation();
 
-        if( distance < 80){// controller grace area. allows you to turn without moving
+        //setSpeedFriction(); USE THIS WITH CONTROLLERS
 
-            setAngle(newAngle);
-            stick.updateLocation();
-            if(speed == 0){
-                slideAngle = angle;
-            }
+        if(Rink.i > 12){
 
-            //setSpeedFriction();
-            //location.x = (int) (location.x + speed * Math.cos(prevAngle));
-            //location.y = (int) (location.y + speed * Math.sin(prevAngle));
+
+            slideList.addLast(newAngle);
+            slideAngle = slideList.pollFirst();
 
         }
+        else{
+            slideList.addLast(newAngle);
+            slideAngle = newAngle;
+    }
+        if( distance < 80){// controller grace area. allows you to turn without moving
+            start = 1;
 
+
+        }
         else {
 
-            setAngle(newAngle);
-            stick.updateLocation();
-
-            System.out.println("slide");
-            //setSpeedFriction();
-            location.x = (int) (location.x + speed * Math.cos(slideAngle));
-            location.y = (int) (location.y + speed * Math.sin(slideAngle));
             setSpeed(3);
-
-
-            if(Rink.i%5 == 0){
-                slideAngle = angle;
-
+            if(start == 1) {
+                location.x = (int) (location.x + speed * Math.cos(newAngle));
+                location.y = (int) (location.y + speed * Math.sin(newAngle));
+                start = 0;
+                slideAngle = newAngle;
             }
-
+            else{
+                //System.out.println("slide");
+                location.x = (int) (location.x + speed * Math.cos(slideAngle));
+                location.y = (int) (location.y + speed * Math.sin(slideAngle));
+            }
         }
 
 

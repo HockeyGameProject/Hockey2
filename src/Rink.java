@@ -1,15 +1,25 @@
+
+import net.java.games.input.Controller;
+import net.java.games.input.Component;
+import net.java.games.input.Component.Identifier;
+import net.java.games.input.ControllerEnvironment;
+
+
 import javax.swing.*;
-import javax.swing.text.Keymap;
-import java.awt.*;
-import java.awt.List;
 import java.awt.event.*;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Line2D;
-//import java.awt.geom.Point2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.BasicStroke;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Graphics;
+import java.awt.Color;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 /**
@@ -57,16 +67,77 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     boolean setScore2 = false;
 
     static int i = 0;
+    Controller controller;
 
-
-
-    Rink() {
+    Rink(Controller c) {
         // set a preferred size for the custom panel.
         setPreferredSize(new Dimension(1000,550));
         //setLayout(new BorderLayout());
         add(scorePanel);
         setVisible(true);
+        controller = c;
     }
+
+
+
+    public int getAxisValueInPercentage(float axisValue) {
+        return (int)(((2 - (1 - axisValue)) * 100) / 2);
+    }
+
+
+    public void gamepad(){
+        while(true) {
+            // Currently selected controller.
+            //int selectedControllerIndex = window.getSelectedControllerName();
+           //Controller controller = foundControllers.get(selectedControllerIndex);
+
+            int xAxisPercentage = 0;
+            int yAxisPercentage = 0;
+
+            Component[] components = controller.getComponents();
+
+            for(int i=0; i < components.length; i++) {
+
+                Component component = components[i];
+                Component.Identifier componentIdentifier = component.getIdentifier();
+
+                if (componentIdentifier.getName().matches("^[0-9]*$")) { // If the component identifier name contains only numbers, then this is a button.
+                    // Is button pressed?
+                    boolean isItPressed = true;
+                    if (component.getPollData() == 0.0f)
+                        isItPressed = false;
+                    continue;
+                }
+
+                if (component.isAnalog()) {
+                    float axisValue = component.getPollData();
+                    System.out.println(axisValue);
+                    int axisValueInPercentage = getAxisValueInPercentage(axisValue);
+
+                    // X axis
+                    if (componentIdentifier == Component.Identifier.Axis.X) {
+                        xAxisPercentage = axisValueInPercentage;
+                        System.out.println(xAxisPercentage);
+                        continue; // Go to next component.
+                    }
+                    // Y axis
+                    if (componentIdentifier == Identifier.Axis.Y) {
+                        yAxisPercentage = axisValueInPercentage;
+                        System.out.println(yAxisPercentage);
+                        continue; // Go to next component.
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
 
 
     public void add(Player mo){
@@ -155,9 +226,6 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     public void run() {
         System.out.println("RUNNING");
 
-        //int frames = 0;
-
-
         while(true) {
             i++;
             //moved = false;
@@ -169,7 +237,6 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }
             updateAll();
             repaint();
-
         }
     }
 
@@ -234,12 +301,13 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
     public void updateAll(){
+        gamepad();
 
         possession = puck.hold;
 
         puck.hitWalls();
 
-        if(i%40 == 0){
+        if(i%10 == 0){
             puck.setSpeedFriction();
         }
         puck.updateLocation();
@@ -319,6 +387,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                     }
                     else if (dragged || moved) {
                         selectedPlayer.updateLocation(e.getX(), e.getY());
+
+
                     }
 
 

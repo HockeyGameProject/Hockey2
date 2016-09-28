@@ -87,7 +87,16 @@ public abstract class MovingObject extends JComponent {
         this.radius = radius;
     }
 
+    public void setSpeedFriction(){
 
+        double tempSpeed = speed * .95;
+        if((tempSpeed%tempSpeed) >= .5 ){
+            speed = (int)Math.ceil(tempSpeed);
+        }
+        else{
+            speed = (int)Math.floor(tempSpeed);
+        }
+    }
 
 
     //test

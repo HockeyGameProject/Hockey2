@@ -1,3 +1,5 @@
+import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
+
 import java.awt.*;
 
 /**
@@ -17,16 +19,7 @@ public class Puck extends MovingObject {
 
     }
 
-    public void setSpeedFriction(){
 
-        double tempSpeed = speed * .95;
-        if((tempSpeed%tempSpeed) >= .5 ){
-            speed = (int)Math.ceil(tempSpeed);
-        }
-        else{
-            speed = (int)Math.floor(tempSpeed);
-        }
-    }
 
     @Override
     public void setRadius(int radius) {
@@ -71,15 +64,21 @@ public class Puck extends MovingObject {
 
 
     public void reflection(double angle, int n){
+        //System.out.println(getPoint());
+
         double reflectAngle =0;
 
         if(n == 1){
+
             reflectAngle = (-1) * angle + Math.PI;
         }
         else if(n == 2){
+
             reflectAngle = (-1)*angle;
+            //System.out.println("reflect angle " + reflectAngle);
         }
         setAngle(reflectAngle);
+
     }
 
     double reflectionAngleWithTangent(Point center){
@@ -118,13 +117,23 @@ public class Puck extends MovingObject {
         double distanceFromRightBottomPost = Math.sqrt(Math.pow((rightGoalLine - location.x), 2)
                 + Math.pow((bottomGoalPost - adjustment - location.y), 2));
 
-        if(location.y <= topBoundary + dummy_radius || location.y >= bottomBoundary -  dummy_radius ){
-            reflection(angle, 2);
-
-        }
-        else if(location.x <= leftBoundary + dummy_radius || location.x >= rightBoundary -  dummy_radius ){
+        if(location.x <= leftBoundary + dummy_radius) {
+            location.x = leftBoundary + dummy_radius;
             reflection(angle, 1);
         }
+        else if ( location.x >= rightBoundary -  dummy_radius ){
+            location.x = rightBoundary - dummy_radius;
+            reflection(angle, 1);
+        }
+        else if(location.y <= topBoundary + dummy_radius ){
+            location.y = topBoundary + dummy_radius;
+            reflection(angle, 2);
+        }
+        else if (location.y >= bottomBoundary -  dummy_radius ){
+            location.y = bottomBoundary - dummy_radius;
+            reflection(angle, 2);
+        }
+
 
 
         // Arcs and tangents
