@@ -1,6 +1,8 @@
 import net.java.games.input.*;
 import net.java.games.input.Component;
+import net.java.games.input.Component.Identifier;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main Controller class for the game. It calls update() and step()
@@ -54,7 +58,6 @@ public class GameDriver {
     }
 
 
-
     public GameDriver(){
         ui      = new UI("Hockey");
 
@@ -77,6 +80,7 @@ public class GameDriver {
 
 
         searchForControllers();
+
         System.out.println(foundControllers.get(0));
         rink    = new Rink(foundControllers.get(0));
         rink.addKeys();
@@ -104,63 +108,6 @@ public class GameDriver {
         rink.addMouseMotionListener(rink);
 
        // rink.addKeyListener(rink);
-    }
-
-    private class KBListener implements KeyListener {
-
-        /**
-         * Invoked when a key has been typed.
-         * See the class description for {@link KeyEvent} for a definition of
-         * a key typed event.
-         *
-         * @param e
-         */
-        @Override
-        public void keyTyped(KeyEvent e) {
-            char c = e.getKeyChar();
-            if(c == 's' ){
-                if( Rink.selectedPlayer == p1)
-                    Rink.selectedPlayer = p2;
-                else
-                    Rink.selectedPlayer = p1;
-            }
-        }
-
-        /**
-         * Invoked when a key has been pressed.
-         * See the class description for {@link KeyEvent} for a definition of
-         * a key pressed event.
-         *
-         * @param e
-         */
-        @Override
-        public void keyPressed(KeyEvent e) {
-            char c = e.getKeyChar();
-            if(c == 's' ){
-                if( Rink.selectedPlayer == p1)
-                    Rink.selectedPlayer = p2;
-                else
-                    Rink.selectedPlayer = p1;
-            }
-        }
-
-        /**
-         * Invoked when a key has been released.
-         * See the class description for {@link KeyEvent} for a definition of
-         * a key released event.
-         *
-         * @param e
-         */
-        @Override
-        public void keyReleased(KeyEvent e) {
-            char c = e.getKeyChar();
-            if(c == 's' ){
-                if( Rink.selectedPlayer == p1)
-                    Rink.selectedPlayer = p2;
-                else
-                    Rink.selectedPlayer = p1;
-            }
-        }
     }
 
 

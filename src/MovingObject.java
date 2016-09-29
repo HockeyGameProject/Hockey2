@@ -46,6 +46,8 @@ public abstract class MovingObject extends JComponent {
     Point arcCenter4 = new Point(rightBoundary - 100, bottomBoundary - 100);
 
     int hitWall = 0;
+    boolean hitWalls = false;
+
 
     public MovingObject(int id, Point point, int speed, double angle, int radius, Color color) {
         this.id       = id;

@@ -86,59 +86,62 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
     public void gamepad(){
-        while(true) {
+        //while(true) {
             // Currently selected controller.
             //int selectedControllerIndex = window.getSelectedControllerName();
            //Controller controller = foundControllers.get(selectedControllerIndex);
 
-            int xAxisPercentage = 0;
-            int yAxisPercentage = 0;
+        if( !controller.poll() ){
+            //window.showControllerDisconnected();
+            return;
+        }
+        int xAxisPercentage = 0;
+        int yAxisPercentage = 0;
 
-            Component[] components = controller.getComponents();
+        Component[] components = controller.getComponents();
+        for(int i=0; i < components.length; i++) {
 
-            for(int i=0; i < components.length; i++) {
+            Component component = components[i];
+            Identifier componentIdentifier = component.getIdentifier();
 
-                Component component = components[i];
-                Component.Identifier componentIdentifier = component.getIdentifier();
+            if (componentIdentifier.getName().matches("^[0-9]*$")) { // If the component identifier name contains only numbers, then this is a button.
+                // Is button pressed?
+                //System.out.println("detect");
+                boolean isItPressed = true;
+                if (component.getPollData() == 0.0f)
+                    isItPressed = false;
+                continue;
+            }
+            if(componentIdentifier == Identifier.Axis.POV){
+                float hatSwitchPosition = component.getPollData();
+                //window.setHatSwitch(hatSwitchPosition);
 
-                if (componentIdentifier.getName().matches("^[0-9]*$")) { // If the component identifier name contains only numbers, then this is a button.
-                    // Is button pressed?
-                    boolean isItPressed = true;
-                    if (component.getPollData() == 0.0f)
-                        isItPressed = false;
-                    continue;
+                // We know that this component was hat switch so we can skip to next component.
+                continue;
+            }
+
+            if (component.isAnalog()) {
+                float axisValue = component.getPollData();
+                System.out.println(axisValue);
+                int axisValueInPercentage = getAxisValueInPercentage(axisValue);
+
+                // X axis
+                if (componentIdentifier == Identifier.Axis.X) {
+                    xAxisPercentage = axisValueInPercentage;
+                    //System.out.println(xAxisPercentage);
+                    continue; // Go to next component.
+                }
+                // Y axis
+                if (componentIdentifier == Identifier.Axis.Y) {
+                    yAxisPercentage = axisValueInPercentage;
+                    //System.out.println(yAxisPercentage);
+                    continue; // Go to next component.
                 }
 
-                if (component.isAnalog()) {
-                    float axisValue = component.getPollData();
-                    System.out.println(axisValue);
-                    int axisValueInPercentage = getAxisValueInPercentage(axisValue);
-
-                    // X axis
-                    if (componentIdentifier == Component.Identifier.Axis.X) {
-                        xAxisPercentage = axisValueInPercentage;
-                        System.out.println(xAxisPercentage);
-                        continue; // Go to next component.
-                    }
-                    // Y axis
-                    if (componentIdentifier == Identifier.Axis.Y) {
-                        yAxisPercentage = axisValueInPercentage;
-                        System.out.println(yAxisPercentage);
-                        continue; // Go to next component.
-                    }
-
-                }
             }
         }
+        //}
     }
-
-
-
-
-
-
-
-
 
     public void add(Player mo){
         players[mo.id] = mo;
