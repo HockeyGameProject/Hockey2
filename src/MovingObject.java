@@ -11,7 +11,7 @@ import java.awt.*;
 public abstract class MovingObject extends JComponent {
 
     Point   location;
-    int     speed;
+    double     speed;
     double  angle;
     int     radius;
     int     adjustment;
@@ -47,7 +47,7 @@ public abstract class MovingObject extends JComponent {
 
     int hitWall = 0;
 
-    public MovingObject(int id, Point point, int speed, double angle, int radius, Color color) {
+    public MovingObject(int id, Point point, double speed, double angle, int radius, Color color) {
         this.id       = id;
         this.location = point;
         this.speed    = speed;
@@ -67,11 +67,11 @@ public abstract class MovingObject extends JComponent {
         this.location = point;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 
@@ -87,16 +87,18 @@ public abstract class MovingObject extends JComponent {
         this.radius = radius;
     }
 
-    public void setSpeedFriction(){
+    public double setSpeedFriction(){
 
         double tempSpeed = speed * .95;
         if((tempSpeed%tempSpeed) >= .5 ){
-            speed = (int)Math.ceil(tempSpeed);
+            tempSpeed = Math.ceil(tempSpeed);
         }
         else{
-            speed = (int)Math.floor(tempSpeed);
+            tempSpeed = Math.floor(tempSpeed);
         }
+        return tempSpeed;
     }
+
 
 
     //test

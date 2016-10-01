@@ -29,13 +29,12 @@ import java.util.LinkedList;
  */
 public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
-
-//lll
     Thread t;
     //ArrayList<Player> players = new ArrayList<>();
     Player[] players = new Player[7];
     static Player selectedPlayer;
     static Player selectedPlayer2;
+    static Player selectedPlayer3;
     boolean dragged = false;
     static boolean moved = false;
     MouseEvent e = null;
@@ -68,6 +67,9 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
     static int i = 0;
     Controller controller;
+    int xAxisPercentage = 0;
+    int yAxisPercentage = 0;
+    String buttonIndex = "";
 
     Rink(Controller c) {
         // set a preferred size for the custom panel.
@@ -76,6 +78,11 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
         add(scorePanel);
         setVisible(true);
         controller = c;
+    }
+    Rink() {
+        setPreferredSize(new Dimension(1000,550));
+        add(scorePanel);
+        setVisible(true);
     }
 
 
@@ -86,58 +93,84 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
     public void gamepad(){
-        while(true) {
-            // Currently selected controller.
-            //int selectedControllerIndex = window.getSelectedControllerName();
-           //Controller controller = foundControllers.get(selectedControllerIndex);
 
-            int xAxisPercentage = 0;
-            int yAxisPercentage = 0;
+        // Currently selected controller.
+        //int selectedControllerIndex = window.getSelectedControllerName();
+        //Controller controller = foundControllers.get(selectedControllerIndex);
 
-            Component[] components = controller.getComponents();
+        controller.poll();
+        Component[] components = controller.getComponents();
 
-            for(int i=0; i < components.length; i++) {
+        for(int i=0; i < components.length; i++) {
+            //System.out.println(components[i].getName());
+            Component component = components[i];
+            Component.Identifier componentIdentifier = component.getIdentifier();
 
-                Component component = components[i];
-                Component.Identifier componentIdentifier = component.getIdentifier();
+            if (componentIdentifier.getName().matches("^[0-9]*$")) { // If the component identifier name contains only numbers, then this is a button.
+                // Is button pressed?
+                boolean isItPressed = true;
+                if (component.getPollData() == 0.0f) {
+                    isItPressed = false;
+                }
+                else{
+                    buttonIndex = component.getIdentifier().toString();
+                    buttonActions();
+                    System.out.println(buttonIndex);
+                }
+                continue;
+            }
 
-                if (componentIdentifier.getName().matches("^[0-9]*$")) { // If the component identifier name contains only numbers, then this is a button.
-                    // Is button pressed?
-                    boolean isItPressed = true;
-                    if (component.getPollData() == 0.0f)
-                        isItPressed = false;
-                    continue;
+            if (component.isAnalog()) {
+                float axisValue = component.getPollData();
+                //System.out.println(axisValue);
+                int axisValueInPercentage = getAxisValueInPercentage(axisValue);
+
+
+                // X axis
+                if (componentIdentifier == Identifier.Axis.X) {
+                    xAxisPercentage = axisValueInPercentage;
+                    //System.out.println("X " + xAxisPercentage);
+                    continue; // Go to next component.
+                }
+                // Y axis
+                if (componentIdentifier == Identifier.Axis.Y) {
+                    yAxisPercentage = axisValueInPercentage;
+                   // System.out.println("Y " + yAxisPercentage);
+                    continue; // Go to next component.
                 }
 
-                if (component.isAnalog()) {
-                    float axisValue = component.getPollData();
-                    System.out.println(axisValue);
-                    int axisValueInPercentage = getAxisValueInPercentage(axisValue);
+            }
+        }
 
-                    // X axis
-                    if (componentIdentifier == Component.Identifier.Axis.X) {
-                        xAxisPercentage = axisValueInPercentage;
-                        System.out.println(xAxisPercentage);
-                        continue; // Go to next component.
-                    }
-                    // Y axis
-                    if (componentIdentifier == Identifier.Axis.Y) {
-                        yAxisPercentage = axisValueInPercentage;
-                        System.out.println(yAxisPercentage);
-                        continue; // Go to next component.
-                    }
 
-                }
+    }
+
+    public void buttonActions(){
+        System.out.println("test");
+        if(buttonIndex.equals("0")){
+            if(puck.hold == 3){
+
+                selectedPlayer3.wristShot();
+            }
+            else{
+                selectedPlayer3.steal = 1;
+            }
+        }
+        else if(buttonIndex.equals("1") || buttonIndex.equals("3")){
+            System.out.println(puck.hold);
+            if(puck.hold == 3){
+                selectedPlayer3.wristShot();
+            }
+        }
+        else if(buttonIndex.equals("2")){
+            if(puck.hold == 3){
+                selectedPlayer3.slapShot();
+            }
+            else{
+                selectedPlayer3.bodyCheckStart();
             }
         }
     }
-
-
-
-
-
-
-
 
 
     public void add(Player mo){
@@ -231,7 +264,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             //moved = false;
             //dragged = false;
             try {
-                Thread.sleep(30);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -301,14 +334,18 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
 
     public void updateAll(){
-        gamepad();
+        if(controller != null){
+            gamepad();
+        }
+
 
         possession = puck.hold;
 
         puck.hitWalls();
 
-        if(i%10 == 0){
-            puck.setSpeedFriction();
+        if(i%10 == 0){//call friction method every 10 frames
+            puck.speed = puck.setSpeedFriction();
+
         }
         puck.updateLocation();
 
@@ -354,7 +391,6 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }
         }
 
-
         for(int i = 1; i < players.length; i++){
 
             if(players[i] == null){
@@ -362,46 +398,28 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }
 
             Player mo = players[i];
-
-
-
             if(reset == 0) {// if its in reset mode it will skip everything
 
-                if (flag == true) { // for body check
-                    frames++;
-                    selectedPlayer.bodyCheck();
+                if(mo.bodyCheckFlag){
+                    mo.bodyCheck();
                 }
 
-                if (frames > 8 && frames < 240) {
-                    frames++;
-                    flag = false;
-                    selectedPlayer.speed = 0;
-                }
-                if (frames == 20) {
-                    selectedPlayer.setSpeed(3);
-                }
-
-                if (mo == selectedPlayer || mo == selectedPlayer2) {
+                if (mo == selectedPlayer || mo == selectedPlayer2 || mo == selectedPlayer3) {
                     if (mo.colliding) {
                         mo.updateLocationCol();
                     }
                     else if (dragged || moved) {
                         selectedPlayer.updateLocation(e.getX(), e.getY());
-
-
                     }
-
-
-                } else {
-
+                    selectedPlayer3.updateLocationController(xAxisPercentage, yAxisPercentage);
+                }
+                else {
                     if (mo.colliding) {
                         mo.updateLocationCol();
                     } else {
                         mo.updateLocation();
                     }
                 }
-
-
                 mo.hitWalls();
                 if (mo.hitWall != 0) {
                     mo.rubWalls();
@@ -411,8 +429,6 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 if (i != possession) {
                     mo.stickHandling();
                 }
-                //selectedPlayer.stickHandling();
-//
 
                 if (puck.hold != 0) {
                     //System.out.println(Player.hold);
@@ -420,35 +436,14 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
                     //when goalie gets the puck
                     if (puck.hold == 5 || puck.hold == 6) {
-                        goalieTimer++;
-                        //System.out.println("goalie catch");
-                        if (goalieTimer == 400) {
-                            if (puck.hold == 5) {
-                                if (players[1].location.x > players[1].leftGoalLine ||
-                                        players[2].location.x > players[2].leftGoalLine) {
-                                    goaliePassToTeammates1();
-                                } else {
-                                    players[puck.hold].wristShot();
-                                }
-                                goalieTimer = 0;
-                            } else if (puck.hold == 6) {
-
-                                if (players[3].location.x < players[3].rightGoalLine ||
-                                        players[4].location.x < players[4].rightGoalLine) {
-                                    goaliePassToTeammates2();
-                                } else {
-                                    players[puck.hold].wristShot();
-                                }
-
-                                goalieTimer = 0;
-                            }
-
-                        }
+                        goalieHold();
                     }
                 }
             }
 
         }
+
+
 
         /*
         Collision collision = new Collision(players.length+1);
@@ -460,8 +455,32 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             }
         }*/
 
+    }
 
+    public void goalieHold(){
+        goalieTimer++;
+        //System.out.println("goalie catch");
+        if (goalieTimer == 400) {
+            if (puck.hold == 5) {
+                if (players[1].location.x > players[1].leftGoalLine ||
+                        players[2].location.x > players[2].leftGoalLine) {
+                    goaliePassToTeammates1();
+                } else {
+                    players[puck.hold].wristShot();
+                }
+                goalieTimer = 0;
+            } else if (puck.hold == 6) {
 
+                if (players[3].location.x < players[3].rightGoalLine ||
+                        players[4].location.x < players[4].rightGoalLine) {
+                    goaliePassToTeammates2();
+                } else {
+                    players[puck.hold].wristShot();
+                }
+
+                goalieTimer = 0;
+            }
+        }
     }
 
     public void goaliePassToTeammates1(){
@@ -750,12 +769,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                     selectedPlayer.slapShot();
                 }
                 else{
-                    if(frames >= 120 || frames == 0) {
-
-                        System.out.println("body check");
-                        flag = true;
-                        frames = 0;
-                    }
+                    selectedPlayer.bodyCheckStart();
                 }
 
             }

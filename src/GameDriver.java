@@ -27,6 +27,8 @@ public class GameDriver {
     Goalie2  g2;
     Puck     puck;
 
+    Controller controller = null;
+
     MouseEvent e;
 
     public ArrayList<Controller> foundControllers = new ArrayList<>();
@@ -39,7 +41,7 @@ public class GameDriver {
         Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
 
         for(int i = 0; i < controllers.length; i++){
-            Controller controller = controllers[i];
+            controller = controllers[i];
 
             if (controller.getType() == net.java.games.input.Controller.Type.GAMEPAD ) {
                 // Add new controller to the list of all controllers.
@@ -50,7 +52,7 @@ public class GameDriver {
             }
 
         }
-        System.out.println(foundControllers);
+        //System.out.println(foundControllers);
     }
 
 
@@ -74,11 +76,19 @@ public class GameDriver {
 
         Rink.selectedPlayer = p1;
         Rink.selectedPlayer2 = p2;
+        Rink.selectedPlayer3 = p3;
 
 
         searchForControllers();
-        System.out.println(foundControllers.get(0));
-        rink    = new Rink(foundControllers.get(0));
+
+
+        if(!foundControllers.isEmpty()){
+            rink    = new Rink(foundControllers.get(0));
+        }
+        else{
+            rink = new Rink();
+        }
+
         rink.addKeys();
         //s1.setPlayer(p1);
         // GIVING PUCK REFERENCE TO GOALIES
