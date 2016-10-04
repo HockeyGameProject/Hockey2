@@ -436,27 +436,33 @@ public class Player extends MovingObject{
     public void bodyCheck(){
 
             frames++;
-            speed = 4;
+            //speed = 3;
             location.x = (int) (location.x + getSpeed() * Math.cos(angle));
             location.y = (int) (location.y + getSpeed() * Math.sin(angle));
 
-        if (frames > 2 && frames < 30) {
-            frames++;
+        if (frames > 10 && frames < 80) {
+            //frames++;
             //bodyCheckFlag = false;
-            speed = 0;
+            if(frames < 20){
+                speed = 6;
+            }
+            else if (frames >= 20) {
+                setSpeed(0);
+               // System.out.println(frames);
+            }
+
         }
-        if (frames == 15) {
-            setSpeed(3);
-        }
-        if(frames >= 30 ){
+
+        else if(frames >= 80 ){
             bodyCheckFlag = false;
             frames = 0;
+            //System.out.println(frames);
         }
     }
 
     public void bodyCheckStart(){
         System.out.println("start");
-        if(frames >= 30 || frames == 0) {
+        if(frames >= 80 || frames == 0) {
 
             System.out.println("body check");
             bodyCheckFlag = true;
@@ -506,20 +512,6 @@ public class Player extends MovingObject{
 
 
     }
-
-    public double setSpeedFriction(){
-        //System.out.println("test");
-        double tempSpeed = speed * .95;
-        if((tempSpeed%tempSpeed) >= .5 ){
-            tempSpeed = Math.ceil(tempSpeed);
-        }
-        else{
-            tempSpeed = Math.floor(tempSpeed);
-        }
-        return tempSpeed;
-    }
-
-
 
     protected class Stick {
 

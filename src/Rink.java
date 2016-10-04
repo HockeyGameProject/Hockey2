@@ -343,7 +343,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
         puck.hitWalls();
 
-        if(i%10 == 0){//call friction method every 10 frames
+        if(i%15 == 0){//call friction method every 10 frames
             puck.speed = puck.setSpeedFriction();
 
         }
@@ -403,8 +403,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 if(mo.bodyCheckFlag){
                     mo.bodyCheck();
                 }
-
-                if (mo == selectedPlayer || mo == selectedPlayer2 || mo == selectedPlayer3) {
+                else if (mo == selectedPlayer || mo == selectedPlayer2 || mo == selectedPlayer3) {
                     if (mo.colliding) {
                         mo.updateLocationCol();
                     }
