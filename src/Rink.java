@@ -141,7 +141,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
 
             }
         }
-
+        //hjhs
 
     }
 
