@@ -135,7 +135,7 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
                 // Y axis
                 if (componentIdentifier == Identifier.Axis.Y) {
                     yAxisPercentage = axisValueInPercentage;
-                   // System.out.println("Y " + yAxisPercentage);
+                    // System.out.println("Y " + yAxisPercentage);
                     continue; // Go to next component.
                 }
 
@@ -401,17 +401,27 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             if(reset == 0) {// if its in reset mode it will skip everything
 
                 if(mo.bodyCheckFlag){
-                    //System.out.println("bodycheck");
+                    //System.out.println(mo.bodyCheckFlag);
                     mo.bodyCheck();
                 }
-                else if (mo == selectedPlayer || mo == selectedPlayer2 || mo == selectedPlayer3) {
-                    //System.out.println("here");
+                else if (mo == selectedPlayer){
+
+                    //if player.gamepadtype = pad, call updateLocationController();
+                    //if player.gamepadtype == kb call updateLocation
+
                     if (mo.colliding) {
                         mo.updateLocationCol();
                     }
-                    else if (dragged || moved) {
+                    if (dragged || moved) {
                         selectedPlayer.updateLocation(e.getX(), e.getY());
                     }
+                }
+                else if (mo == selectedPlayer3) {
+                    //System.out.println("move");
+                    if (mo.colliding) {
+                        mo.updateLocationCol();
+                    }
+
                     selectedPlayer3.updateLocationController(xAxisPercentage, yAxisPercentage);
                 }
                 else {
@@ -607,8 +617,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     public void mouseDragged(MouseEvent e) {
         dragged = true;
 
-            //selectedPlayer.updateLocation(e.getX(),e.getY());
-            //System.out.println(selectedPlayer.getPoint());
+        //selectedPlayer.updateLocation(e.getX(),e.getY());
+        //System.out.println(selectedPlayer.getPoint());
         this.e = e;
     }
 
@@ -616,8 +626,8 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
     public void mouseMoved(MouseEvent e) {
         moved = true;
 
-            //selectedPlayer.updateLocation(e.getX(),e.getY());
-            //System.out.println(selectedPlayer.getPoint());
+        //selectedPlayer.updateLocation(e.getX(),e.getY());
+        //System.out.println(selectedPlayer.getPoint());
         this.e = e;
     }
 
