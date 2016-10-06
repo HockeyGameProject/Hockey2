@@ -12,7 +12,15 @@ import java.util.LinkedList;
  * @version 1
  */
 
+
+
 public class Player extends MovingObject{
+
+
+    public enum ControllerType{
+        MOUSE, KEYBOARD, GAMEPAD, AI;
+    }
+
 
     Color teamColor;
     Puck puck;
@@ -29,12 +37,15 @@ public class Player extends MovingObject{
     double distance = 0;
     int frames = 0;
     boolean bodyCheckFlag = false;
+    ControllerType controllerType;
 
-    public Player(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
+    public Player(int id, Point point, int speed, double angle, int radius,
+                  ControllerType controllerType, Color color, Puck puck) {
         super(id, point, speed, angle, radius, color);
         this.teamColor = color;
         this.puck = puck;
         this.stick = new Stick(20);
+        this.controllerType = controllerType;
         dummy_radius = stick.length;
     }
 
@@ -444,7 +455,7 @@ public class Player extends MovingObject{
             //frames++;
             //bodyCheckFlag = false;
             if(frames < 20){
-                speed = 6;
+                setSpeed(6);
             }
             else if (frames >= 20) {
                 setSpeed(0);
@@ -464,7 +475,7 @@ public class Player extends MovingObject{
         System.out.println("start");
         if(frames >= 80 || frames == 0) {
 
-            System.out.println("body check");
+            //System.out.println("body check");
             bodyCheckFlag = true;
             frames = 0;
         }

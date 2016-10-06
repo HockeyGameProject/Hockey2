@@ -401,9 +401,11 @@ public class Rink extends JPanel implements Runnable, MouseMotionListener{
             if(reset == 0) {// if its in reset mode it will skip everything
 
                 if(mo.bodyCheckFlag){
+                    //System.out.println("bodycheck");
                     mo.bodyCheck();
                 }
                 else if (mo == selectedPlayer || mo == selectedPlayer2 || mo == selectedPlayer3) {
+                    //System.out.println("here");
                     if (mo.colliding) {
                         mo.updateLocationCol();
                     }
