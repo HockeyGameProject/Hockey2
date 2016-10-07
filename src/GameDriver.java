@@ -77,6 +77,7 @@ public class GameDriver {
         Rink.selectedPlayer = p1;
         Rink.selectedPlayer2 = p2;
         Rink.selectedPlayer3 = p3;
+        Rink.selectedPlayer4 = p4;
 
 
         searchForControllers();

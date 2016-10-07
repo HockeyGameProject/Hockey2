@@ -12,6 +12,7 @@ public class Puck extends MovingObject {
 
     int postTimer = 0;
     int hold = 0;
+    double frictionCoefficient = .95;
     public Puck(int id, Point point, int speed, double angle, int radius, Color color) {
         super(id, point, speed, angle, radius, color);
         adjustment = 4;
@@ -29,8 +30,7 @@ public class Puck extends MovingObject {
 
     @Override
     public void updateLocation() {
-        location.x = (int) (location.x + speed * Math.cos(angle));
-        location.y = (int) (location.y + speed * Math.sin(angle));
+        positionCalculation(angle);
     }
 
 
@@ -84,14 +84,14 @@ public class Puck extends MovingObject {
     double reflectionAngleWithTangent(Point center){
         double angle = angleWithArcCenter(center.x, center.y);
         Point end = new Point();
-        end.x = center.x + (int) (100*Math.cos(angle));
-        end.y = center.y + (int) (100*Math.sin(angle));
+        end.x = center.x + (int) Math.round((100*Math.cos(angle)));
+        end.y = center.y + (int) Math.round((100*Math.sin(angle)));
         Line incident = new Line(center, end);
         Point tangentStart = new Point(end);
         Point tangentEnd = new Point();
         double angle1 = angle + ((Math.PI/180)*1);
-        tangentEnd.x = center.x + (int) (100*Math.cos(angle1));
-        tangentEnd.y = center.y + (int) (100*Math.sin(angle1));
+        tangentEnd.x = center.x + (int) Math.round((100*Math.cos(angle1)));
+        tangentEnd.y = center.y + (int) Math.round((100*Math.sin(angle1)));
         Line tangent = new Line(tangentStart, tangentEnd);
         double tangentTheta = Math.atan2(tangent.slopeY, tangent.slopeX);
         double lineTheta = Math.atan2(incident.slopeY, incident.slopeX);
@@ -214,9 +214,7 @@ public class Puck extends MovingObject {
                 || distanceFromLeftTopPost < dummy_radius
                 || distanceFromRightBottomPost < dummy_radius
                 || distanceFromRightTopPost < dummy_radius )
-                && (location.x - dummy_radius - 2 > leftGoalLine
-                || location.x + dummy_radius + 2 < rightGoalLine )
-                && postTimer > 5){
+                && (location.x - dummy_radius - 2 > leftGoalLine || location.x + dummy_radius + 2 < rightGoalLine ) && postTimer > 5){
 
 
 
@@ -227,6 +225,10 @@ public class Puck extends MovingObject {
 
         }
         postTimer++;
+
+    }
+
+    public void goalEdges(){
 
     }
 }

@@ -14,6 +14,7 @@ public class ScorePanel extends JPanel implements Runnable{
     JTextField scoreField2 = new JTextField(2);
     int score1 = 0;
     int score2 = 0;
+    public static int fps = 0;
 
     Thread t;
 
@@ -67,6 +68,10 @@ public class ScorePanel extends JPanel implements Runnable{
         this.scoreField2.setText(""+dec.format(score2));
     }
 
+    public static int getFps() {
+        return fps;
+    }
+
     @Override
     public void addNotify() {
         super.addNotify();
@@ -79,6 +84,8 @@ public class ScorePanel extends JPanel implements Runnable{
     public void run() {
         int min = 0;
         int sec = 0;
+
+
         for(int i = 300; i >= 0; i--){
             sec = (i % 60);
             min = i / 60;
@@ -86,6 +93,8 @@ public class ScorePanel extends JPanel implements Runnable{
             this.second.setText(""+dec.format(sec));
             //updateAll();
             repaint();
+
+            fps = 0;
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

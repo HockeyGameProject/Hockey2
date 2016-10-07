@@ -1,7 +1,3 @@
-import net.java.games.input.*;
-import net.java.games.input.Component;
-import net.java.games.input.Controller;
-
 import java.awt.*;
 import java.util.LinkedList;
 
@@ -18,7 +14,7 @@ public class Player extends MovingObject{
     Puck puck;
     Stick stick;
     int release = 0;
-    int steal = 0;
+
     int puckGrabArea = 16;
     double slideAngle= 0;
     int start = 0;
@@ -27,8 +23,16 @@ public class Player extends MovingObject{
     int oldX = 0;
     int oldY = 0;
     double distance = 0;
-    int frames = 0;
+    int bodyCheckFrames = 0;
     boolean bodyCheckFlag = false;
+    int stealFrames = 0;
+    boolean stealFlag = false;
+    int slideLimit = 9;
+    double oldAngle = 0;
+    int buttonInputLimitFrames = 0;
+    double tempSpeed;
+    double tempAngle;
+    double frictionCoefficient = .8;
 
     public Player(int id, Point point, int speed, double angle, int radius, Color color, Puck puck) {
         super(id, point, speed, angle, radius, color);
@@ -243,8 +247,7 @@ public class Player extends MovingObject{
             collisionFrames = 0;
             colliding = false;
         }
-        location.x = (int) (location.x + getSpeed() * Math.cos(angle));
-        location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+        positionCalculation(angle);
         stick.updateLocation();
     }
 
@@ -261,51 +264,66 @@ public class Player extends MovingObject{
         stick.updateLocation();*/
     }
 
-
-    public void updateLocationController(double xAxisPercentage, double yAxisPercentage){
-        int xNeutral = 49;
-        int yNeutral = 49;
-        double distance = Math.sqrt(Math.pow((xAxisPercentage - xNeutral), 2)
-                + Math.pow((yAxisPercentage - yNeutral), 2));
-
-        double controllerX = xAxisPercentage - xNeutral;
-        double controllerY = yAxisPercentage - yNeutral;
-        double newAngle = Math.atan2(controllerY, controllerX);
-        setAngle(newAngle);
-        stick.updateLocation();
-        if(slideList.size() > 24){
+    public void slideList(double newAngle){
+        if(slideList.size() > slideLimit){
             slideList.addLast(newAngle);
             slideAngle = slideList.pollFirst();
         }
         else{
             slideList.addLast(newAngle);
             slideAngle = newAngle;
-
         }
-        if( distance < 38){// controller grace area. allows you to turn without moving
-            start = 1;
-            slideList.clear();
-            if(Rink.i%10 == 0){//call friction method every 10 frames
-                speed = setSpeedFriction();
+    }
+
+
+    public void updateLocationController(double xAxisPercentage, double yAxisPercentage){
+        //System.out.println("x " + xAxisPercentage + "y " +yAxisPercentage);
+        int xNeutral = 49;
+        int yNeutral = 49;
+
+        double distance = getDistance(xNeutral, xAxisPercentage, yNeutral, yAxisPercentage);
+        double controllerX = xAxisPercentage - xNeutral;
+        double controllerY = yAxisPercentage - yNeutral;
+        double newAngle = Math.atan2(controllerY, controllerX);
+
+        stick.updateLocation();
+        slideList(newAngle);
+
+        //oldAngle = slideList.getLast();
+
+
+        if( distance > 24 && distance < 38){// controller grace area. allows you to turn without moving
+            //System.out.println(start);
+            setAngle(newAngle);
+            tempAngle = angle;
+            if (start == 0) {
+                start = 1;
+                slideList.clear();
             }
         }
-        else {
-            setSpeed(1.5);
-            if(start == 1) {
-                location.x = (int) (location.x + speed * Math.cos(newAngle));
-                location.y = (int) (location.y + speed * Math.sin(newAngle));
+        else if(distance >= 38) {
+            setAngle(newAngle);
+            setSpeed(3);
+            if(start == 1) { //if was stopped before, dont use the slide angle to calculate position
+                positionCalculation(newAngle);
                 start = 0;
                 slideAngle = newAngle;
             }
             else{
-                //System.out.println("slide");
-                location.x = (int) Math.round((location.x + speed * Math.cos(slideAngle)));
-                location.y = (int) Math.round((location.y + speed * Math.sin(slideAngle)));
-                //location.x = (int) (location.x + speed * Math.cos(slideAngle));
-                //location.y = (int) (location.y + speed * Math.sin(slideAngle));
+                positionCalculation(slideAngle);
+                tempSpeed = speed;
             }
         }
+        else if (distance < 9 ) {
+            if (tempSpeed != 0) {
+                setAngle(tempAngle);
+                positionCalculation(tempAngle);
+                if (Rink.i % 10  == 0) {//call friction method every 10 bodyCheckFrames
+                    speed = setSpeedFriction(frictionCoefficient);
 
+                }
+            }
+        }
     }
 
     public void updateLocation(double x, double y){
@@ -319,7 +337,7 @@ public class Player extends MovingObject{
         setAngle(newAngle);
         stick.updateLocation();
 
-        if(slideList.size() > 24){
+        if(slideList.size() > slideLimit){
             slideList.addLast(newAngle);
             slideAngle = slideList.pollFirst();
         }
@@ -331,24 +349,19 @@ public class Player extends MovingObject{
         if( distance < 80){// controller grace area. allows you to turn without moving
             start = 1;
             slideList.clear();
-            if(Rink.i%10 == 0){//call friction method every 10 frames
-                speed = setSpeedFriction();
+            if(Rink.i%10 == 0){//call friction method every 10 bodyCheckFrames
+                speed = setSpeedFriction(frictionCoefficient);
             }
         }
         else {
-            setSpeed(1.5);
+            setSpeed(3);
             if(start == 1) {
-                location.x = (int) (location.x + speed * Math.cos(newAngle));
-                location.y = (int) (location.y + speed * Math.sin(newAngle));
+                positionCalculation(newAngle);
                 start = 0;
                 slideAngle = newAngle;
             }
             else{
-                //System.out.println("slide");
-                location.x = (int) Math.round((location.x + speed * Math.cos(slideAngle)));
-                location.y = (int) Math.round((location.y + speed * Math.sin(slideAngle)));
-                //location.x = (int) (location.x + speed * Math.cos(slideAngle));
-                //location.y = (int) (location.y + speed * Math.sin(slideAngle));
+                positionCalculation(slideAngle);
             }
         }
     }
@@ -371,10 +384,10 @@ public class Player extends MovingObject{
     public void stickHandling() {// of its close itll turn on the hold method
 
         //Puck puck = player.puck;
-        int stickHoldingPointX = (int) (location.x + (radius - adjustment) * Math.cos(angle));
-        int stickHoldingPointY = (int) (location.y + (radius - adjustment) * Math.sin(angle));
-        double distance = Math.sqrt(Math.pow((puck.location.x - stickHoldingPointX), 2)
-                + Math.pow((puck.location.y - stickHoldingPointY), 2));
+        int stickHoldingPointX = (int) Math.round((location.x + (radius - adjustment) * Math.cos(angle)));
+        int stickHoldingPointY = (int) Math.round((location.y + (radius - adjustment) * Math.sin(angle)));
+
+        double distance = getDistance(puck.location.x, stickHoldingPointX, puck.location.y, stickHoldingPointY);
 
         if (distance <= puckGrabArea && release != 1) {
 
@@ -382,9 +395,9 @@ public class Player extends MovingObject{
 
                 puck.hold = id;
             }
-            else if (steal == 1){
+            else if (stealFlag){
                 puck.hold = id;
-                steal = 0;
+                stealFlag = false;
             }
 
             //Rink.possession = id;
@@ -399,8 +412,8 @@ public class Player extends MovingObject{
 
     public void holdPuck() {
         //possession = id;
-        int stickHoldingPointX = (int) (location.x + 12 * Math.cos(angle));
-        int stickHoldingPointY = (int) (location.y + 12 * Math.sin(angle));
+        int stickHoldingPointX = (int) Math.round((location.x + 12 * Math.cos(angle)));
+        int stickHoldingPointY = (int) Math.round((location.y + 12 * Math.sin(angle)));
 
         puck.location.x = stickHoldingPointX;
         puck.location.y = stickHoldingPointY;
@@ -414,7 +427,7 @@ public class Player extends MovingObject{
         puck.hold = 0;
         //Rink.possession = 0;
         puck.setAngle(angle);
-        puck.setSpeed(10);
+        puck.setSpeed(5);
         puck.updateLocation();
     }
 
@@ -423,52 +436,86 @@ public class Player extends MovingObject{
         release = 1;
         puck.hold = 0;
         puck.setAngle(angle);
-        puck.setSpeed(14);
+        puck.setSpeed(11);
         puck.updateLocation();
     }
+
+
 
     public void pass(Puck puck){
         puck.setAngle(getAngle());
         puck.setSpeed(5);
     }
 
+    public void bodyCheckStart(){
+        if(bodyCheckFrames >= 80 || bodyCheckFrames == 0) {
+            bodyCheckFlag = true;
+            bodyCheckFrames = 0;
+        }
+    }
 
     public void bodyCheck(){
 
-            frames++;
-            //speed = 3;
-            location.x = (int) (location.x + getSpeed() * Math.cos(angle));
-            location.y = (int) (location.y + getSpeed() * Math.sin(angle));
+            bodyCheckFrames++;
+            positionCalculation(angle);
+            stick.updateLocation();
+        if (bodyCheckFrames > 2 && bodyCheckFrames < 80) {//activate it between frame 2 and frame 80
 
-        if (frames > 10 && frames < 80) {
-            //frames++;
-            //bodyCheckFlag = false;
-            if(frames < 20){
-                speed = 6;
+            if(bodyCheckFrames < 10){ //only make it move forward for 10 bodyCheckFrames at this speed
+                speed = 5;
             }
-            else if (frames >= 20) {
+            else if (bodyCheckFrames >= 10) {//after 10 bodyCheckFrames, it has to rest for an amount
                 setSpeed(0);
-               // System.out.println(frames);
+                slideList.clear();
             }
-
         }
-
-        else if(frames >= 80 ){
+        else if(bodyCheckFrames >= 80 ){
             bodyCheckFlag = false;
-            frames = 0;
-            //System.out.println(frames);
+            bodyCheckFrames = 0;
         }
     }
 
-    public void bodyCheckStart(){
-        System.out.println("start");
-        if(frames >= 80 || frames == 0) {
 
-            System.out.println("body check");
-            bodyCheckFlag = true;
-            frames = 0;
+    public void stealStart(){
+        if(stealFrames >= 20|| stealFrames == 0) {
+            stealFlag = true;
+            stealFrames = 0;
         }
     }
+
+
+    public void steal(){
+        stealFrames++;
+        if (stealFrames > 10) {
+            stealFlag = false;
+            stealFrames = 0;
+        }
+    }
+
+    public void pressZeroButton(){
+        if(puck.hold == id){
+            wristShot();
+        }
+        else{
+            stealFlag = true;
+        }
+    }
+
+    public void pressOneButton(){
+        if (puck.hold == id) {
+            wristShot();
+        }
+    }
+
+    public void pressTwoButton(){
+        if (puck.hold == id) {
+            slapShot();
+        }
+        else {
+            bodyCheckStart();
+        }
+    }
+
 
     public void afterGoal() {
 

@@ -89,17 +89,11 @@ public abstract class MovingObject extends JComponent {
         this.radius = radius;
     }
 
-    public double setSpeedFriction(){
-
-        double tempSpeed = speed * .95;
-        if((tempSpeed%tempSpeed) >= .5 ){
-            tempSpeed = Math.ceil(tempSpeed);
-        }
-        else{
-            tempSpeed = Math.floor(tempSpeed);
-        }
+    public double setSpeedFriction(double coefficient){
+        double tempSpeed = speed * coefficient;
         return tempSpeed;
     }
+
 
 
 
@@ -111,5 +105,19 @@ public abstract class MovingObject extends JComponent {
         g2d.setColor(color);
         g2d.fillOval(location.x-radius, location.y-radius, radius*2, radius*2);
     }
+
+    public void positionCalculation(double angle){
+        location.x = (int) Math.round((location.x + speed * Math.cos(angle)));
+        location.y = (int) Math.round((location.y + speed * Math.sin(angle)));
+    }
+
+    public double getDistance(int x1, double x2, int y1, double y2){
+        return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+    }
+
+    public double getDistance(int x1, int x2, int y1, int y2){
+        return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+    }
+
 
 }

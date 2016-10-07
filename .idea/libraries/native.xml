@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="native">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/Jinput" />
+      <root url="file://$PROJECT_DIR$/Jinput" />
+    </NATIVE>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/src" />
+    </SOURCES>
+  </library>
+</component>
