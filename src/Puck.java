@@ -209,7 +209,7 @@ public class Puck extends MovingObject {
             if(location.x <= rightGoalBack+ dummy_radius)
                 reflection(angle, 1);
         }
-        // hit the post
+        // hit the post,,
         else if((distanceFromLeftBottomPost < dummy_radius
                 || distanceFromLeftTopPost < dummy_radius
                 || distanceFromRightBottomPost < dummy_radius
