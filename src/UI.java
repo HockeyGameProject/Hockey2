@@ -8,6 +8,7 @@ import java.awt.*;
  */
 public class UI extends JFrame {
 
+
     public UI(String title){
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

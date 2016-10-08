@@ -3,6 +3,7 @@ import java.util.LinkedList;
 
 public class Collision {
 
+
     //ArrayList<ArrayList<MovingObject>> adjList = new ArrayList<>(7);
 
     private static int WHITE = 0;

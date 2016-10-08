@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 public class Player extends MovingObject{
 
+
     Color teamColor;
     Puck puck;
     Stick stick;

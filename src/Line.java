@@ -3,6 +3,7 @@ import java.awt.*;
 /**
  * Created by alien on 8/16/16.
  */
+
 public class Line {
     int x1;
     int x2;

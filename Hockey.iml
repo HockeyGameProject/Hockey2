@@ -7,8 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="jutils" level="project" />
-    <orderEntry type="library" name="jinput-core" level="project" />
+    <orderEntry type="library" name="jinput" level="project" />
     <orderEntry type="library" name="native" level="project" />
   </component>
 </module>
